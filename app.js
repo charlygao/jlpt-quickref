@@ -2,6 +2,7 @@
   const DATA = window.JLPT_DATA;
   const STORAGE_KEY = 'jlptQuickRef.v1';
   const THEME_KEY = 'jlptQuickRef.theme';
+  const VOCAB_BATCH_SIZE = 80;
 
   const state = {
     type: 'grammar',
@@ -9,6 +10,8 @@
     query: '',
     read: new Set(),
     lastSeen: {},
+    startIndex: 0,
+    visibleCount: VOCAB_BATCH_SIZE,
   };
 
   const els = {
@@ -24,6 +27,9 @@
     resumeBanner: document.getElementById('resumeBanner'),
     resumeText: document.getElementById('resumeText'),
     resumeButton: document.getElementById('resumeButton'),
+    loadMoreWrap: document.getElementById('loadMoreWrap'),
+    loadMoreText: document.getElementById('loadMoreText'),
+    loadMoreButton: document.getElementById('loadMoreButton'),
     themeToggle: document.getElementById('themeToggle'),
     backToTop: document.getElementById('backToTop'),
   };
@@ -67,11 +73,35 @@
     return `${state.type}:${state.level}`;
   }
 
+  function resetWindow() {
+    state.startIndex = 0;
+    state.visibleCount = VOCAB_BATCH_SIZE;
+  }
+
+  function itemSearchText(item) {
+    if (state.type === 'grammar') {
+      return [
+        item.title,
+        item.meaning,
+        item.connection,
+        ...(item.examples || []).flatMap(ex => [ex.jp, ex.zh]),
+      ].join('\n').toLowerCase();
+    }
+    return [
+      item.word,
+      item.reading,
+      item.meaning,
+      item.pos,
+      item.example?.jp,
+      item.example?.zh,
+    ].join('\n').toLowerCase();
+  }
+
   function getCurrentItems() {
     const items = DATA[state.type][state.level] || [];
     const q = state.query.trim().toLowerCase();
     if (!q) return items;
-    return items.filter((item) => JSON.stringify(item).toLowerCase().includes(q));
+    return items.filter(item => itemSearchText(item).includes(q));
   }
 
   function grammarCard(item, index) {
@@ -123,15 +153,29 @@
   }
 
   function updateStats() {
-    els.grammarCount.textContent = flatCount(DATA.grammar);
-    els.vocabCount.textContent = flatCount(DATA.vocab);
-    els.readCount.textContent = state.read.size;
+    els.grammarCount.textContent = flatCount(DATA.grammar).toLocaleString('zh-CN');
+    els.vocabCount.textContent = flatCount(DATA.vocab).toLocaleString('zh-CN');
+    els.readCount.textContent = state.read.size.toLocaleString('zh-CN');
 
     const all = DATA[state.type][state.level] || [];
     const read = all.filter(x => state.read.has(x.id)).length;
     const pct = all.length ? Math.round(read / all.length * 100) : 0;
     els.progressPercent.textContent = `${pct}% · ${read}/${all.length}`;
     els.progressBar.style.width = `${pct}%`;
+  }
+
+  function updateLoadMore(total, start, end) {
+    if (!els.loadMoreWrap) return;
+    const hasMore = state.type === 'vocab' && end < total;
+    els.loadMoreWrap.hidden = !hasMore;
+    if (!hasMore) return;
+
+    const remaining = total - end;
+    const next = Math.min(VOCAB_BATCH_SIZE, remaining);
+    els.loadMoreText.textContent = start > 0
+      ? `从第 ${start + 1} 条继续 · 当前显示到 ${end}/${total}`
+      : `当前显示 ${end}/${total}`;
+    els.loadMoreButton.textContent = `再显示 ${next} 条`;
   }
 
   let observer;
@@ -153,11 +197,24 @@
     document.querySelectorAll('.track-card').forEach(card => observer.observe(card));
   }
 
-  function render() {
+  function render({ reset = false } = {}) {
+    if (reset) resetWindow();
     updateControls();
-    const items = getCurrentItems();
-    els.contentList.innerHTML = items.map((item, i) => state.type === 'grammar' ? grammarCard(item, i) : vocabCard(item, i)).join('');
-    els.emptyState.hidden = items.length !== 0;
+
+    const allItems = getCurrentItems();
+    const start = state.type === 'vocab' ? Math.min(state.startIndex, allItems.length) : 0;
+    const end = state.type === 'vocab'
+      ? Math.min(allItems.length, start + state.visibleCount)
+      : allItems.length;
+    const visibleItems = allItems.slice(start, end);
+
+    els.contentList.innerHTML = visibleItems
+      .map((item, i) => state.type === 'grammar'
+        ? grammarCard(item, start + i)
+        : vocabCard(item, start + i))
+      .join('');
+    els.emptyState.hidden = allItems.length !== 0;
+    updateLoadMore(allItems.length, start, end);
     updateStats();
     attachObserver();
     updateResumeBanner();
@@ -175,9 +232,21 @@
     els.resumeBanner.hidden = false;
   }
 
+  function ensureSavedItemRendered(id) {
+    if (document.getElementById(id) || state.type !== 'vocab' || state.query) return;
+    const items = getCurrentItems();
+    const index = items.findIndex(item => item.id === id);
+    if (index < 0) return;
+
+    state.startIndex = Math.max(0, index - 8);
+    state.visibleCount = VOCAB_BATCH_SIZE;
+    render();
+  }
+
   function jumpToSaved({ auto = false } = {}) {
     const id = state.lastSeen[currentKey()];
     if (!id) return;
+    ensureSavedItemRendered(id);
     const target = document.getElementById(id);
     if (!target) return;
     target.scrollIntoView({ behavior: auto ? 'auto' : 'smooth', block: 'start' });
@@ -194,6 +263,7 @@
     state.type = btn.dataset.type;
     state.query = '';
     els.searchInput.value = '';
+    resetWindow();
     saveState();
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -203,6 +273,7 @@
     state.level = btn.dataset.level;
     state.query = '';
     els.searchInput.value = '';
+    resetWindow();
     saveState();
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -213,7 +284,7 @@
     clearTimeout(searchTimer);
     searchTimer = setTimeout(() => {
       state.query = e.target.value;
-      render();
+      render({ reset: true });
     }, 120);
   });
 
@@ -228,6 +299,10 @@
     updateStats();
   });
 
+  els.loadMoreButton?.addEventListener('click', () => {
+    state.visibleCount += VOCAB_BATCH_SIZE;
+    render();
+  });
   els.resumeButton.addEventListener('click', () => jumpToSaved());
   els.themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark');
@@ -239,6 +314,8 @@
   loadState();
   render();
 
-  // Returning users are restored after layout is ready. The banner remains available for manual re-jump.
+  // Returning users are restored after layout is ready. For large vocabulary
+  // levels, restoration renders a small window around the saved card instead
+  // of creating thousands of cards first.
   requestAnimationFrame(() => requestAnimationFrame(() => jumpToSaved({ auto: true })));
 })();
