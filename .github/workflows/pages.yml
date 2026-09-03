@@ -23,6 +23,48 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Validate JavaScript syntax
+        run: |
+          node --check app.js
+          for file in data/*.js; do node --check "$file"; done
+
+      - name: Validate reference data
+        run: |
+          node <<'NODE'
+          global.window = {};
+          [
+            './data/base.js',
+            './data/n5.js', './data/n4.js', './data/n3.js', './data/n2.js', './data/n1.js',
+            './data/extra-base.js',
+            './data/extra-n5.js', './data/extra-n4.js', './data/extra-n3.js', './data/extra-n2.js', './data/extra-n1.js'
+          ].forEach(file => require(file));
+
+          const data = window.JLPT_DATA;
+          const levels = ['N5', 'N4', 'N3', 'N2', 'N1'];
+          let grammarTotal = 0;
+          let vocabTotal = 0;
+          const ids = new Set();
+
+          for (const level of levels) {
+            const grammar = data.grammar[level] || [];
+            const vocab = data.vocab[level] || [];
+            grammarTotal += grammar.length;
+            vocabTotal += vocab.length;
+            console.log(`${level}: ${grammar.length} grammar, ${vocab.length} vocab`);
+
+            for (const item of [...grammar, ...vocab]) {
+              if (!item.id) throw new Error(`Missing id in ${level}`);
+              if (ids.has(item.id)) throw new Error(`Duplicate id: ${item.id}`);
+              ids.add(item.id);
+            }
+          }
+
+          console.log(`TOTAL: ${grammarTotal} grammar, ${vocabTotal} vocab`);
+          if (grammarTotal < 250) throw new Error(`Grammar coverage too small: ${grammarTotal}`);
+          if (vocabTotal < 1000) throw new Error(`Vocabulary coverage too small: ${vocabTotal}`);
+          NODE
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
