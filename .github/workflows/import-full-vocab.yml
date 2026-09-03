@@ -1,0 +1,47 @@
+name: Import full JLPT vocabulary
+
+on:
+  push:
+    paths:
+      - '.github/workflows/import-full-vocab.yml'
+      - 'scripts/build_full_vocab.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Tomoshi open dictionary
+        run: |
+          curl -L --fail --retry 3 \
+            -o /tmp/tomoshi.db.zst \
+            https://github.com/tomoshi-app/tomoshi-dict-data/releases/download/v2026-08-12/tomoshi-dict-open.db.zst
+          echo 'cd4e6b710fa4fca0672471b64bf251256dde7eba807b9bee2ab88b3fc71554c1  /tmp/tomoshi.db.zst' | sha256sum -c -
+          zstd -d /tmp/tomoshi.db.zst -o /tmp/tomoshi.db
+
+      - name: Generate browser vocabulary data
+        run: python3 scripts/build_full_vocab.py /tmp/tomoshi.db data/full-vocab.js
+
+      - name: Validate generated file
+        run: |
+          node --check data/full-vocab.js
+          test -s data/full-vocab.js
+          ls -lh data/full-vocab.js
+
+      - name: Commit generated vocabulary
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/full-vocab.js
+          if git diff --cached --quiet; then
+            echo 'Generated vocabulary is already up to date.'
+            exit 0
+          fi
+          git commit -m 'content: import full JLPT vocabulary'
+          git push
