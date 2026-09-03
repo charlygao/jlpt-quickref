@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f7fb" />
+  <meta name="description" content="面向中文母语者的 JLPT N5-N1 日语语法与词汇快速参考。" />
+  <title>日语语法・词汇速查 | JLPT N5-N1</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">日</div>
+      <div>
+        <h1>日语速查</h1>
+        <p>JLPT N5 → N1 · 中文母语者向</p>
+      </div>
+    </div>
+    <button id="themeToggle" class="icon-btn" aria-label="切换深浅色">◐</button>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero panel">
+      <div>
+        <span class="eyebrow">Japanese Quick Reference</span>
+        <h2>碎片时间，也能把语法和词汇串起来。</h2>
+        <p>按 JLPT 等级浏览核心语法、接续、中文解释、例句与高频词汇。进度保存在本机，回来会自动恢复到上次阅读位置。</p>
+      </div>
+      <div class="hero-stats">
+        <div><strong id="grammarCount">0</strong><span>语法点</span></div>
+        <div><strong id="vocabCount">0</strong><span>词汇</span></div>
+        <div><strong id="readCount">0</strong><span>已读</span></div>
+      </div>
+    </section>
+
+    <section class="controls panel sticky-controls">
+      <div class="segmented" role="tablist" aria-label="内容类型">
+        <button class="segment is-active" data-type="grammar" role="tab">语法</button>
+        <button class="segment" data-type="vocab" role="tab">词汇</button>
+      </div>
+
+      <div class="level-row" aria-label="JLPT 等级">
+        <button class="level-chip is-active" data-level="N5">N5</button>
+        <button class="level-chip" data-level="N4">N4</button>
+        <button class="level-chip" data-level="N3">N3</button>
+        <button class="level-chip" data-level="N2">N2</button>
+        <button class="level-chip" data-level="N1">N1</button>
+      </div>
+
+      <label class="search-box">
+        <span>⌕</span>
+        <input id="searchInput" type="search" autocomplete="off" placeholder="搜索语法、日文、中文或例句…" />
+      </label>
+    </section>
+
+    <section class="progress-panel panel">
+      <div class="progress-head">
+        <div>
+          <span class="muted">当前进度</span>
+          <strong id="progressLabel">N5 · 语法</strong>
+        </div>
+        <span id="progressPercent">0%</span>
+      </div>
+      <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+    </section>
+
+    <section id="resumeBanner" class="resume-banner panel" hidden>
+      <div>
+        <strong>已找到上次阅读位置</strong>
+        <span id="resumeText"></span>
+      </div>
+      <button id="resumeButton" class="primary-btn">继续阅读</button>
+    </section>
+
+    <section id="contentList" class="content-list" aria-live="polite"></section>
+
+    <section id="emptyState" class="empty-state panel" hidden>
+      <div class="empty-icon">あ</div>
+      <h3>没有找到匹配内容</h3>
+      <p>换个关键词，或切换等级试试看。</p>
+    </section>
+
+    <section class="note panel">
+      <strong>关于 JLPT 分级</strong>
+      <p>JLPT 官方并未公布逐条固定的语法与词汇清单。本页等级划分综合常见教材与备考体系，定位是“快速参考”，不是官方出题范围声明。</p>
+    </section>
+  </main>
+
+  <button id="backToTop" class="floating-btn" aria-label="返回顶部">↑</button>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
