@@ -42,6 +42,7 @@ body.dark {
 
 button, input { font: inherit; }
 button { color: inherit; }
+a { color: var(--accent); text-underline-offset: 3px; }
 
 .topbar {
   position: sticky;
@@ -149,6 +150,17 @@ button { color: inherit; }
 .vocab-reading { color: var(--accent); font-weight: 700; }
 .vocab-pos { color: var(--muted); font-size: 11px; background: var(--code-bg); padding: 3px 7px; border-radius: 999px; }
 
+.load-more-wrap {
+  margin-top: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.load-more-wrap[hidden] { display: none; }
+.load-more-wrap .muted { line-height: 1.5; }
+
 .empty-state { margin-top: 14px; padding: 34px 20px; text-align: center; }
 .empty-icon { width: 54px; height: 54px; display: grid; place-items: center; margin: 0 auto 12px; border-radius: 18px; background: var(--accent-soft); color: var(--accent); font-size: 25px; font-weight: 800; }
 .empty-state h3 { margin: 0 0 6px; }
@@ -171,6 +183,7 @@ button { color: inherit; }
   .card { padding: 17px; scroll-margin-top: 230px; }
   .card h3 { font-size: 18px; }
   .resume-banner { align-items: stretch; flex-direction: column; }
+  .load-more-wrap { align-items: stretch; flex-direction: column; }
   .primary-btn { width: 100%; }
 }
 
