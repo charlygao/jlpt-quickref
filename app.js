@@ -52,7 +52,7 @@
     }));
   }
 
-  const escapeHtml = (value) => String(value)
+  const escapeHtml = (value) => String(value ?? '')
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
@@ -91,26 +91,28 @@
           <div class="meta-box"><label>级别</label><span>${item.level} · 快速参考</span></div>
         </div>
         <div class="examples">
-          ${item.examples.map(ex => `<div class="example"><div class="example-jp">${escapeHtml(ex.jp)}</div><div class="example-zh">${escapeHtml(ex.zh)}</div></div>`).join('')}
+          ${(item.examples || []).map(ex => `<div class="example"><div class="example-jp">${escapeHtml(ex.jp)}</div><div class="example-zh">${escapeHtml(ex.zh)}</div></div>`).join('')}
         </div>
       </article>`;
   }
 
   function vocabCard(item, index) {
     const read = state.read.has(item.id);
+    const exampleHtml = item.example?.jp ? `
+        <div class="examples">
+          <div class="example"><div class="example-jp">${escapeHtml(item.example.jp)}</div><div class="example-zh">${escapeHtml(item.example.zh)}</div></div>
+        </div>` : '';
     return `
       <article class="card track-card" id="${item.id}" data-id="${item.id}">
         <div class="card-head">
           <div class="card-title-wrap">
             <div class="card-kicker"><span class="badge">${item.level}</span><span class="card-index">词汇 ${String(index + 1).padStart(2, '0')}</span></div>
-            <div class="vocab-line"><span class="vocab-word">${escapeHtml(item.word)}</span><span class="vocab-reading">${escapeHtml(item.reading)}</span><span class="vocab-pos">${escapeHtml(item.pos)}</span></div>
+            <div class="vocab-line"><span class="vocab-word">${escapeHtml(item.word)}</span><span class="vocab-reading">${escapeHtml(item.reading)}</span><span class="vocab-pos">${escapeHtml(item.pos || '词汇')}</span></div>
           </div>
           <button class="read-btn ${read ? 'is-read' : ''}" data-read-id="${item.id}">${read ? '✓ 已读' : '标记已读'}</button>
         </div>
-        <p class="meaning">${escapeHtml(item.meaning)}</p>
-        <div class="examples">
-          <div class="example"><div class="example-jp">${escapeHtml(item.example.jp)}</div><div class="example-zh">${escapeHtml(item.example.zh)}</div></div>
-        </div>
+        <p class="meaning">${escapeHtml(item.meaning || '—')}</p>
+        ${exampleHtml}
       </article>`;
   }
 
