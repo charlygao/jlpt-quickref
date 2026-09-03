@@ -1,0 +1,40 @@
+name: Inspect Tomoshi dictionary schema
+
+on:
+  push:
+    paths:
+      - '.github/workflows/inspect-tomoshi.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download open dictionary
+        run: |
+          curl -L --fail --retry 3 \
+            -o /tmp/tomoshi.db.zst \
+            https://github.com/tomoshi-app/tomoshi-dict-data/releases/download/v2026-08-12/tomoshi-dict-open.db.zst
+          zstd -d /tmp/tomoshi.db.zst -o /tmp/tomoshi.db
+
+      - name: Inspect relevant schemas
+        run: |
+          echo '=== entries ==='
+          sqlite3 /tmp/tomoshi.db '.schema entries'
+          echo '=== forms ==='
+          sqlite3 /tmp/tomoshi.db '.schema forms'
+          echo '=== zh_defs ==='
+          sqlite3 /tmp/tomoshi.db '.schema zh_defs'
+          echo '=== vocab_jlpt ==='
+          sqlite3 /tmp/tomoshi.db '.schema vocab_jlpt'
+          echo '=== sample entries ==='
+          sqlite3 -header -column /tmp/tomoshi.db 'SELECT * FROM entries LIMIT 2;'
+          echo '=== sample forms ==='
+          sqlite3 -header -column /tmp/tomoshi.db 'SELECT * FROM forms LIMIT 4;'
+          echo '=== sample zh_defs ==='
+          sqlite3 -header -column /tmp/tomoshi.db 'SELECT * FROM zh_defs LIMIT 4;'
+          echo '=== sample vocab_jlpt ==='
+          sqlite3 -header -column /tmp/tomoshi.db 'SELECT * FROM vocab_jlpt LIMIT 8;'
