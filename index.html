@@ -25,7 +25,7 @@
       <div>
         <span class="eyebrow">Japanese Quick Reference</span>
         <h2>碎片时间，也能把语法和词汇串起来。</h2>
-        <p>按 JLPT 等级浏览核心语法、接续、中文解释、例句与高频词汇。进度保存在本机，回来会自动恢复到上次阅读位置。</p>
+        <p>按 JLPT 等级浏览核心语法、接续、中文解释、例句与分级词汇。进度保存在本机，回来会自动恢复到上次阅读位置。</p>
       </div>
       <div class="hero-stats">
         <div><strong id="grammarCount">0</strong><span>语法点</span></div>
@@ -75,6 +75,11 @@
 
     <section id="contentList" class="content-list" aria-live="polite"></section>
 
+    <section id="loadMoreWrap" class="load-more-wrap panel" hidden>
+      <span id="loadMoreText" class="muted"></span>
+      <button id="loadMoreButton" class="primary-btn">继续显示</button>
+    </section>
+
     <section id="emptyState" class="empty-state panel" hidden>
       <div class="empty-icon">あ</div>
       <h3>没有找到匹配内容</h3>
@@ -83,7 +88,8 @@
 
     <section class="note panel">
       <strong>关于 JLPT 分级</strong>
-      <p>JLPT 官方并未公布逐条固定的语法与词汇清单。本页等级划分综合常见教材与备考体系，定位是“快速参考”，不是官方出题范围声明。</p>
+      <p>JLPT 官方并未公布逐条固定的语法与词汇清单。本页等级划分综合常见教材与社区词表，定位是“快速参考”，不是官方出题范围声明。</p>
+      <p>完整分级词汇底库部分数据改编自 Tomoshi Dictionary Open Data / JMdict，并按 CC BY-SA 4.0 提供。<a href="FULL_VOCAB_NOTICE.md">查看数据来源、署名与修改说明</a>。</p>
     </section>
   </main>
 
@@ -101,6 +107,7 @@
   <script src="data/extra-n3.js"></script>
   <script src="data/extra-n2.js"></script>
   <script src="data/extra-n1.js"></script>
+  <script src="data/full-vocab.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
