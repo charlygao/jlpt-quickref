@@ -71,25 +71,24 @@ def chinese_glosses(entry, zh_data):
     return out[:8]
 
 
-def pos_label(entry):
-    tags = []
-    for sense in entry.get("senses") or []:
-        tags.extend(sense.get("pos") or [])
-    text = " ".join(str(x) for x in tags).lower()
+def tag_to_pos(tag):
+    text = str(tag or "").lower()
+    # Map each JMdict POS tag independently. This avoids a secondary sense such
+    # as an adverbial/particle use overriding the primary noun/verb sense.
     if "pronoun" in text:
         return "代词"
-    if "particle" in text:
-        return "助词"
+    if "noun" in text:
+        return "名词"
+    if "verb" in text:
+        return "动词"
+    if "adjective" in text or "adjectival" in text:
+        return "形容词"
+    if "adverb" in text:
+        return "副词"
     if "conjunction" in text:
         return "接续词"
     if "interjection" in text:
         return "感叹词"
-    if "adverb" in text:
-        return "副词"
-    if "adjective" in text or "adjectival" in text:
-        return "形容词"
-    if "verb" in text:
-        return "动词"
     if "counter" in text:
         return "助数词"
     if "prefix" in text:
@@ -98,8 +97,19 @@ def pos_label(entry):
         return "接尾词"
     if "expression" in text:
         return "表达"
-    if "noun" in text:
-        return "名词"
+    if text.strip().startswith("particle") or text.strip() == "particle":
+        return "助词"
+    return None
+
+
+def pos_label(entry):
+    # JMdict senses are ordered. Prefer the first recognizable POS on the first
+    # sense that provides one, rather than concatenating every sense together.
+    for sense in entry.get("senses") or []:
+        for tag in sense.get("pos") or []:
+            label = tag_to_pos(tag)
+            if label:
+                return label
     return "词汇"
 
 
