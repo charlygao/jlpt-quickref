@@ -9,7 +9,9 @@
     type: 'grammar',
     level: 'N5',
     query: '',
-    read: new Set(),
+    filter: 'all',
+    mastered: new Set(),
+    followed: new Set(),
     lastSeen: {},
     startIndex: 0,
     visibleCount: VOCAB_BATCH_SIZE,
@@ -21,7 +23,7 @@
     searchInput: document.getElementById('searchInput'),
     grammarCount: document.getElementById('grammarCount'),
     vocabCount: document.getElementById('vocabCount'),
-    readCount: document.getElementById('readCount'),
+    masteredCount: document.getElementById('masteredCount'),
     progressLabel: document.getElementById('progressLabel'),
     progressPercent: document.getElementById('progressPercent'),
     progressBar: document.getElementById('progressBar'),
@@ -33,6 +35,9 @@
     loadMoreButton: document.getElementById('loadMoreButton'),
     themeToggle: document.getElementById('themeToggle'),
     backToTop: document.getElementById('backToTop'),
+    filterToggle: document.getElementById('filterToggle'),
+    filterLabel: document.getElementById('filterLabel'),
+    filterMenu: document.getElementById('filterMenu'),
   };
 
   function loadState() {
@@ -40,7 +45,8 @@
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
       if (saved.type && DATA[saved.type]) state.type = saved.type;
       if (saved.level && DATA.grammar[saved.level]) state.level = saved.level;
-      state.read = new Set(Array.isArray(saved.read) ? saved.read : []);
+      state.mastered = new Set(Array.isArray(saved.mastered) ? saved.mastered : []);
+      state.followed = new Set(Array.isArray(saved.followed) ? saved.followed : []);
       state.lastSeen = saved.lastSeen || {};
     } catch (_) {}
 
@@ -54,7 +60,8 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       type: state.type,
       level: state.level,
-      read: [...state.read],
+      mastered: [...state.mastered],
+      followed: [...state.followed],
       lastSeen: state.lastSeen,
     }));
   }
@@ -91,8 +98,20 @@
   function getCurrentItems() {
     const items = DATA[state.type][state.level] || [];
     const q = state.query.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter(item => itemSearchText(item).includes(q));
+    return items.filter(item => {
+      if (q && !itemSearchText(item).includes(q)) return false;
+      if (state.filter === 'unmastered') return !state.mastered.has(item.id);
+      if (state.filter === 'followed') return state.followed.has(item.id);
+      return true;
+    });
+  }
+
+  function studyButtons(item) {
+    const mastered = state.mastered.has(item.id);
+    const followed = state.followed.has(item.id);
+    return `
+      <button type="button" class="status-btn mastery-btn ${mastered ? 'is-active' : ''}" data-status="mastered" data-item-id="${escapeHtml(item.id)}" aria-pressed="${mastered}"><span aria-hidden="true">✓</span> 掌握</button>
+      <button type="button" class="status-btn follow-btn ${followed ? 'is-active' : ''}" data-status="followed" data-item-id="${escapeHtml(item.id)}" aria-pressed="${followed}"><span aria-hidden="true">★</span> 关注</button>`;
   }
 
   // ---- Grammar-element quick reference -------------------------------------------------
@@ -126,7 +145,6 @@
   }
 
   function grammarCard(item, index) {
-    const read = state.read.has(item.id);
     return `
       <article class="card track-card" id="${item.id}" data-id="${item.id}">
         <div class="card-head">
@@ -134,7 +152,7 @@
             <div class="card-kicker"><span class="badge">${item.level}</span><span class="card-index">语法 ${String(index + 1).padStart(2, '0')}</span></div>
             <h3>${escapeHtml(item.title)}</h3>
           </div>
-          <button class="read-btn ${read ? 'is-read' : ''}" data-read-id="${item.id}">${read ? '✓ 已读' : '标记已读'}</button>
+          <div class="card-actions">${studyButtons(item)}</div>
         </div>
         <p class="meaning">${escapeHtml(item.meaning)}</p>
         <div class="meta-grid single">
@@ -302,7 +320,6 @@
   }
 
   function vocabCard(item, index) {
-    const read = state.read.has(item.id);
     const type = detailedType(item);
     const exampleHtml = item.example?.jp ? `
         <div class="examples">
@@ -318,7 +335,7 @@
             <div class="card-kicker"><span class="badge">${item.level}</span><span class="card-index">词汇 ${String(index + 1).padStart(2, '0')}</span></div>
             <div class="vocab-line"><span class="vocab-word">${escapeHtml(item.word)}</span><span class="vocab-reading">${escapeHtml(item.reading)}</span><span class="vocab-pos">${escapeHtml(type)}</span></div>
           </div>
-          <div class="card-actions">${conjugateButton}<button class="read-btn ${read ? 'is-read' : ''}" data-read-id="${item.id}">${read ? '✓ 已读' : '标记已读'}</button></div>
+          <div class="card-actions">${conjugateButton}${studyButtons(item)}</div>
         </div>
         <p class="meaning">${escapeHtml(item.meaning || '—')}</p>
         ${exampleHtml}
@@ -327,6 +344,8 @@
 
   // ---- Shared modal --------------------------------------------------------------------
   let modal;
+  let lockedScrollY = 0;
+  let modalReturnFocus = null;
   function ensureModal() {
     if (modal) return modal;
     modal = document.createElement('div');
@@ -341,22 +360,39 @@
     document.body.appendChild(modal);
     modal.querySelector('.modal-close').addEventListener('click', closeModal);
     modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    modal.addEventListener('touchmove', e => { if (e.target === modal) e.preventDefault(); }, { passive: false });
     return modal;
   }
 
   function openModal(title, html) {
     const el = ensureModal();
+    const wasClosed = el.hidden;
     el.querySelector('#infoModalTitle').textContent = title;
     el.querySelector('.modal-body').innerHTML = html;
+    el.querySelector('.info-modal').scrollTop = 0;
     el.hidden = false;
-    document.body.classList.add('modal-open');
+    if (wasClosed) {
+      modalReturnFocus = document.activeElement;
+      lockedScrollY = window.scrollY;
+      document.documentElement.classList.add('modal-open');
+      document.body.classList.add('modal-open');
+      document.body.style.top = `-${lockedScrollY}px`;
+    }
     el.querySelector('.modal-close').focus({ preventScroll: true });
   }
 
   function closeModal() {
     if (!modal || modal.hidden) return;
     modal.hidden = true;
+    document.documentElement.classList.remove('modal-open');
     document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo(0, lockedScrollY);
+    document.documentElement.style.scrollBehavior = previousScrollBehavior;
+    modalReturnFocus?.focus?.({ preventScroll: true });
+    modalReturnFocus = null;
   }
 
   function openTermModal(term) {
@@ -395,14 +431,37 @@
   function updateStats() {
     els.grammarCount.textContent = flatCount(DATA.grammar).toLocaleString();
     els.vocabCount.textContent = flatCount(DATA.vocab).toLocaleString();
-    els.readCount.textContent = state.read.size.toLocaleString();
+    els.masteredCount.textContent = state.mastered.size.toLocaleString();
 
     const items = DATA[state.type][state.level] || [];
-    const read = items.filter(x => state.read.has(x.id)).length;
-    const percent = items.length ? Math.round(read / items.length * 100) : 0;
+    const mastered = items.filter(x => state.mastered.has(x.id)).length;
+    const percent = items.length ? Math.round(mastered / items.length * 100) : 0;
     els.progressLabel.textContent = `${state.level} · ${state.type === 'grammar' ? '语法' : '词汇'}`;
-    els.progressPercent.textContent = `${percent}% · ${read}/${items.length}`;
+    els.progressPercent.textContent = `${percent}% · ${mastered}/${items.length}`;
     els.progressBar.style.width = `${percent}%`;
+  }
+
+  const FILTER_LABELS = {
+    all: '显示全部',
+    unmastered: '仅显示未掌握',
+    followed: '仅显示关注',
+  };
+
+  function updateFilterControls() {
+    els.filterLabel.textContent = FILTER_LABELS[state.filter];
+    document.querySelectorAll('[data-filter]').forEach(button => {
+      const active = button.dataset.filter === state.filter;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-checked', String(active));
+    });
+  }
+
+  function setFilterMenuOpen(open, { focus = false } = {}) {
+    els.filterMenu.hidden = !open;
+    els.filterToggle.setAttribute('aria-expanded', String(open));
+    if (open && focus) {
+      (els.filterMenu.querySelector('.is-active') || els.filterMenu.querySelector('button'))?.focus();
+    }
   }
 
   function updateControls() {
@@ -442,6 +501,7 @@
   function render({ reset = false } = {}) {
     if (reset) resetWindow();
     updateControls();
+    updateFilterControls();
     const allItems = getCurrentItems();
     const start = state.type === 'vocab' ? Math.min(state.startIndex, allItems.length) : 0;
     const end = state.type === 'vocab' ? Math.min(allItems.length, start + state.visibleCount) : allItems.length;
@@ -456,7 +516,7 @@
 
   function updateResumeBanner() {
     const id = state.lastSeen[currentKey()];
-    if (!id || state.query || !DATA[state.type][state.level].some(x => x.id === id)) {
+    if (!id || state.query || state.filter !== 'all' || !DATA[state.type][state.level].some(x => x.id === id)) {
       els.resumeBanner.hidden = true;
       return;
     }
@@ -523,17 +583,36 @@
     if (term) { openTermModal(term.dataset.term); return; }
     const conj = e.target.closest('[data-conjugate-id]');
     if (conj) { const item = findVocab(conj.dataset.conjugateId); if (item) openConjugationModal(item); return; }
-    const btn = e.target.closest('[data-read-id]');
+    const btn = e.target.closest('[data-status][data-item-id]');
     if (!btn) return;
-    const id = btn.dataset.readId;
-    state.read.has(id) ? state.read.delete(id) : state.read.add(id);
+    const id = btn.dataset.itemId;
+    const collection = btn.dataset.status === 'mastered' ? state.mastered : state.followed;
+    collection.has(id) ? collection.delete(id) : collection.add(id);
     saveState();
-    btn.classList.toggle('is-read', state.read.has(id));
-    btn.textContent = state.read.has(id) ? '✓ 已读' : '标记已读';
-    updateStats();
+    render();
   });
 
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  els.filterToggle.addEventListener('click', () => {
+    const open = els.filterToggle.getAttribute('aria-expanded') !== 'true';
+    setFilterMenuOpen(open, { focus: open });
+  });
+  els.filterMenu.addEventListener('click', e => {
+    const option = e.target.closest('[data-filter]');
+    if (!option) return;
+    state.filter = option.dataset.filter;
+    setFilterMenuOpen(false);
+    resetWindow();
+    render();
+    els.filterToggle.focus({ preventScroll: true });
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.floating-actions')) setFilterMenuOpen(false);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (modal && !modal.hidden) closeModal();
+    else setFilterMenuOpen(false);
+  });
   els.loadMoreButton?.addEventListener('click', () => { state.visibleCount += VOCAB_BATCH_SIZE; render(); });
   els.resumeButton.addEventListener('click', () => jumpToSaved());
   els.themeToggle.addEventListener('click', () => {
@@ -541,7 +620,6 @@
     localStorage.setItem(THEME_KEY, document.body.classList.contains('dark') ? 'dark' : 'light');
   });
   els.backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-  window.addEventListener('scroll', () => els.backToTop.classList.toggle('show', scrollY > 600), { passive: true });
 
   loadState();
   render();

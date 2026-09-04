@@ -47,12 +47,12 @@
       <div>
         <span class="eyebrow">Japanese Quick Reference</span>
         <h2>碎片时间，也能把语法和词汇串起来。</h2>
-        <p>按 JLPT 等级浏览核心语法、接续、中文解释、例句与分级词汇。进度保存在本机，回来会自动恢复到上次阅读位置。</p>
+        <p>按 JLPT 等级浏览核心语法、接续、中文解释、例句与分级词汇。掌握与关注状态保存在本机，回来会自动恢复到上次阅读位置。</p>
       </div>
       <div class="hero-stats">
         <div><strong id="grammarCount">0</strong><span>语法点</span></div>
         <div><strong id="vocabCount">0</strong><span>词汇</span></div>
-        <div><strong id="readCount">0</strong><span>已读</span></div>
+        <div><strong id="masteredCount">0</strong><span>已掌握</span></div>
       </div>
     </section>
 
@@ -79,7 +79,7 @@
     <section class="progress-panel panel">
       <div class="progress-head">
         <div>
-          <span class="muted">当前进度</span>
+          <span class="muted">掌握进度</span>
           <strong id="progressLabel">N5 · 语法</strong>
         </div>
         <span id="progressPercent">0%</span>
@@ -115,7 +115,19 @@
     </section>
   </main>
 
-  <button id="backToTop" class="floating-btn" aria-label="返回顶部">↑</button>
+  <aside class="floating-actions" aria-label="浏览操作">
+    <div id="filterMenu" class="filter-menu" role="menu" aria-label="内容筛选" hidden>
+      <button type="button" class="filter-option is-active" data-filter="all" role="menuitemradio" aria-checked="true">显示全部</button>
+      <button type="button" class="filter-option" data-filter="unmastered" role="menuitemradio" aria-checked="false">仅显示未掌握</button>
+      <button type="button" class="filter-option" data-filter="followed" role="menuitemradio" aria-checked="false">仅显示关注</button>
+    </div>
+    <div class="floating-action-row">
+      <button id="filterToggle" class="floating-filter-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="filterMenu">
+        <span aria-hidden="true">≡</span><span id="filterLabel">显示全部</span>
+      </button>
+      <button id="backToTop" class="floating-icon-btn" type="button" aria-label="返回顶部" title="返回顶部">↑</button>
+    </div>
+  </aside>
 
   <script src="data/base.js"></script>
   <script src="data/n5.js"></script>
