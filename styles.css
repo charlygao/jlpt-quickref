@@ -212,17 +212,28 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
 .bookmark-btn:disabled { color: var(--muted); opacity: .42; cursor: default; box-shadow: none; }
 .bookmark-btn:disabled svg { fill: none; }
 .filter-menu {
-  width: 174px; padding: 6px; display: grid; gap: 3px;
-  border: 1px solid var(--line); border-radius: 16px;
+  width: 210px; padding: 7px; display: grid; gap: 3px;
+  border: 1px solid var(--line); border-radius: 18px;
   background: var(--panel-solid); box-shadow: 0 16px 44px rgba(20,23,36,.18);
 }
 .filter-menu[hidden] { display: none; }
 .filter-option {
-  width: 100%; border: 0; border-radius: 11px; padding: 10px 11px;
-  background: transparent; color: var(--muted); text-align: left; cursor: pointer; font-size: 12px; font-weight: 750;
+  width: 100%; min-height: 46px; border: 0; border-radius: 12px; padding: 6px 9px;
+  display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; align-items: center; gap: 10px;
+  background: transparent; color: var(--muted); text-align: left; cursor: pointer; font-size: 14px; font-weight: 750;
 }
 .filter-option:hover, .filter-option:focus-visible { background: var(--code-bg); outline: none; }
 .filter-option.is-active { color: var(--accent); background: var(--accent-soft); }
+.filter-option-icon {
+  width: 28px; height: 28px; display: grid; place-items: center; border-radius: 9px;
+  background: var(--code-bg); color: var(--muted); font-size: 15px; line-height: 1;
+}
+.filter-option.is-active .filter-option-icon { background: var(--panel-solid); color: var(--accent); }
+.filter-option-count {
+  min-width: 30px; padding: 3px 7px; border-radius: 999px; background: var(--code-bg);
+  color: var(--muted); text-align: center; font-size: 12px; font-variant-numeric: tabular-nums;
+}
+.filter-option.is-active .filter-option-count { background: var(--panel-solid); color: var(--accent); }
 
 /* Shared grammar-term / conjugation floating sheet */
 .modal-backdrop {

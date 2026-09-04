@@ -109,12 +109,21 @@
 
   <aside class="floating-actions" aria-label="浏览操作">
     <div id="filterMenu" class="filter-menu" role="menu" aria-label="内容筛选" hidden>
-      <button type="button" class="filter-option is-active" data-filter="all" role="menuitemradio" aria-checked="true">显示全部</button>
-      <button type="button" class="filter-option" data-filter="unmastered" role="menuitemradio" aria-checked="false">仅显示未掌握</button>
-      <button type="button" class="filter-option" data-filter="followed" role="menuitemradio" aria-checked="false">仅显示关注</button>
+      <button type="button" class="filter-option is-active" data-filter="all" role="menuitemradio" aria-checked="true">
+        <span class="filter-option-icon" aria-hidden="true">☷</span><span>全部</span><span class="filter-option-count" data-filter-count="all">0</span>
+      </button>
+      <button type="button" class="filter-option" data-filter="mastered" role="menuitemradio" aria-checked="false">
+        <span class="filter-option-icon" aria-hidden="true">✓</span><span>已掌握</span><span class="filter-option-count" data-filter-count="mastered">0</span>
+      </button>
+      <button type="button" class="filter-option" data-filter="unmastered" role="menuitemradio" aria-checked="false">
+        <span class="filter-option-icon" aria-hidden="true">○</span><span>未掌握</span><span class="filter-option-count" data-filter-count="unmastered">0</span>
+      </button>
+      <button type="button" class="filter-option" data-filter="followed" role="menuitemradio" aria-checked="false">
+        <span class="filter-option-icon" aria-hidden="true">★</span><span>关注</span><span class="filter-option-count" data-filter-count="followed">0</span>
+      </button>
     </div>
-    <button id="filterToggle" class="floating-icon-btn filter-toggle-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="filterMenu" aria-label="筛选：显示全部" title="筛选：显示全部">
-      <span id="filterIcon" aria-hidden="true">☷</span><span id="filterLabel" class="sr-only">显示全部</span>
+    <button id="filterToggle" class="floating-icon-btn filter-toggle-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="filterMenu" aria-label="筛选：全部" title="筛选：全部">
+      <span id="filterIcon" aria-hidden="true">☷</span><span id="filterLabel" class="sr-only">全部</span>
     </button>
     <button id="resumeBookmark" class="floating-icon-btn bookmark-btn" type="button" aria-label="暂无上次阅读位置" title="暂无上次阅读位置" disabled>
       <svg viewBox="0 0 24 24" aria-hidden="true">

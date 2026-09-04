@@ -100,6 +100,7 @@
     const q = state.query.trim().toLowerCase();
     return items.filter(item => {
       if (q && !itemSearchText(item).includes(q)) return false;
+      if (state.filter === 'mastered') return state.mastered.has(item.id);
       if (state.filter === 'unmastered') return !state.mastered.has(item.id);
       if (state.filter === 'followed') return state.followed.has(item.id);
       return true;
@@ -443,18 +444,29 @@
   }
 
   const FILTER_LABELS = {
-    all: '显示全部',
-    unmastered: '仅显示未掌握',
-    followed: '仅显示关注',
+    all: '全部',
+    mastered: '已掌握',
+    unmastered: '未掌握',
+    followed: '关注',
   };
   const FILTER_ICONS = {
     all: '☷',
+    mastered: '✓',
     unmastered: '○',
     followed: '★',
   };
 
   function updateFilterControls() {
     const label = FILTER_LABELS[state.filter];
+    const query = state.query.trim().toLowerCase();
+    const items = (DATA[state.type][state.level] || []).filter(item => !query || itemSearchText(item).includes(query));
+    const masteredCount = items.filter(item => state.mastered.has(item.id)).length;
+    const counts = {
+      all: items.length,
+      mastered: masteredCount,
+      unmastered: items.length - masteredCount,
+      followed: items.filter(item => state.followed.has(item.id)).length,
+    };
     els.filterIcon.textContent = FILTER_ICONS[state.filter];
     els.filterLabel.textContent = label;
     els.filterToggle.setAttribute('aria-label', `筛选：${label}`);
@@ -463,6 +475,8 @@
       const active = button.dataset.filter === state.filter;
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-checked', String(active));
+      const count = button.querySelector('[data-filter-count]');
+      if (count) count.textContent = counts[button.dataset.filter].toLocaleString();
     });
   }
 
