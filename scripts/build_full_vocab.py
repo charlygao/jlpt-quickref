@@ -69,67 +69,97 @@ def chinese_glosses(entry, zh_data):
 
 
 def detailed_pos(tags):
-    texts = [str(tag or "").lower() for tag in tags]
-    joined = " | ".join(texts)
+    """Map JMdict POS labels to learner-facing Chinese classes.
 
-    # Verb classes first: these are needed by the browser conjugator.
-    if "godan verb" in joined:
+    Match individual tags rather than a joined substring. This matters because
+    labels such as "adverbial noun" contain the letters "verb", and
+    "intransitive verb" contains "transitive verb" as a substring.
+    """
+    texts = [str(tag or "").strip().lower() for tag in tags if str(tag or "").strip()]
+
+    def starts(prefix):
+        return any(t.startswith(prefix) for t in texts)
+
+    def contains(fragment):
+        return any(fragment in t for t in texts)
+
+    has_godan = starts("godan verb")
+    has_ichidan = starts("ichidan verb")
+    has_kuru = any("kuru verb" in t or t.startswith("irregular verb - kuru") for t in texts)
+    has_suru = any("suru verb" in t or "takes the auxiliary verb suru" in t for t in texts)
+    has_aux_verb = starts("auxiliary verb")
+    has_transitive = starts("transitive verb")
+    has_intransitive = starts("intransitive verb")
+    has_real_verb = any(
+        "verb" in t
+        and "adverb" not in t
+        and not t.startswith("transitive verb")
+        and not t.startswith("intransitive verb")
+        and not t.startswith("auxiliary verb")
+        for t in texts
+    )
+
+    has_noun = any("noun" in t for t in texts)
+    has_pronoun = starts("pronoun")
+    has_i_adj = any("adjective (keiyoushi)" in t or "i-adjective" in t or "keiyoushi" in t for t in texts)
+    has_na_adj = any("adjectival nouns or quasi-adjectives" in t or "na-adjective" in t or "keiyodoshi" in t for t in texts)
+    has_no_adj = any("nouns which may take the genitive case particle" in t or "no-adjective" in t for t in texts)
+
+    if has_godan:
         core = "五段动词"
-    elif "ichidan verb" in joined:
+    elif has_ichidan:
         core = "一段动词"
-    elif "kuru verb" in joined or "irregular verb - kuru" in joined:
+    elif has_kuru:
         core = "カ变动词"
-    elif "suru verb" in joined or "takes the auxiliary verb suru" in joined:
+    elif has_noun and has_suru:
+        core = "名词・サ变"
+    elif has_suru:
         core = "サ变动词"
-    elif "auxiliary verb" in joined:
+    elif has_aux_verb:
         core = "助动词"
-    elif "verb" in joined:
+    elif has_real_verb:
         core = "动词"
-    elif "adjective (keiyoushi)" in joined or "i-adjective" in joined or "keiyoushi" in joined:
+    elif has_i_adj:
         core = "い形容词"
-    elif "adjectival nouns or quasi-adjectives" in joined or "na-adjective" in joined or "keiyodoshi" in joined:
+    elif has_na_adj:
         core = "な形容词"
-    elif "nouns which may take the genitive case particle" in joined or "no-adjective" in joined:
+    elif has_no_adj:
         core = "の形容词"
-    elif "taru adjective" in joined:
+    elif contains("taru adjective"):
         core = "タルト形容词"
-    elif "pre-noun adjectival" in joined:
+    elif contains("pre-noun adjectival"):
         core = "连体词"
-    elif "auxiliary adjective" in joined:
+    elif contains("auxiliary adjective"):
         core = "补助形容词"
-    elif "pronoun" in joined:
+    elif has_pronoun:
         core = "代词"
-    elif "noun" in joined:
+    elif has_noun:
+        # Includes temporal/adverbial/proper nouns. Keeping them as nouns is
+        # more useful than falsely treating "adverbial noun" as a verb.
         core = "名词"
-    elif "adverb" in joined:
+    elif starts("adverb"):
         core = "副词"
-    elif "conjunction" in joined:
+    elif starts("conjunction"):
         core = "接续词"
-    elif "interjection" in joined:
+    elif starts("interjection"):
         core = "感叹词"
-    elif "counter" in joined:
+    elif starts("counter"):
         core = "助数词"
-    elif "prefix" in joined:
+    elif starts("prefix"):
         core = "接头词"
-    elif "suffix" in joined:
+    elif starts("suffix"):
         core = "接尾词"
-    elif "expression" in joined:
+    elif starts("expression"):
         core = "表达"
-    elif any(t.strip().startswith("particle") or t.strip() == "particle" for t in texts):
+    elif starts("particle"):
         core = "助词"
     else:
         core = "词汇"
 
-    # A noun that can take suru is more useful to learners as 名词・サ变.
-    has_noun = "noun" in joined
-    has_suru = "suru verb" in joined or "takes the auxiliary verb suru" in joined
-    if has_noun and has_suru:
-        core = "名词・サ变"
-
     qualifiers = []
-    if "transitive verb" in joined:
+    if has_transitive:
         qualifiers.append("他动词")
-    if "intransitive verb" in joined:
+    if has_intransitive:
         qualifiers.append("自动词")
 
     if qualifiers and ("动词" in core or core == "名词・サ变"):
@@ -138,8 +168,8 @@ def detailed_pos(tags):
 
 
 def pos_label(entry):
-    # JMdict senses are ordered. Use the first sense with POS tags, but inspect
-    # all tags on that sense so class + transitivity can be preserved.
+    # JMdict senses are ordered. Use the first sense that provides POS tags;
+    # those tags represent the primary sense shown by this compact card.
     for sense in entry.get("senses") or []:
         tags = sense.get("pos") or []
         if tags:
