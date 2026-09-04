@@ -5,7 +5,10 @@ import sys
 from collections import OrderedDict
 from pathlib import Path
 
-from wordfreq import zipf_frequency
+try:
+    from wordfreq import zipf_frequency
+except ImportError:  # Unit tests for POS mapping do not need the frequency model.
+    zipf_frequency = None
 
 LEVELS = ["N5", "N4", "N3", "N2", "N1"]
 
@@ -70,8 +73,30 @@ def chinese_glosses(entry, zh_data):
     return out[:8]
 
 
+def _tag_texts(value):
+    """Yield normalized scalar values from string or structured POS tags."""
+    if isinstance(value, str):
+        text = value.strip().lower()
+        if text:
+            yield text
+        return
+    if isinstance(value, dict):
+        # Tomoshi versions have represented JMdict tags both as strings and as
+        # small objects. Read the fields instead of matching against repr(dict).
+        for item in value.values():
+            yield from _tag_texts(item)
+        return
+    if isinstance(value, (list, tuple, set)):
+        for item in value:
+            yield from _tag_texts(item)
+
+
 def detailed_pos(tags):
-    texts = [str(tag or "").strip().lower() for tag in tags if str(tag or "").strip()]
+    texts = list(dict.fromkeys(_tag_texts(tags)))
+    codes = {
+        text for text in texts
+        if text and all(char.isascii() and (char.isalnum() or char in "-_") for char in text)
+    }
 
     def starts(prefix):
         return any(t.startswith(prefix) for t in texts)
@@ -89,28 +114,66 @@ def detailed_pos(tags):
             or "takes aux. verb suru" in text
         )
 
-    has_godan = starts("godan verb")
-    has_ichidan = starts("ichidan verb")
-    has_kuru = any("kuru verb" in t or t.startswith("irregular verb - kuru") for t in texts)
-    has_suru = any(is_suru_tag(t) for t in texts)
-    has_aux_verb = starts("auxiliary verb")
-    has_transitive = starts("transitive verb")
-    has_intransitive = starts("intransitive verb")
+    has_godan = any(code.startswith("v5") for code in codes) or starts("godan verb")
+    has_ichidan = bool(codes & {"v1", "v1-s"}) or starts("ichidan verb")
+    has_kuru = "vk" in codes or any("kuru verb" in t or t.startswith("irregular verb - kuru") for t in texts)
+    has_suru_noun = "vs" in codes or any(
+        "noun or participle which takes the aux" in t and "verb suru" in t
+        for t in texts
+    )
+    has_suru_verb = bool(codes & {"vs-c", "vs-i", "vs-s"}) or any(
+        is_suru_tag(t) and "noun or participle" not in t
+        for t in texts
+    )
+    has_suru = has_suru_noun or has_suru_verb
+    has_aux_verb = "aux-v" in codes or starts("auxiliary verb")
+    has_transitive = "vt" in codes or starts("transitive verb")
+    has_intransitive = "vi" in codes or starts("intransitive verb")
     has_real_verb = any(
-        "verb" in t
+        code.startswith(("v1", "v2", "v4", "v5"))
+        or code in {"vk", "vn", "vr", "vz", "v-unspec"}
+        for code in codes
+    ) or any(
+        (t.startswith("verb") or " verb " in f" {t} ")
         and "adverb" not in t
-        and not t.startswith("transitive verb")
-        and not t.startswith("intransitive verb")
-        and not t.startswith("auxiliary verb")
+        and not t.startswith(("transitive verb", "intransitive verb", "auxiliary verb"))
         and not is_suru_tag(t)
         for t in texts
     )
 
-    has_noun = any("noun" in t for t in texts)
-    has_pronoun = starts("pronoun")
-    has_i_adj = any("adjective (keiyoushi)" in t or "i-adjective" in t or "keiyoushi" in t for t in texts)
-    has_na_adj = any("adjectival nouns or quasi-adjectives" in t or "na-adjective" in t or "keiyodoshi" in t for t in texts)
-    has_no_adj = any("nouns which may take the genitive case particle" in t or "no-adjective" in t for t in texts)
+    noun_codes = {"n", "n-adv", "n-pr", "n-pref", "n-suf", "n-t", "num", "unc"}
+    has_noun = bool(codes & noun_codes) or any(
+        t == "noun"
+        or t.startswith("noun (")
+        or t.startswith("noun, ")
+        or t.startswith("adverbial noun")
+        or t.startswith("temporal noun")
+        or "noun or participle which takes the aux" in t
+        for t in texts
+    )
+    has_pronoun = "pn" in codes or starts("pronoun")
+
+    explicit_i_adj = bool(codes & {"adj-i", "adj-ix", "adj-kari", "adj-ku", "adj-shiku"})
+    explicit_na_adj = "adj-na" in codes
+    has_i_adj = explicit_i_adj or any(
+        t == "i-adjective"
+        or t.startswith("adjective (keiyoushi)")
+        for t in texts
+    )
+    has_na_adj = explicit_na_adj or any(
+        "adjectival nouns or quasi-adjectives" in t
+        or t == "na-adjective"
+        or "keiyodoshi" in t
+        for t in texts
+    )
+    has_no_adj = "adj-no" in codes or any(
+        "nouns which may take the genitive case particle" in t or t == "no-adjective"
+        for t in texts
+    )
+    has_taru_adj = "adj-t" in codes or contains("taru adjective")
+    has_prenominal = bool(codes & {"adj-pn", "adj-f"}) or contains("pre-noun adjectival")
+    has_aux_adj = "aux-adj" in codes or contains("auxiliary adjective")
+    has_adverb = bool(codes & {"adv", "adv-to", "n-adv"}) or starts("adverb")
 
     if has_godan:
         core = "五段动词"
@@ -118,7 +181,7 @@ def detailed_pos(tags):
         core = "一段动词"
     elif has_kuru:
         core = "カ变动词"
-    elif has_noun and has_suru:
+    elif (has_noun or has_suru_noun) and has_suru:
         core = "名词・サ变"
     elif has_suru:
         core = "サ变动词"
@@ -126,37 +189,40 @@ def detailed_pos(tags):
         core = "助动词"
     elif has_real_verb:
         core = "动词"
+    elif has_na_adj:
+        # Some structured upstream tags contain a generic adjective parent
+        # label alongside the precise adj-na value. The specific な signal must
+        # win; otherwise every な-adjective is mislabeled as an い-adjective.
+        core = "な形容词"
     elif has_i_adj:
         core = "い形容词"
-    elif has_na_adj:
-        core = "な形容词"
     elif has_no_adj:
         core = "の形容词"
-    elif contains("taru adjective"):
+    elif has_taru_adj:
         core = "タルト形容词"
-    elif contains("pre-noun adjectival"):
+    elif has_prenominal:
         core = "连体词"
-    elif contains("auxiliary adjective"):
+    elif has_aux_adj:
         core = "补助形容词"
     elif has_pronoun:
         core = "代词"
     elif has_noun:
         core = "名词"
-    elif starts("adverb"):
+    elif has_adverb:
         core = "副词"
-    elif starts("conjunction"):
+    elif "conj" in codes or starts("conjunction"):
         core = "接续词"
-    elif starts("interjection"):
+    elif "int" in codes or starts("interjection"):
         core = "感叹词"
-    elif starts("counter"):
+    elif "ctr" in codes or starts("counter"):
         core = "助数词"
-    elif starts("prefix"):
+    elif "pref" in codes or starts("prefix"):
         core = "接头词"
-    elif starts("suffix"):
+    elif "suf" in codes or starts("suffix"):
         core = "接尾词"
-    elif starts("expression"):
+    elif "exp" in codes or starts("expression"):
         core = "表达"
-    elif starts("particle"):
+    elif "prt" in codes or starts("particle"):
         core = "助词"
     else:
         core = "词汇"
@@ -166,25 +232,81 @@ def detailed_pos(tags):
         qualifiers.append("他动词")
     if has_intransitive:
         qualifiers.append("自动词")
+    parts = [core]
     if qualifiers and ("动词" in core or core == "名词・サ变"):
-        return core + "・" + "・".join(qualifiers)
-    return core
+        parts.extend(qualifiers)
+
+    # Preserve frequent secondary usages instead of discarding every POS after
+    # the first JMdict sense. This keeps labels such as 名词・サ变・な形容词 and
+    # 名词・副词 useful to learners without weakening conjugation detection.
+    if core == "名词・サ变":
+        if has_na_adj:
+            parts.append("な形容词")
+        elif has_i_adj and not has_na_adj:
+            parts.append("い形容词")
+        if has_adverb:
+            parts.append("副词")
+    elif core in {"い形容词", "な形容词", "の形容词", "タルト形容词"}:
+        if has_noun:
+            parts.insert(0, "名词")
+        if has_adverb:
+            parts.append("副词")
+    elif core == "名词" and has_adverb:
+        parts.append("副词")
+
+    return "・".join(dict.fromkeys(parts))
 
 
 def pos_label(entry):
+    tags = []
+    inherited = []
     for sense in entry.get("senses") or []:
-        tags = sense.get("pos") or []
-        if tags:
-            return detailed_pos(tags)
-    return "词汇"
+        current = sense.get("pos") or []
+        if current:
+            inherited = current
+        tags.extend(inherited)
+    return detailed_pos(tags) if tags else "词汇"
 
 
 def usage_frequency(word):
     """Surface-form corpus estimate used only as a secondary tie-breaker."""
+    if zipf_frequency is None:
+        return 0.0
     try:
         return round(float(zipf_frequency(word, "ja", wordlist="best")), 2)
     except Exception:
         return 0.0
+
+
+def validate_pos_inventory(grouped):
+    rows = [row for level in LEVELS for row in grouped[level].values()]
+    i_adjectives = [row for row in rows if "い形容词" in row[3].split("・")]
+    na_adjectives = [row for row in rows if "な形容词" in row[3].split("・")]
+    suspicious_i = [row for row in i_adjectives if not row[0].endswith("い")]
+
+    # A healthy JMdict import contains hundreds of both adjective classes. A
+    # zero/near-zero な count is a parser regression, not a property of JLPT.
+    if len(i_adjectives) < 50 or len(na_adjectives) < 50:
+        raise ValueError(
+            f"implausible adjective inventory: {len(i_adjectives)} い, "
+            f"{len(na_adjectives)} な"
+        )
+    if len(suspicious_i) > max(10, len(i_adjectives) // 20):
+        examples = "、".join(row[0] for row in suspicious_i[:10])
+        raise ValueError(
+            f"too many non-い forms labeled い形容词: {len(suspicious_i)}/"
+            f"{len(i_adjectives)} ({examples})"
+        )
+
+    expected_na = {"本当", "綺麗", "特別", "可能", "高級", "活発", "増し", "タイムリー"}
+    for row in rows:
+        if row[0] in expected_na and "い形容词" in row[3]:
+            raise ValueError(f"known な-adjective mislabeled as い形容词: {row[0]} ({row[3]})")
+
+    print(
+        f"POS: {len(i_adjectives)} い-adjectives, {len(na_adjectives)} な-adjectives, "
+        f"{len(suspicious_i)} non-い-form い-adjective candidates"
+    )
 
 
 def build(db_path, output_path):
@@ -239,6 +361,8 @@ def build(db_path, output_path):
                 existing[5] = entry_rank if existing[5] is None else min(existing[5], entry_rank)
 
     conn.close()
+
+    validate_pos_inventory(grouped)
 
     lines = [
         "// Generated from Tomoshi Dictionary Open Data; see FULL_VOCAB_NOTICE.md.",
