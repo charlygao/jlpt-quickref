@@ -274,10 +274,16 @@
     const passive = word === 'ある' ? '—' : a + 'れる';
     const causative = word === 'ある' ? '—' : a + 'せる';
     const causativePassive = word === 'ある' ? '—' : a + 'せられる';
+    const causativePassiveShort = word === 'ある'
+      ? '—'
+      : end === 'す'
+        ? causativePassive + '（す结尾不缩约）'
+        : a + 'される';
     return [
       ['辞书形', word], ['ます形', honorificMasu[word] || i + 'ます'], ['ない形', negative],
       ['て形', te], ['た形', ta], ['可能形', potential], ['意向形', o + 'う'],
-      ['命令形', e], ['ば形', e + 'ば'], ['被动形', passive], ['使役形', causative], ['使役被动形', causativePassive]
+      ['命令形', e], ['ば形', e + 'ば'], ['被动形', passive], ['使役形', causative],
+      ['使役被动形', causativePassive], ['使役被动形（简化）', causativePassiveShort]
     ];
   }
 

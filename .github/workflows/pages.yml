@@ -240,10 +240,24 @@ jobs:
             const actual = new Map(rows).get(label);
             if (actual !== expected) throw new Error(`${item.word} ${label}: expected ${expected}, got ${actual}`);
           }
+          function expectMissingForms(item, labels) {
+            const actual = new Set(conjugation.rows(item).map(([label]) => label));
+            for (const label of labels) {
+              if (actual.has(label)) throw new Error(`${item.word} should not list ${label}`);
+            }
+          }
           expectForm({word:'書く',reading:'かく',pos:'五段动词・他动词'}, 'て形', '書いて');
+          expectForm({word:'書く',reading:'かく',pos:'五段动词・他动词'}, '使役被动形（简化）', '書かされる');
+          expectForm({word:'話す',reading:'はなす',pos:'五段动词・他动词'}, '使役被动形', '話させられる');
+          expectForm({word:'話す',reading:'はなす',pos:'五段动词・他动词'}, '使役被动形（简化）', '話させられる（す结尾不缩约）');
           expectForm({word:'食べる',reading:'たべる',pos:'一段动词・他动词'}, '可能形', '食べられる');
           expectForm({word:'勉強',reading:'べんきょう',pos:'名词・サ变'}, '辞书形', '勉強する');
           expectForm({word:'来る',reading:'くる',pos:'カ变动词・自动词'}, 'ない形', '来ない（こない）');
+          const removedVerbForms = ['ません形', 'ました形', 'ませんでした', 'なかった形', '可能否定'];
+          expectMissingForms({word:'書く',reading:'かく',pos:'五段动词・他动词'}, removedVerbForms);
+          expectMissingForms({word:'食べる',reading:'たべる',pos:'一段动词・他动词'}, removedVerbForms);
+          expectMissingForms({word:'勉強',reading:'べんきょう',pos:'名词・サ变'}, removedVerbForms);
+          expectMissingForms({word:'来る',reading:'くる',pos:'カ变动词・自动词'}, removedVerbForms);
 
           console.log(`TOTAL: ${grammarTotal} grammar, ${grammarExampleTotal} grammar examples, ${vocabTotal} vocab, ${reviewedVocabExamples} reviewed vocab examples, ${highFrequencyExamples} top-frequency examples, ${detailedPosCount} detailed POS`);
           if (grammarTotal < 350) throw new Error(`Grammar coverage too small: ${grammarTotal}`);

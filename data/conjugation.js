@@ -48,20 +48,15 @@
     return ieRow.includes(prev) ? 'ichidan' : 'godan';
   }
 
-  function verbRows({dict, stem, politeStem, negative, pastNegative, te, ta, potential, potentialNegative, volitional, imperative, conditional, passive, causative, causativePassive}) {
-    return [
+  function verbRows({dict, stem, politeStem, negative, te, ta, potential, volitional, imperative, conditional, passive, causative, causativePassive, causativePassiveShort = null}) {
+    const rows = [
       ['辞书形', dict],
       ['ます词干 / 连用形', stem],
       ['ます形', politeStem + 'ます'],
-      ['ません形', politeStem + 'ません'],
-      ['ました形', politeStem + 'ました'],
-      ['ませんでした', politeStem + 'ませんでした'],
       ['ない形', negative],
-      ['なかった形', pastNegative],
       ['て形', te],
       ['た形', ta],
       ['可能形', potential],
-      ['可能否定', potentialNegative],
       ['意向形', volitional],
       ['命令形', imperative],
       ['禁止形', dict + 'な'],
@@ -72,6 +67,10 @@
       ['使役被动形', causativePassive],
       ['たい形', stem + 'たい'],
     ];
+    if (causativePassiveShort !== null) {
+      rows.splice(rows.length - 1, 0, ['使役被动形（简化）', causativePassiveShort]);
+    }
+    return rows;
   }
 
   function godanRows(word) {
@@ -89,17 +88,20 @@
       ta = word.slice(0,-1) + 'うた';
     }
     const negative = word === 'ある' ? 'ない' : a + 'ない';
-    const pastNegative = word === 'ある' ? 'なかった' : a + 'なかった';
     const potential = word === 'ある' ? '—' : e + 'る';
-    const potentialNegative = word === 'ある' ? '—' : e + 'ない';
     const passive = word === 'ある' ? '—' : a + 'れる';
     const causative = word === 'ある' ? '—' : a + 'せる';
     const causativePassive = word === 'ある' ? '—' : a + 'せられる';
+    const causativePassiveShort = word === 'ある'
+      ? '—'
+      : word.endsWith('す')
+        ? causativePassive + '（す结尾不缩约）'
+        : a + 'される';
     const politeStem = specialMasuStem[word] || i;
     return verbRows({
-      dict: word, stem: i, politeStem, negative, pastNegative, te, ta,
-      potential, potentialNegative, volitional: o + 'う', imperative: e,
-      conditional: e + 'ば', passive, causative, causativePassive
+      dict: word, stem: i, politeStem, negative, te, ta,
+      potential, volitional: o + 'う', imperative: e,
+      conditional: e + 'ば', passive, causative, causativePassive, causativePassiveShort
     });
   }
 
@@ -107,8 +109,8 @@
     const stem = word.endsWith('る') ? word.slice(0,-1) : word;
     return verbRows({
       dict: word, stem, politeStem: stem,
-      negative: stem + 'ない', pastNegative: stem + 'なかった', te: stem + 'て', ta: stem + 'た',
-      potential: stem + 'られる', potentialNegative: stem + 'られない', volitional: stem + 'よう',
+      negative: stem + 'ない', te: stem + 'て', ta: stem + 'た',
+      potential: stem + 'られる', volitional: stem + 'よう',
       imperative: stem + 'ろ', conditional: stem + 'れば', passive: stem + 'られる',
       causative: stem + 'させる', causativePassive: stem + 'させられる'
     });
@@ -119,8 +121,8 @@
     const dict = prefix + 'する';
     return verbRows({
       dict, stem: prefix + 'し', politeStem: prefix + 'し',
-      negative: prefix + 'しない', pastNegative: prefix + 'しなかった', te: prefix + 'して', ta: prefix + 'した',
-      potential: prefix + 'できる', potentialNegative: prefix + 'できない', volitional: prefix + 'しよう',
+      negative: prefix + 'しない', te: prefix + 'して', ta: prefix + 'した',
+      potential: prefix + 'できる', volitional: prefix + 'しよう',
       imperative: prefix + 'しろ／' + prefix + 'せよ', conditional: prefix + 'すれば', passive: prefix + 'される',
       causative: prefix + 'させる', causativePassive: prefix + 'させられる'
     });
@@ -133,15 +135,10 @@
       ['辞书形', dict],
       ['ます词干 / 连用形', prefix + '来（き）'],
       ['ます形', prefix + '来ます（きます）'],
-      ['ません形', prefix + '来ません（きません）'],
-      ['ました形', prefix + '来ました（きました）'],
-      ['ませんでした', prefix + '来ませんでした（きませんでした）'],
       ['ない形', prefix + '来ない（こない）'],
-      ['なかった形', prefix + '来なかった（こなかった）'],
       ['て形', prefix + '来て（きて）'],
       ['た形', prefix + '来た（きた）'],
       ['可能形', prefix + '来られる（こられる）'],
-      ['可能否定', prefix + '来られない（こられない）'],
       ['意向形', prefix + '来よう（こよう）'],
       ['命令形', prefix + '来い（こい）'],
       ['禁止形', prefix + '来るな（くるな）'],
