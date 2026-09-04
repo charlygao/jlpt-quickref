@@ -1,0 +1,68 @@
+name: Materialize curated grammar examples
+
+on:
+  push:
+    paths:
+      - '.github/workflows/materialize-grammar-examples.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Materialize runtime curated examples as explicit ID data
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          global.window = {};
+          [
+            './data/base.js',
+            './data/n5.js','./data/n4.js','./data/n3.js','./data/n2.js','./data/n1.js',
+            './data/extra-base.js',
+            './data/extra-n5.js','./data/extra-n4.js','./data/extra-n3.js','./data/extra-n2.js','./data/extra-n1.js',
+            './data/grammar-examples-base.js',
+            './data/grammar-examples-n5.js','./data/grammar-examples-n4.js','./data/grammar-examples-n3.js','./data/grammar-examples-n2.js','./data/grammar-examples-n1.js'
+          ].forEach(f => require(f));
+
+          const before = new Map();
+          for (const level of ['N5','N4','N3','N2','N1']) {
+            for (const item of window.JLPT_DATA.grammar[level] || []) {
+              before.set(item.id, new Set((item.examples || []).map(x => x.jp)));
+            }
+          }
+          require('./data/grammar-examples-auto.js');
+
+          const grouped = {N5:[],N4:[],N3:[],N2:[],N1:[]};
+          for (const level of Object.keys(grouped)) {
+            for (const item of window.JLPT_DATA.grammar[level] || []) {
+              const old = before.get(item.id) || new Set();
+              const added = (item.examples || []).filter(x => !old.has(x.jp));
+              if (added.length) grouped[level].push([item.id, added]);
+            }
+          }
+
+          const lines = [
+            '// Explicit, human-reviewed grammar examples. No runtime generation or title matching.',
+            '(() => {',
+            '  const { addGrammarExamples } = window.JLPT_GRAMMAR_EXAMPLES;'
+          ];
+          for (const level of ['N5','N4','N3','N2','N1']) {
+            if (!grouped[level].length) continue;
+            lines.push(`  addGrammarExamples('${level}', ${JSON.stringify(grouped[level])});`);
+          }
+          lines.push('})();', '');
+          fs.writeFileSync('data/grammar-examples-curated.js', lines.join('\n'));
+          console.log(Object.fromEntries(Object.entries(grouped).map(([k,v]) => [k,v.length])));
+          NODE
+          node --check data/grammar-examples-curated.js
+      - name: Commit materialized data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/grammar-examples-curated.js
+          git commit -m 'content: materialize curated grammar examples' || exit 0
+          git push
