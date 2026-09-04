@@ -17,6 +17,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install frequency model
+        run: |
+          python3 -m pip install --disable-pip-version-check 'wordfreq[cjk]==3.1.1'
+
       - name: Download Tomoshi open dictionary
         run: |
           curl -L --fail --retry 3 \
@@ -32,6 +36,7 @@ jobs:
         run: |
           node --check data/full-vocab.js
           test -s data/full-vocab.js
+          grep -q 'FREQUENCY_NOTICE.md' data/full-vocab.js
           ls -lh data/full-vocab.js
 
       - name: Commit generated vocabulary
@@ -43,5 +48,5 @@ jobs:
             echo 'Generated vocabulary is already up to date.'
             exit 0
           fi
-          git commit -m 'content: import full JLPT vocabulary'
+          git commit -m 'content: rank JLPT vocabulary by usage frequency'
           git push
