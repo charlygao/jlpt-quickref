@@ -107,21 +107,6 @@
     </section>
   </main>
 
-  <aside id="quickNav" class="quick-nav" aria-label="快速导航" hidden>
-    <output id="quickNavBubble" class="quick-nav-bubble" aria-live="polite" hidden></output>
-    <div id="quickNavTrack" class="quick-nav-track" role="slider" tabindex="0"
-      aria-label="在当前列表中快速跳转" aria-orientation="vertical"
-      aria-valuemin="1" aria-valuemax="1" aria-valuenow="1">
-      <span class="quick-nav-marks" aria-hidden="true"></span>
-      <span id="quickNavThumb" class="quick-nav-thumb" aria-hidden="true"></span>
-    </div>
-    <button id="quickNavFlag" class="quick-nav-flag" type="button" aria-label="跳转到上次阅读位置" hidden>
-      <svg viewBox="0 0 16 18" aria-hidden="true">
-        <path d="M4 15.5V2.5M4.5 3h7l-1.7 2.7L11.5 8h-7" />
-      </svg>
-    </button>
-  </aside>
-
   <aside class="floating-actions" aria-label="浏览操作">
     <div id="filterMenu" class="filter-menu" role="menu" aria-label="内容筛选" hidden>
       <button type="button" class="filter-option is-active" data-filter="all" role="menuitemradio" aria-checked="true">显示全部</button>
@@ -130,6 +115,11 @@
     </div>
     <button id="filterToggle" class="floating-icon-btn filter-toggle-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="filterMenu" aria-label="筛选：显示全部" title="筛选：显示全部">
       <span id="filterIcon" aria-hidden="true">☷</span><span id="filterLabel" class="sr-only">显示全部</span>
+    </button>
+    <button id="resumeBookmark" class="floating-icon-btn bookmark-btn" type="button" aria-label="暂无上次阅读位置" title="暂无上次阅读位置" disabled>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-3.5L6 21V4.75A1.75 1.75 0 0 1 7.75 3Z" />
+      </svg>
     </button>
     <button id="backToTop" class="floating-icon-btn" type="button" aria-label="返回顶部" title="返回顶部">↑</button>
   </aside>

@@ -202,6 +202,10 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
 }
 .floating-icon-btn { display: grid; place-items: center; width: 46px; height: 46px; padding: 0; font-size: 18px; }
 .filter-toggle-btn { color: var(--accent); font-size: 21px; line-height: 1; }
+.bookmark-btn { color: var(--accent-2); }
+.bookmark-btn svg { width: 21px; height: 21px; fill: color-mix(in srgb, var(--accent-2) 15%, transparent); stroke: currentColor; stroke-width: 1.7; stroke-linejoin: round; }
+.bookmark-btn:disabled { color: var(--muted); opacity: .42; cursor: default; box-shadow: none; }
+.bookmark-btn:disabled svg { fill: none; }
 .filter-menu {
   width: 174px; padding: 6px; display: grid; gap: 3px;
   border: 1px solid var(--line); border-radius: 16px;
@@ -214,51 +218,6 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
 }
 .filter-option:hover, .filter-option:focus-visible { background: var(--code-bg); outline: none; }
 .filter-option.is-active { color: var(--accent); background: var(--accent-soft); }
-
-/* iOS-style edge scrubber for long grammar and vocabulary lists. */
-.quick-nav {
-  position: fixed; z-index: 75; top: 50%; right: max(4px, env(safe-area-inset-right));
-  width: 28px; height: clamp(210px, 46dvh, 380px); transform: translateY(-50%);
-}
-.quick-nav[hidden], .quick-nav-flag[hidden], .quick-nav-bubble[hidden] { display: none; }
-.quick-nav-track {
-  --current-position: 0%;
-  position: absolute; inset: 0 0 0 auto; width: 20px;
-  border: 1px solid color-mix(in srgb, var(--line) 74%, transparent);
-  border-radius: 999px; background: color-mix(in srgb, var(--panel-solid) 72%, transparent);
-  box-shadow: 0 8px 28px rgba(21,24,38,.12);
-  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
-  cursor: ns-resize; touch-action: none; outline: none;
-}
-.quick-nav-track:focus-visible { box-shadow: 0 0 0 3px var(--accent-soft), 0 8px 28px rgba(21,24,38,.12); }
-.quick-nav-marks {
-  position: absolute; top: 12px; bottom: 12px; left: 50%; width: 4px; transform: translateX(-50%);
-  background: repeating-linear-gradient(to bottom, color-mix(in srgb, var(--muted) 35%, transparent) 0 2px, transparent 2px 19px);
-  border-radius: 999px; opacity: .8;
-}
-.quick-nav-thumb {
-  position: absolute; z-index: 2; top: var(--current-position); left: 50%;
-  width: 5px; height: 24px; border-radius: 999px; transform: translate(-50%, -50%);
-  background: var(--accent); box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 42%, transparent);
-  transition: top .08s linear;
-}
-.quick-nav-flag {
-  position: absolute; z-index: 3; top: 0; right: 14px; width: 25px; height: 25px; padding: 0;
-  display: grid; place-items: center; transform: translateY(-50%);
-  border: 1px solid color-mix(in srgb, var(--accent-2) 32%, var(--line)); border-radius: 9px;
-  color: var(--accent-2); background: color-mix(in srgb, var(--panel-solid) 90%, transparent);
-  box-shadow: 0 6px 18px rgba(21,24,38,.15); cursor: pointer;
-}
-.quick-nav-flag svg { width: 15px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
-.quick-nav-flag:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent-2) 22%, transparent); outline-offset: 2px; }
-.quick-nav-bubble {
-  position: absolute; z-index: 4; top: 0; right: 34px; max-width: min(260px, calc(100vw - 70px));
-  padding: 8px 11px; transform: translateY(-50%); border-radius: 11px;
-  color: var(--text); background: color-mix(in srgb, var(--panel-solid) 94%, transparent);
-  border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(21,24,38,.18);
-  font-size: 12px; font-weight: 750; line-height: 1.35; white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis; pointer-events: none;
-}
 
 /* Shared grammar-term / conjugation floating sheet */
 .modal-backdrop {
@@ -320,9 +279,6 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
 
   .floating-actions { right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }
   .floating-icon-btn { width: 44px; height: 44px; }
-  .quick-nav { right: max(2px, env(safe-area-inset-right)); width: 26px; height: clamp(190px, 42dvh, 330px); }
-  .quick-nav-track { width: 18px; }
-  .quick-nav-flag { right: 12px; }
 
   .modal-backdrop {
     padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
@@ -336,10 +292,6 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
   .modal-head { padding: 14px 18px 12px; }
   .modal-body { padding: 18px 18px max(26px, env(safe-area-inset-bottom)); }
   .conj-row { grid-template-columns: 94px 1fr; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .quick-nav-thumb { transition: none; }
 }
 
 @media (max-width: 390px) {

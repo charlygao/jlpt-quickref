@@ -37,10 +37,7 @@
     filterIcon: document.getElementById('filterIcon'),
     filterLabel: document.getElementById('filterLabel'),
     filterMenu: document.getElementById('filterMenu'),
-    quickNav: document.getElementById('quickNav'),
-    quickNavTrack: document.getElementById('quickNavTrack'),
-    quickNavBubble: document.getElementById('quickNavBubble'),
-    quickNavFlag: document.getElementById('quickNavFlag'),
+    resumeBookmark: document.getElementById('resumeBookmark'),
   };
 
   function loadState() {
@@ -497,63 +494,21 @@
     els.loadMoreButton.hidden = remaining === 0;
   }
 
-  let quickNavItems = [];
-  let currentQuickNavIndex = 0;
-  let bubbleHideTimer;
-  let quickNavDragFrame;
-
-  function quickNavItemLabel(item) {
-    if (!item) return '';
+  function itemDisplayLabel(item) {
     return state.type === 'grammar' ? item.title : `${item.word}（${item.reading}）`;
   }
 
-  function setQuickNavIndex(index, { showBubble = false } = {}) {
-    const total = quickNavItems.length;
-    if (!total) return;
-    currentQuickNavIndex = Math.max(0, Math.min(total - 1, index));
-    const ratio = total > 1 ? currentQuickNavIndex / (total - 1) : 0;
-    const item = quickNavItems[currentQuickNavIndex];
-    const position = `${(ratio * 100).toFixed(3)}%`;
-    els.quickNavTrack.style.setProperty('--current-position', position);
-    els.quickNavTrack.setAttribute('aria-valuemax', String(total));
-    els.quickNavTrack.setAttribute('aria-valuenow', String(currentQuickNavIndex + 1));
-    els.quickNavTrack.setAttribute('aria-valuetext', `${currentQuickNavIndex + 1} / ${total}，${quickNavItemLabel(item)}`);
-
-    if (showBubble) {
-      clearTimeout(bubbleHideTimer);
-      els.quickNavBubble.textContent = `${currentQuickNavIndex + 1} / ${total} · ${quickNavItemLabel(item)}`;
-      els.quickNavBubble.style.top = position;
-      els.quickNavBubble.hidden = false;
-    }
-  }
-
-  function hideQuickNavBubble(delay = 0) {
-    clearTimeout(bubbleHideTimer);
-    bubbleHideTimer = setTimeout(() => { els.quickNavBubble.hidden = true; }, delay);
-  }
-
-  function updateQuickNav(items, preferredId, fallbackIndex = 0) {
-    quickNavItems = items;
-    els.quickNav.hidden = items.length < 2;
-    if (items.length < 2) {
-      els.quickNavFlag.hidden = true;
-      els.quickNavBubble.hidden = true;
-      return;
-    }
-
-    const preferredIndex = preferredId ? items.findIndex(item => item.id === preferredId) : -1;
-    setQuickNavIndex(preferredIndex >= 0 ? preferredIndex : fallbackIndex);
-
+  function updateBookmarkControl() {
     const resumeId = sessionResume[currentKey()];
-    const resumeIndex = resumeId ? items.findIndex(item => item.id === resumeId) : -1;
-    els.quickNavFlag.hidden = resumeIndex < 0;
-    if (resumeIndex >= 0) {
-      const ratio = resumeIndex / (items.length - 1);
-      const item = items[resumeIndex];
-      els.quickNavFlag.style.top = `${(ratio * 100).toFixed(3)}%`;
-      els.quickNavFlag.setAttribute('aria-label', `跳转到上次阅读位置：${quickNavItemLabel(item)}`);
-      els.quickNavFlag.title = `上次阅读：${quickNavItemLabel(item)}`;
-    }
+    const item = resumeId
+      ? (DATA[state.type][state.level] || []).find(candidate => candidate.id === resumeId)
+      : null;
+    const label = item
+      ? `跳转到上次阅读位置：${itemDisplayLabel(item)}`
+      : '暂无上次阅读位置';
+    els.resumeBookmark.disabled = !item;
+    els.resumeBookmark.setAttribute('aria-label', label);
+    els.resumeBookmark.title = label;
   }
 
   let observer;
@@ -565,8 +520,6 @@
       const seen = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
       if (!seen) return;
       state.lastSeen[currentKey()] = seen.target.dataset.id;
-      const index = quickNavItems.findIndex(item => item.id === seen.target.dataset.id);
-      if (index >= 0) setQuickNavIndex(index);
       saveState();
     }, { rootMargin: '-18% 0px -68% 0px', threshold: 0 });
     cards.forEach(c => observer.observe(c));
@@ -574,7 +527,6 @@
 
   function render({ reset = false } = {}) {
     if (reset) resetWindow();
-    const previousCurrentId = quickNavItems[currentQuickNavIndex]?.id;
     updateControls();
     updateFilterControls();
     const allItems = getCurrentItems();
@@ -585,10 +537,7 @@
     els.emptyState.hidden = allItems.length !== 0;
     updateLoadMore(allItems.length, start, end);
     updateStats();
-    const visibleCurrentId = visibleItems.some(item => item.id === previousCurrentId)
-      ? previousCurrentId
-      : visibleItems[0]?.id;
-    updateQuickNav(allItems, visibleCurrentId, start);
+    updateBookmarkControl();
     attachObserver();
   }
 
@@ -615,8 +564,6 @@
     } else {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    const index = quickNavItems.findIndex(item => item.id === id);
-    if (index >= 0) setQuickNavIndex(index);
     if (auto) {
       setTimeout(() => target.animate([
         { boxShadow: '0 0 0 0 rgba(91,91,214,0)' },
@@ -627,32 +574,18 @@
   }
 
   function jumpToSaved({ auto = false } = {}) {
-    jumpToItem(sessionResume[currentKey()] || state.lastSeen[currentKey()], { auto });
-  }
-
-  function jumpToQuickNavIndex(index, { showBubble = true } = {}) {
-    const item = quickNavItems[Math.max(0, Math.min(quickNavItems.length - 1, index))];
-    if (!item) return;
-    ensureItemRendered(item.id);
-    const target = document.getElementById(item.id);
-    if (!target) return;
-    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
-    document.documentElement.style.scrollBehavior = 'auto';
-    target.scrollIntoView({ behavior: 'auto', block: 'start' });
-    document.documentElement.style.scrollBehavior = previousScrollBehavior;
-    const updatedIndex = quickNavItems.findIndex(candidate => candidate.id === item.id);
-    if (updatedIndex >= 0) setQuickNavIndex(updatedIndex, { showBubble });
-  }
-
-  function quickNavIndexFromPointer(clientY) {
-    const rect = els.quickNavTrack.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
-    return Math.round(ratio * (quickNavItems.length - 1));
-  }
-
-  function scheduleQuickNavJump(clientY) {
-    cancelAnimationFrame(quickNavDragFrame);
-    quickNavDragFrame = requestAnimationFrame(() => jumpToQuickNavIndex(quickNavIndexFromPointer(clientY)));
+    const id = sessionResume[currentKey()] || state.lastSeen[currentKey()];
+    if (!id) return;
+    if (state.query || state.filter !== 'all') {
+      state.query = '';
+      state.filter = 'all';
+      els.searchInput.value = '';
+      const compactSearchInput = document.getElementById('compactSearchInput');
+      if (compactSearchInput) compactSearchInput.value = '';
+      resetWindow();
+      render();
+    }
+    jumpToItem(id, { auto });
   }
 
   function captureCurrentResumeMarker() {
@@ -724,46 +657,7 @@
     else setFilterMenuOpen(false);
   });
   els.loadMoreButton?.addEventListener('click', () => { state.visibleCount += VOCAB_BATCH_SIZE; render(); });
-  els.quickNavTrack.addEventListener('pointerdown', e => {
-    if (e.pointerType === 'mouse' && e.button !== 0) return;
-    e.preventDefault();
-    els.quickNavTrack.setPointerCapture(e.pointerId);
-    scheduleQuickNavJump(e.clientY);
-  });
-  els.quickNavTrack.addEventListener('pointermove', e => {
-    if (els.quickNavTrack.hasPointerCapture(e.pointerId)) scheduleQuickNavJump(e.clientY);
-  });
-  els.quickNavTrack.addEventListener('pointerup', e => {
-    cancelAnimationFrame(quickNavDragFrame);
-    jumpToQuickNavIndex(quickNavIndexFromPointer(e.clientY));
-    if (els.quickNavTrack.hasPointerCapture(e.pointerId)) els.quickNavTrack.releasePointerCapture(e.pointerId);
-    hideQuickNavBubble(650);
-  });
-  els.quickNavTrack.addEventListener('pointercancel', () => {
-    cancelAnimationFrame(quickNavDragFrame);
-    hideQuickNavBubble();
-  });
-  els.quickNavTrack.addEventListener('keydown', e => {
-    const total = quickNavItems.length;
-    if (!total) return;
-    const fineStep = Math.max(1, Math.round(total / 40));
-    const pageStep = Math.max(1, Math.round(total / 10));
-    let next = currentQuickNavIndex;
-    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') next -= fineStep;
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') next += fineStep;
-    else if (e.key === 'PageUp') next -= pageStep;
-    else if (e.key === 'PageDown') next += pageStep;
-    else if (e.key === 'Home') next = 0;
-    else if (e.key === 'End') next = total - 1;
-    else return;
-    e.preventDefault();
-    jumpToQuickNavIndex(next);
-    hideQuickNavBubble(650);
-  });
-  els.quickNavFlag.addEventListener('click', e => {
-    e.stopPropagation();
-    jumpToItem(sessionResume[currentKey()], { auto: false });
-  });
+  els.resumeBookmark.addEventListener('click', () => jumpToSaved());
   els.themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark');
     localStorage.setItem(THEME_KEY, document.body.classList.contains('dark') ? 'dark' : 'light');
