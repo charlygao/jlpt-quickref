@@ -48,7 +48,7 @@
   function updateCompactMode() {
     ticking = false;
     const headerBottom = topbar.getBoundingClientRect().bottom;
-    const shouldCompact = controls.getBoundingClientRect().top <= headerBottom + 1;
+    const shouldCompact = controls.getBoundingClientRect().bottom <= headerBottom + 1;
     if (shouldCompact === compact) return;
     compact = shouldCompact;
     body.classList.toggle('compact-header', compact);
