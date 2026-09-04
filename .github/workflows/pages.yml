@@ -51,6 +51,10 @@ jobs:
             echo 'A server-only Supabase key must never be included in the static site.' >&2
             exit 1
           fi
+          if grep -qE 'authSignup|\.auth\.signUp|注册新账号' index.html supabase-progress.js; then
+            echo 'Public account registration must remain disabled in the static site.' >&2
+            exit 1
+          fi
 
           # Example sentences must be explicit reviewed data. Runtime/template
           # example generators are intentionally forbidden.

@@ -10,6 +10,9 @@
 `public.user_progress`。未登录状态仍保存在浏览器本机；第一次登录会合并本机和云端状态，
 之后登录时以云端为准，离线操作会在恢复网络后补同步。
 
+新用户注册已关闭；页面只提供已有账号登录，Supabase Auth 的 `Allow new users to sign up`
+必须保持关闭。
+
 部署前在对应 Supabase 项目执行：
 
 `supabase/migrations/202609040001_create_user_progress.sql`

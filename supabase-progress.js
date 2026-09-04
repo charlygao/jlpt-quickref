@@ -303,30 +303,20 @@
     }
   }
 
-  async function submitAuth(mode) {
+  async function submitAuth() {
     if (!client || authBusy) return;
     if (!els.form.reportValidity()) return;
     const email = els.email.value.trim();
     const password = els.password.value;
     setAuthBusy(true);
-    setMessage(mode === 'signup' ? '正在创建账号…' : '正在登录…');
+    setMessage('正在登录…');
 
     try {
-      const result = mode === 'signup'
-        ? await client.auth.signUp({
-            email,
-            password,
-            options: { emailRedirectTo: new URL('.', location.href).href },
-          })
-        : await client.auth.signInWithPassword({ email, password });
+      const result = await client.auth.signInWithPassword({ email, password });
 
       if (result.error) throw result.error;
-      if (mode === 'signup' && !result.data.session) {
-        setMessage('账号已创建，请查收确认邮件后再登录。', 'success');
-      } else {
-        setMessage(mode === 'signup' ? '注册并登录成功。' : '登录成功，正在同步进度…', 'success');
-        await reconcile(result.data.session);
-      }
+      setMessage('登录成功，正在同步进度…', 'success');
+      await reconcile(result.data.session);
     } catch (error) {
       setMessage(error?.message || '操作失败，请稍后重试。', 'error');
     } finally {
@@ -345,7 +335,6 @@
       email: document.getElementById('authEmail'),
       password: document.getElementById('authPassword'),
       login: document.getElementById('authLogin'),
-      signup: document.getElementById('authSignup'),
       signout: document.getElementById('authSignout'),
       currentEmail: document.getElementById('authCurrentEmail'),
       syncIndicator: document.getElementById('authSyncIndicator'),
@@ -356,8 +345,7 @@
     els.accountButton?.addEventListener('click', openModal);
     els.close?.addEventListener('click', closeModal);
     els.modal?.addEventListener('click', event => { if (event.target === els.modal) closeModal(); });
-    els.form?.addEventListener('submit', event => { event.preventDefault(); submitAuth('login'); });
-    els.signup?.addEventListener('click', () => submitAuth('signup'));
+    els.form?.addEventListener('submit', event => { event.preventDefault(); submitAuth(); });
     els.signout?.addEventListener('click', async () => {
       if (!client || authBusy) return;
       setAuthBusy(true);
