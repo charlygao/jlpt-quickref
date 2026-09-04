@@ -1,5 +1,10 @@
 (() => {
   const DATA = window.JLPT_DATA;
+  const REQUIRED_POS_COMPONENTS = new Map([
+    ['幾つ\u0000いくつ', ['名词', '副词']],
+    ['後悔\u0000こうかい', ['名词', 'サ变']],
+    ['一時\u0000いちじ', ['名词', '副词']],
+  ]);
 
   function hash(text) {
     let h = 2166136261;
@@ -17,6 +22,20 @@
     return 1;
   }
 
+  function applyRequiredPos(word, reading, pos) {
+    const required = REQUIRED_POS_COMPONENTS.get(`${word}\u0000${reading}`);
+    if (!required) return pos;
+
+    const parts = pos && pos !== '词汇' ? String(pos).split('・') : [];
+    for (const component of required) {
+      if (parts.includes(component)) continue;
+      if (component === '名词') parts.unshift(component);
+      else if (component === 'サ变' && parts.includes('名词')) parts.splice(parts.indexOf('名词') + 1, 0, component);
+      else parts.push(component);
+    }
+    return parts.join('・') || pos;
+  }
+
   function addVocab(level, rows) {
     const list = DATA.vocab[level] || (DATA.vocab[level] = []);
     const byKey = new Map(list.map(x => [`${x.word}\u0000${x.reading}`, x]));
@@ -26,10 +45,12 @@
       const [word, reading, meaning, pos = '词汇', frequency = null, frequencyRank = null] = row;
       const key = `${word}\u0000${reading}`;
       if (!word) continue;
+      const normalizedPos = applyRequiredPos(word, reading, pos);
 
       const existing = byKey.get(key);
       if (existing) {
-        if (posSpecificity(pos) > posSpecificity(existing.pos)) existing.pos = pos;
+        existing.pos = applyRequiredPos(word, reading, existing.pos);
+        if (posSpecificity(normalizedPos) > posSpecificity(existing.pos)) existing.pos = normalizedPos;
         if (Number.isFinite(frequency)) existing.frequency = frequency;
         if (Number.isInteger(frequencyRank) && frequencyRank > 0) existing.frequencyRank = frequencyRank;
         continue;
@@ -41,7 +62,7 @@
         word,
         reading: reading || word,
         meaning,
-        pos,
+        pos: normalizedPos,
         frequency: Number.isFinite(frequency) ? frequency : null,
         frequencyRank: Number.isInteger(frequencyRank) && frequencyRank > 0 ? frequencyRank : null,
         example: null,

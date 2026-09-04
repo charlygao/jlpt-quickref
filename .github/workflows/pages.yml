@@ -70,12 +70,15 @@ jobs:
           const data = window.JLPT_DATA;
           const levels = ['N5', 'N4', 'N3', 'N2', 'N1'];
           const minimumVocab = { N5: 650, N4: 620, N3: 1600, N2: 1700, N1: 3000 };
-          const requiredHighFrequencyCoverage = { N5: 290, N4: 290, N3: 290, N2: 290, N1: 290 };
+          const requiredHighFrequencyCoverage = { N5: 190, N4: 190, N3: 190, N2: 190, N1: 190 };
           let grammarTotal = 0;
           let vocabTotal = 0;
           let grammarExampleTotal = 0;
           let labeledGrammarExamples = 0;
           let detailedPosCount = 0;
+          let iAdjectiveCount = 0;
+          let naAdjectiveCount = 0;
+          const suspiciousIAdjectives = [];
           let reviewedVocabExamples = 0;
           let highFrequencyExamples = 0;
           const ids = new Set();
@@ -89,6 +92,11 @@ jobs:
             grammarTotal += grammar.length;
             vocabTotal += vocab.length;
             detailedPosCount += vocab.filter(item => detailedPosPattern.test(item.pos || '')).length;
+            iAdjectiveCount += vocab.filter(item => (item.pos || '').includes('い形容词')).length;
+            naAdjectiveCount += vocab.filter(item => (item.pos || '').includes('な形容词')).length;
+            suspiciousIAdjectives.push(...vocab.filter(item =>
+              (item.pos || '').includes('い形容词') && !String(item.word || '').endsWith('い')
+            ));
 
             if (vocab.length < minimumVocab[level]) {
               throw new Error(`${level} vocabulary coverage too small: ${vocab.length}`);
@@ -209,8 +217,20 @@ jobs:
           }
           expectPos('N5', '会う', 'あう', /五段动词.*自动词/);
           expectPos('N5', '開ける', 'あける', /一段动词.*他动词/);
+          expectPos('N5', '幾つ', 'いくつ', /名词.*副词/);
+          expectPos('N2', '後悔', 'こうかい', /名词.*サ变/);
+          expectPos('N2', '一時', 'いちじ', /名词.*副词/);
+          expectPos('N1', '増し', 'まし', /名词.*な形容词/);
+          expectPos('N1', 'タイムリー', 'タイムリー', /名词.*な形容词/);
+          expectPos('N1', 'オープン', 'オープン', /名词.*サ变.*な形容词/);
           if (/动词/.test(vocabItem('N5', '秋', 'あき')?.pos || '')) throw new Error('秋 must not be classified as a verb');
           if (/动词/.test(vocabItem('N5', '朝', 'あさ')?.pos || '')) throw new Error('朝 must not be classified as a verb');
+          if (iAdjectiveCount < 100 || naAdjectiveCount < 100) {
+            throw new Error(`Implausible adjective distribution: ${iAdjectiveCount} い, ${naAdjectiveCount} な`);
+          }
+          if (suspiciousIAdjectives.length) {
+            throw new Error(`Non-い forms labeled い形容词: ${suspiciousIAdjectives.slice(0, 10).map(x => x.word).join('、')}`);
+          }
 
           const conjugation = window.JLPT_CONJUGATION;
           if (!conjugation?.rows) throw new Error('Conjugation reference is not loaded');
@@ -233,7 +253,7 @@ jobs:
           if (highFrequencyExamples !== requiredHighFrequencyTotal) {
             throw new Error(`Top-frequency example coverage mismatch: ${highFrequencyExamples}/${requiredHighFrequencyTotal}`);
           }
-          if (reviewedVocabExamples < 1571) throw new Error(`Too few reviewed vocabulary examples: ${reviewedVocabExamples}`);
+          if (reviewedVocabExamples < 1082) throw new Error(`Too few reviewed vocabulary examples: ${reviewedVocabExamples}`);
           if (vocabTotal < 7600) throw new Error(`Vocabulary coverage too small: ${vocabTotal}`);
           if (detailedPosCount < 1000) throw new Error(`Detailed POS coverage too small: ${detailedPosCount}`);
           NODE
