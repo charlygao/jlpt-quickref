@@ -1,7 +1,7 @@
 (() => {
   const DATA = window.JLPT_DATA;
   const TERM_DATA = window.JLPT_TERMS || { terms: {}, aliases: {} };
-  const STORAGE_KEY = 'jlptQuickRef.v1';
+  const STORAGE_KEY = 'jlptQuickRef.v2';
   const THEME_KEY = 'jlptQuickRef.theme';
   const VOCAB_BATCH_SIZE = 80;
 
@@ -349,84 +349,93 @@
     el.querySelector('.modal-body').innerHTML = html;
     el.hidden = false;
     document.body.classList.add('modal-open');
+    el.querySelector('.modal-close').focus({ preventScroll: true });
   }
 
   function closeModal() {
-    if (!modal) return;
+    if (!modal || modal.hidden) return;
     modal.hidden = true;
     document.body.classList.remove('modal-open');
   }
 
-  function openTermModal(key) {
-    const term = TERM_DATA.terms?.[key];
-    if (!term) return;
-    openModal(term.title, `
-      <p class="modal-summary">${escapeHtml(term.summary)}</p>
-      <section class="modal-section"><h4>定义与变形</h4><ul>${(term.rules || []).map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul></section>
-      ${(term.examples || []).length ? `<section class="modal-section"><h4>例</h4><div class="term-examples">${term.examples.map(x => `<code>${escapeHtml(x)}</code>`).join('')}</div></section>` : ''}
+  function openTermModal(term) {
+    const info = TERM_DATA.terms?.[term];
+    if (!info) return;
+    const rules = (info.rules || []).map(x => `<li>${escapeHtml(x)}</li>`).join('');
+    const examples = (info.examples || []).map(x => `<code>${escapeHtml(x)}</code>`).join('');
+    openModal(term, `
+      <p class="modal-summary">${escapeHtml(info.summary || '')}</p>
+      ${rules ? `<section class="modal-section"><h4>定义与变形</h4><ul>${rules}</ul></section>` : ''}
+      ${examples ? `<section class="modal-section"><h4>例</h4><div class="term-examples">${examples}</div></section>` : ''}
     `);
   }
 
   function findVocab(id) {
-    return (DATA.vocab[state.level] || []).find(x => x.id === id)
-      || Object.values(DATA.vocab).flat().find(x => x.id === id);
+    for (const level of Object.keys(DATA.vocab)) {
+      const item = DATA.vocab[level].find(x => x.id === id);
+      if (item) return item;
+    }
+    return null;
   }
 
   function openConjugationModal(item) {
     const rows = conjugationRows(item);
-    const type = detailedType(item);
     if (!rows.length) return;
+    const type = detailedType(item);
     openModal(`${item.word} · 变形一览`, `
       <div class="conj-intro"><span class="vocab-reading">${escapeHtml(item.reading)}</span><span class="vocab-pos">${escapeHtml(type)}</span></div>
-      <div class="conj-table">${rows.map(([name, value]) => `<div class="conj-row"><span>${escapeHtml(name)}</span><strong>${escapeHtml(value)}</strong></div>`).join('')}</div>
-      <p class="modal-note">表中展示标准现代日语的主要学习用活用。少数古语、固定表达或特殊敬语可能存在额外惯用形式。</p>
+      <div class="conj-table">
+        ${rows.map(([label, form]) => `<div class="conj-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(form)}</strong></div>`).join('')}
+      </div>
+      <p class="modal-note">现代标准日语速查。部分形式会因语义、语体或动词自身性质而较少实际使用；请结合例句判断。</p>
     `);
   }
 
-  function updateControls() {
-    document.querySelectorAll('.segment').forEach(btn => btn.classList.toggle('is-active', btn.dataset.type === state.type));
-    document.querySelectorAll('.level-chip').forEach(btn => btn.classList.toggle('is-active', btn.dataset.level === state.level));
+  function updateStats() {
+    els.grammarCount.textContent = flatCount(DATA.grammar).toLocaleString();
+    els.vocabCount.textContent = flatCount(DATA.vocab).toLocaleString();
+    els.readCount.textContent = state.read.size.toLocaleString();
+
+    const items = DATA[state.type][state.level] || [];
+    const read = items.filter(x => state.read.has(x.id)).length;
+    const percent = items.length ? Math.round(read / items.length * 100) : 0;
     els.progressLabel.textContent = `${state.level} · ${state.type === 'grammar' ? '语法' : '词汇'}`;
+    els.progressPercent.textContent = `${percent}% · ${read}/${items.length}`;
+    els.progressBar.style.width = `${percent}%`;
   }
 
-  function updateStats() {
-    els.grammarCount.textContent = flatCount(DATA.grammar).toLocaleString('zh-CN');
-    els.vocabCount.textContent = flatCount(DATA.vocab).toLocaleString('zh-CN');
-    els.readCount.textContent = state.read.size.toLocaleString('zh-CN');
-
-    const all = DATA[state.type][state.level] || [];
-    const read = all.filter(x => state.read.has(x.id)).length;
-    const pct = all.length ? Math.round(read / all.length * 100) : 0;
-    els.progressPercent.textContent = `${pct}% · ${read}/${all.length}`;
-    els.progressBar.style.width = `${pct}%`;
+  function updateControls() {
+    document.querySelectorAll('.segment').forEach(x => x.classList.toggle('is-active', x.dataset.type === state.type));
+    document.querySelectorAll('.level-chip').forEach(x => x.classList.toggle('is-active', x.dataset.level === state.level));
   }
 
   function updateLoadMore(total, start, end) {
     if (!els.loadMoreWrap) return;
-    const hasMore = state.type === 'vocab' && end < total;
-    els.loadMoreWrap.hidden = !hasMore;
-    if (!hasMore) return;
-    const remaining = total - end;
-    const next = Math.min(VOCAB_BATCH_SIZE, remaining);
-    els.loadMoreText.textContent = start > 0 ? `从第 ${start + 1} 条继续 · 当前显示到 ${end}/${total}` : `当前显示 ${end}/${total}`;
-    els.loadMoreButton.textContent = `再显示 ${next} 条`;
+    const remaining = Math.max(0, total - end);
+    const before = start;
+    if (state.type !== 'vocab' || state.query || (!remaining && !before)) {
+      els.loadMoreWrap.hidden = true;
+      return;
+    }
+    els.loadMoreWrap.hidden = false;
+    els.loadMoreText.textContent = before
+      ? `从第 ${start + 1} 条继续 · 后面还有 ${remaining.toLocaleString()} 条`
+      : `已显示 ${end.toLocaleString()} / ${total.toLocaleString()} · 还有 ${remaining.toLocaleString()} 条`;
+    els.loadMoreButton.hidden = remaining === 0;
   }
 
   let observer;
-  let observationTimer;
   function attachObserver() {
     observer?.disconnect();
-    observer = new IntersectionObserver((entries) => {
-      const visible = entries.filter(e => e.isIntersecting).sort((a,b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top));
-      if (!visible.length || state.query) return;
-      clearTimeout(observationTimer);
-      observationTimer = setTimeout(() => {
-        const id = visible[0].target.dataset.id;
-        state.lastSeen[currentKey()] = id;
-        saveState();
-      }, 250);
-    }, { rootMargin: '-28% 0px -55% 0px', threshold: 0.01 });
-    document.querySelectorAll('.track-card').forEach(card => observer.observe(card));
+    const cards = [...document.querySelectorAll('.track-card')];
+    if (!cards.length) return;
+    observer = new IntersectionObserver(entries => {
+      const seen = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      if (!seen) return;
+      state.lastSeen[currentKey()] = seen.target.dataset.id;
+      saveState();
+    }, { rootMargin: '-18% 0px -68% 0px', threshold: 0 });
+    cards.forEach(c => observer.observe(c));
   }
 
   function render({ reset = false } = {}) {
@@ -487,7 +496,9 @@
     state.query = '';
     els.searchInput.value = '';
     resetWindow(); saveState(); render();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!document.body.classList.contains('compact-header')) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }));
 
   document.querySelectorAll('.level-chip').forEach(btn => btn.addEventListener('click', () => {
@@ -495,7 +506,9 @@
     state.query = '';
     els.searchInput.value = '';
     resetWindow(); saveState(); render();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!document.body.classList.contains('compact-header')) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }));
 
   let searchTimer;
