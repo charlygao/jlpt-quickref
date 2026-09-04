@@ -142,7 +142,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .card-title-wrap { min-width: 0; }
 .card h3 { margin: 0; font-size: 20px; line-height: 1.35; word-break: break-word; }
 .card-actions { flex: 0 0 auto; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
-.status-btn, .conj-btn {
+.status-btn {
   flex: 0 0 auto; border: 1px solid var(--line); background: transparent; border-radius: 10px;
   padding: 7px 9px; cursor: pointer; color: var(--muted); font-size: 12px;
 }
@@ -152,8 +152,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .follow-btn.is-active { border-color: color-mix(in srgb, var(--accent-2) 58%, var(--line)); background: color-mix(in srgb, var(--accent-2) 13%, transparent); color: var(--accent-2); }
 .status-btn.is-active span { opacity: 1; }
 body.dark .mastery-btn.is-active { color: #68d6a3; }
-.conj-btn { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); background: color-mix(in srgb, var(--accent-soft) 45%, transparent); font-weight: 750; }
-.conj-btn:hover, .grammar-term:hover { background: var(--accent-soft); }
+.grammar-term:hover { background: var(--accent-soft); }
 .meaning { margin: 10px 0 0; color: var(--text); line-height: 1.7; }
 .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
 .meta-grid.single { grid-template-columns: 1fr; }
@@ -182,6 +181,9 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
 .vocab-word { font-size: 23px; font-weight: 800; }
 .vocab-reading { color: var(--accent); font-weight: 700; }
 .vocab-pos { color: var(--muted); font-size: 11px; background: var(--code-bg); padding: 3px 7px; border-radius: 999px; }
+.vocab-pos-action { border: 0; color: var(--accent); font-weight: 800; cursor: pointer; }
+.vocab-pos-action:hover { background: var(--accent-soft); }
+.vocab-pos-action:focus-visible { outline: 2px solid color-mix(in srgb, var(--accent) 48%, transparent); outline-offset: 2px; }
 
 .load-more-wrap { margin-top: 14px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .load-more-wrap[hidden] { display: none; }

@@ -322,20 +322,21 @@
 
   function vocabCard(item, index) {
     const type = detailedType(item);
+    const inflectable = isInflectable(item);
     const exampleHtml = item.example?.jp ? `
         <div class="examples">
           <div class="example"><div class="example-jp">${escapeHtml(item.example.jp)}</div><div class="example-zh">${escapeHtml(item.example.zh)}</div></div>
         </div>` : '';
-    const conjugateButton = isInflectable(item)
-      ? `<button type="button" class="conj-btn" data-conjugate-id="${escapeHtml(item.id)}">变形一览</button>`
-      : '';
+    const posTag = inflectable
+      ? `<button type="button" class="vocab-pos vocab-pos-action" data-conjugate-id="${escapeHtml(item.id)}" aria-label="${escapeHtml(type)}，查看${escapeHtml(item.word)}的变形一览" title="查看变形一览">${escapeHtml(type)}</button>`
+      : `<span class="vocab-pos">${escapeHtml(type)}</span>`;
     return `
       <article class="card track-card" id="${item.id}" data-id="${item.id}">
         <div class="card-head">
           <div class="card-title-wrap">
-            <div class="vocab-line"><span class="vocab-word">${escapeHtml(item.word)}</span><span class="vocab-reading">${escapeHtml(item.reading)}</span><span class="vocab-pos">${escapeHtml(type)}</span></div>
+            <div class="vocab-line"><span class="vocab-word">${escapeHtml(item.word)}</span><span class="vocab-reading">${escapeHtml(item.reading)}</span>${posTag}</div>
           </div>
-          <div class="card-actions">${conjugateButton}${studyButtons(item)}</div>
+          <div class="card-actions">${studyButtons(item)}</div>
         </div>
         <p class="meaning">${escapeHtml(item.meaning || '—')}</p>
         ${exampleHtml}
