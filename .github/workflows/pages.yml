@@ -27,11 +27,13 @@ jobs:
       - name: Validate JavaScript syntax
         run: |
           node --check app.js
+          node --check compact-nav.js
           for file in data/*.js; do node --check "$file"; done
           test -s data/full-vocab.js
           test -s data/grammar-terms.js
           test -s data/conjugation.js
           test -s data/grammar-examples-base.js
+          test -s data/grammar-examples-review.js
           test -s FULL_VOCAB_NOTICE.md
 
       - name: Validate reference data
@@ -49,7 +51,7 @@ jobs:
             './data/grammar-examples-base.js',
             './data/grammar-examples-n5.js', './data/grammar-examples-n4.js', './data/grammar-examples-n3.js',
             './data/grammar-examples-n2.js', './data/grammar-examples-n1.js',
-            './data/grammar-examples-auto.js'
+            './data/grammar-examples-auto.js', './data/grammar-examples-review.js'
           ].forEach(file => require(file));
 
           const data = window.JLPT_DATA;
@@ -58,7 +60,7 @@ jobs:
           let grammarTotal = 0;
           let vocabTotal = 0;
           let exampleTotal = 0;
-          let branchTaggedExamples = 0;
+          let labeledExamples = 0;
           let detailedPosCount = 0;
           const ids = new Set();
           const detailedPosPattern = /五段动词|一段动词|サ变动词|カ变动词|名词・サ变|い形容词|な形容词|の形容词|自动词|他动词/;
@@ -79,12 +81,27 @@ jobs:
               if (!Array.isArray(item.examples) || item.examples.length < 2) {
                 throw new Error(`Grammar needs at least 2 examples: ${item.id} ${item.title}`);
               }
+              if (!item.examples[0]?.covers?.trim()) {
+                throw new Error(`First grammar example has no connection label: ${item.id} ${item.title}`);
+              }
+
               const jpSet = new Set();
+              const labeledSentenceSet = new Set();
               for (const ex of item.examples) {
                 if (!ex?.jp || !ex?.zh) throw new Error(`Incomplete example: ${item.id}`);
+                if (!ex.covers?.trim()) throw new Error(`Unlabeled grammar example: ${item.id} ${ex.jp}`);
+                if (/^补充(例|语境)$/.test(ex.covers)) {
+                  throw new Error(`Mechanical filler label is forbidden: ${item.id} ${ex.jp}`);
+                }
+                if (/^老师说[：:“]/.test(ex.zh) && !/と言/.test(item.title)) {
+                  throw new Error(`Quotation-wrapper filler detected: ${item.id} ${ex.jp}`);
+                }
                 if (jpSet.has(ex.jp)) throw new Error(`Duplicate example in ${item.id}: ${ex.jp}`);
                 jpSet.add(ex.jp);
-                if (ex.covers) branchTaggedExamples += 1;
+                const labeledSentence = `${ex.covers}\u0000${ex.jp}`;
+                if (labeledSentenceSet.has(labeledSentence)) throw new Error(`Duplicate labeled example in ${item.id}: ${ex.jp}`);
+                labeledSentenceSet.add(labeledSentence);
+                labeledExamples += 1;
               }
               exampleTotal += item.examples.length;
             }
@@ -140,10 +157,10 @@ jobs:
           expectForm({word:'静か',reading:'しずか',pos:'な形容词'}, '连体形', '静かな + N');
           if (asMap({word:'書く',reading:'かく',pos:'五段动词'}).size < 20) throw new Error('Comprehensive verb conjugation list is too small');
 
-          console.log(`TOTAL: ${grammarTotal} grammar, ${exampleTotal} grammar examples (${branchTaggedExamples} branch-tagged), ${vocabTotal} vocab, ${detailedPosCount} detailed POS`);
+          console.log(`TOTAL: ${grammarTotal} grammar, ${exampleTotal} grammar examples (${labeledExamples} labeled), ${vocabTotal} vocab, ${detailedPosCount} detailed POS`);
           if (grammarTotal < 350) throw new Error(`Grammar coverage too small: ${grammarTotal}`);
           if (exampleTotal < grammarTotal * 2) throw new Error(`Grammar example coverage too small: ${exampleTotal}`);
-          if (branchTaggedExamples < 100) throw new Error(`Connection-branch tagged examples too small: ${branchTaggedExamples}`);
+          if (labeledExamples !== exampleTotal) throw new Error(`Not every grammar example is labeled: ${labeledExamples}/${exampleTotal}`);
           if (vocabTotal < 7600) throw new Error(`Vocabulary coverage too small: ${vocabTotal}`);
           if (detailedPosCount < 1000) throw new Error(`Detailed POS coverage too small: ${detailedPosCount}`);
           NODE
