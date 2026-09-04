@@ -71,7 +71,6 @@ def chinese_glosses(entry, zh_data):
 
 
 def detailed_pos(tags):
-    """Map JMdict POS labels to learner-facing Chinese classes."""
     texts = [str(tag or "").strip().lower() for tag in tags if str(tag or "").strip()]
 
     def starts(prefix):
@@ -156,7 +155,6 @@ def detailed_pos(tags):
         qualifiers.append("他动词")
     if has_intransitive:
         qualifiers.append("自动词")
-
     if qualifiers and ("动词" in core or core == "名词・サ变"):
         return core + "・" + "・".join(qualifiers)
     return core
@@ -171,11 +169,7 @@ def pos_label(entry):
 
 
 def usage_frequency(word):
-    """Return a corpus-based Japanese Zipf frequency score.
-
-    wordfreq combines several corpora; higher is more frequent. We only store
-    the resulting score/order, never generated example sentences.
-    """
+    """Surface-form corpus estimate used only as a secondary tie-breaker."""
     try:
         return round(float(zipf_frequency(word, "ja", wordlist="best")), 2)
     except Exception:
@@ -187,10 +181,12 @@ def build(db_path, output_path):
     conn.row_factory = sqlite3.Row
     rows = conn.execute(
         """
-        SELECT v.entry_id, v.level, e.data AS entry_data, z.data AS zh_data
+        SELECT v.entry_id, v.level, e.data AS entry_data, z.data AS zh_data,
+               fr.rank AS frequency_rank
         FROM vocab_jlpt v
         JOIN entries e ON e.id = v.entry_id
         LEFT JOIN zh_defs z ON z.entry_id = v.entry_id AND z.locale = 'zh-CN'
+        LEFT JOIN freq_rank fr ON fr.entry_id = v.entry_id
         WHERE v.level IN ('N5','N4','N3','N2','N1')
         """
     )
@@ -214,9 +210,12 @@ def build(db_path, output_path):
         key = (word, reading)
         meaning = "；".join(glosses)
         pos = pos_label(entry)
-        frequency = usage_frequency(word)
+        corpus_frequency = usage_frequency(word)
+        entry_rank = int(row["frequency_rank"]) if row["frequency_rank"] is not None else None
+        payload = [word, reading, meaning, pos, corpus_frequency, entry_rank]
+
         if key not in grouped[level]:
-            grouped[level][key] = [word, reading, meaning, pos, frequency]
+            grouped[level][key] = payload
         else:
             existing = grouped[level][key]
             existing_parts = existing[2].split("；")
@@ -224,27 +223,36 @@ def build(db_path, output_path):
                 if gloss not in existing_parts and len(existing_parts) < 10:
                     existing_parts.append(gloss)
             existing[2] = "；".join(existing_parts)
-            existing[4] = max(existing[4], frequency)
+            existing[4] = max(existing[4], corpus_frequency)
+            if entry_rank is not None:
+                existing[5] = entry_rank if existing[5] is None else min(existing[5], entry_rank)
 
     conn.close()
 
     lines = [
         "// Generated from Tomoshi Dictionary Open Data; see FULL_VOCAB_NOTICE.md.",
-        "// Frequency ordering is derived from wordfreq; see FREQUENCY_NOTICE.md.",
-        "// Adapted dictionary/frequency data is distributed under CC BY-SA terms.",
+        "// Primary ordering uses entry-level JMdict-derived freq_rank; wordfreq is a secondary signal.",
+        "// See FREQUENCY_NOTICE.md. No example sentences are generated here.",
         "(() => {",
         "  const { addVocab } = window.JLPT_EXT;",
     ]
     total = 0
     for level in LEVELS:
         values = list(grouped[level].values())
-        values.sort(key=lambda x: (-x[4], x[1], x[0]))
+        values.sort(key=lambda x: (
+            x[5] is None,
+            x[5] if x[5] is not None else 10**9,
+            -x[4],
+            x[1],
+            x[0],
+        ))
         total += len(values)
         payload = json.dumps(values, ensure_ascii=False, separators=(",", ":"))
         lines.append(f"  addVocab('{level}', {payload});")
-        print(f"{level}: {len(values)} full-list vocabulary entries")
+        ranked = sum(1 for x in values if x[5] is not None)
+        print(f"{level}: {len(values)} entries; {ranked} with entry-level frequency rank")
         if values:
-            print(f"  top frequency: {values[0][0]} {values[0][4]}")
+            print(f"  top: {values[0][0]} rank={values[0][5]} zipf={values[0][4]}")
     lines.append("})();")
     Path(output_path).write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"TOTAL: {total} generated entries; skipped: {skipped}")
