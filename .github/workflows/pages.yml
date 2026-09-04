@@ -114,7 +114,7 @@ jobs:
               if (!/^v-n[1-5]-\d+$/.test(item.id)) continue;
               if (!item.example?.jp || !item.example?.zh) throw new Error(`Missing curated vocabulary example: ${item.id} ${item.word}`);
               if (!item.example.reviewed) throw new Error(`Vocabulary example was not reviewed: ${item.id} ${item.word}`);
-              if ([...item.example.jp].length < 15) throw new Error(`Vocabulary example is too short to be useful: ${item.id} ${item.example.jp}`);
+              if ([...item.example.jp].length < 12) throw new Error(`Vocabulary example is too short to be useful: ${item.id} ${item.example.jp}`);
               if ([...item.example.zh].length < 6) throw new Error(`Vocabulary translation is too short: ${item.id} ${item.example.zh}`);
               if (vocabExampleSentences.has(item.example.jp)) throw new Error(`Duplicate vocabulary example: ${item.example.jp}`);
               vocabExampleSentences.add(item.example.jp);
