@@ -318,19 +318,38 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
   .conj-row { grid-template-columns: 94px 1fr; }
 }
 
-/* iOS Safari can retain a keyboard-sized fixed-position viewport after an input
-   closes. Keep persistent chrome in the document's sticky scroll layer instead. */
+/* Keep Safari's persistent chrome outside the scrolling layer. The document
+   itself never scrolls on iOS; only .page-shell does, so neither the header nor
+   the action rail can be re-parented by WebKit's sticky/fixed compositor. */
 @supports (-webkit-touch-callout: none) {
   :root {
-    --ios-sticky-top-buffer: 8px;
+    --ios-top-buffer: 8px;
+    --ios-browser-bottom: 64px;
+  }
+
+  html {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100lvh;
+    min-height: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
   }
 
   .topbar {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    height: calc(var(--topbar-height) + env(safe-area-inset-top) + var(--ios-sticky-top-buffer));
-    padding-top: calc(10px + env(safe-area-inset-top) + var(--ios-sticky-top-buffer));
+    position: relative;
+    top: auto;
+    flex: 0 0 auto;
+    height: calc(var(--topbar-height) + env(safe-area-inset-top) + var(--ios-top-buffer));
+    padding-top: calc(10px + env(safe-area-inset-top) + var(--ios-top-buffer));
     padding-bottom: 10px;
     -webkit-transform: none;
     transform: none;
@@ -339,23 +358,43 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
     background: var(--panel-solid);
   }
 
+  .page-shell {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 10px;
+    padding-bottom: calc(var(--ios-browser-bottom) + env(safe-area-inset-bottom) + 64px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.modal-open {
+    position: relative;
+    top: 0 !important;
+  }
+
+  body.modal-open .page-shell {
+    overflow: hidden;
+  }
+
+  .page-shell .card {
+    scroll-margin-top: 12px;
+  }
+
   .floating-actions {
-    --floating-actions-height: 150px;
-    --floating-browser-bottom: calc(64px + env(safe-area-inset-bottom));
-    position: -webkit-sticky;
-    position: sticky;
-    top: calc(100vh - var(--floating-actions-height) - var(--floating-browser-bottom));
-    top: calc(100lvh - var(--floating-actions-height) - var(--floating-browser-bottom));
-    right: auto;
-    bottom: auto;
-    width: max-content;
-    height: 0;
-    margin-right: max(12px, env(safe-area-inset-right));
-    margin-left: auto;
-    overflow: visible;
+    position: absolute;
+    top: auto;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: calc(var(--ios-browser-bottom) + env(safe-area-inset-bottom));
+    width: auto;
+    height: auto;
+    margin: 0;
     -webkit-transform: none;
     transform: none;
-    will-change: auto;
+    contain: layout style;
   }
 
   .floating-actions .filter-menu {
@@ -363,6 +402,7 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
     right: 0;
     bottom: 9px;
   }
+
 }
 
 @media (prefers-reduced-motion: reduce) {

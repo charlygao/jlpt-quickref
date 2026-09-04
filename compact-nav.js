@@ -7,8 +7,14 @@
   const compactSearchButton = document.getElementById('compactSearchButton');
   const compactTypeButtons = [...document.querySelectorAll('[data-compact-type]')];
   const compactLevelButtons = [...document.querySelectorAll('[data-compact-level]')];
+  const pageShell = document.querySelector('.page-shell');
 
   if (!topbar || !controls || !fullSearch || !compactInput || !compactSearchButton) return;
+
+  const pageScrollRoot = pageShell && /^(auto|scroll)$/.test(getComputedStyle(pageShell).overflowY)
+    ? pageShell
+    : null;
+  const scrollEventTarget = pageScrollRoot || window;
 
   let ticking = false;
   let compact = false;
@@ -49,7 +55,9 @@
 
   function updateCompactMode() {
     ticking = false;
-    const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+    const scrollTop = pageScrollRoot
+      ? pageScrollRoot.scrollTop
+      : window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
     const shouldCompact = scrollTop >= compactThreshold - 1;
     if (shouldCompact === compact) return;
     compact = shouldCompact;
@@ -65,6 +73,11 @@
   }
 
   function measureCompactThreshold() {
+    if (pageScrollRoot) {
+      const rootTop = pageScrollRoot.getBoundingClientRect().top;
+      compactThreshold = controls.getBoundingClientRect().bottom - rootTop + pageScrollRoot.scrollTop;
+      return;
+    }
     const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
     compactThreshold = controls.getBoundingClientRect().bottom + scrollTop - topbar.offsetHeight;
   }
@@ -128,7 +141,7 @@
     stateObserver.observe(el, { attributes: true, attributeFilter: ['class'] });
   });
 
-  window.addEventListener('scroll', scheduleCompactModeUpdate, { passive: true });
+  scrollEventTarget.addEventListener('scroll', scheduleCompactModeUpdate, { passive: true });
   window.addEventListener('resize', handleViewportResize, { passive: true });
 
   measureCompactThreshold();

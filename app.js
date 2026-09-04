@@ -39,6 +39,29 @@
     resumeBookmark: document.getElementById('resumeBookmark'),
   };
 
+  const pageShell = document.querySelector('.page-shell');
+  const pageScrollRoot = pageShell && /^(auto|scroll)$/.test(getComputedStyle(pageShell).overflowY)
+    ? pageShell
+    : null;
+
+  function pageScrollTop() {
+    return pageScrollRoot
+      ? pageScrollRoot.scrollTop
+      : window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+  }
+
+  function scrollPageTo(options) {
+    (pageScrollRoot || window).scrollTo(options);
+  }
+
+  function withoutSmoothScroll(callback) {
+    const behaviorTarget = pageScrollRoot || document.documentElement;
+    const previous = behaviorTarget.style.scrollBehavior;
+    behaviorTarget.style.scrollBehavior = 'auto';
+    callback();
+    behaviorTarget.style.scrollBehavior = previous;
+  }
+
   function loadState() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
@@ -375,10 +398,10 @@
     el.hidden = false;
     if (wasClosed) {
       modalReturnFocus = document.activeElement;
-      lockedScrollY = window.scrollY;
+      lockedScrollY = pageScrollTop();
       document.documentElement.classList.add('modal-open');
       document.body.classList.add('modal-open');
-      document.body.style.top = `-${lockedScrollY}px`;
+      if (!pageScrollRoot) document.body.style.top = `-${lockedScrollY}px`;
     }
     el.querySelector('.modal-close').focus({ preventScroll: true });
   }
@@ -389,10 +412,7 @@
     document.documentElement.classList.remove('modal-open');
     document.body.classList.remove('modal-open');
     document.body.style.top = '';
-    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
-    document.documentElement.style.scrollBehavior = 'auto';
-    window.scrollTo(0, lockedScrollY);
-    document.documentElement.style.scrollBehavior = previousScrollBehavior;
+    withoutSmoothScroll(() => scrollPageTo({ top: lockedScrollY, left: 0, behavior: 'auto' }));
     modalReturnFocus?.focus?.({ preventScroll: true });
     modalReturnFocus = null;
   }
@@ -531,7 +551,7 @@
       if (!seen) return;
       state.lastSeen[currentKey()] = seen.target.dataset.id;
       saveState();
-    }, { rootMargin: '-18% 0px -68% 0px', threshold: 0 });
+    }, { root: pageScrollRoot, rootMargin: '-18% 0px -68% 0px', threshold: 0 });
     cards.forEach(c => observer.observe(c));
   }
 
@@ -543,8 +563,9 @@
 
     const rect = els.loadMoreWrap.getBoundingClientRect();
     const viewport = window.visualViewport;
-    const viewportHeight = viewport?.height || window.innerHeight || document.documentElement.clientHeight;
-    const viewportTop = viewport?.offsetTop || 0;
+    const rootRect = pageScrollRoot?.getBoundingClientRect();
+    const viewportHeight = rootRect?.height || viewport?.height || window.innerHeight || document.documentElement.clientHeight;
+    const viewportTop = rootRect?.top || viewport?.offsetTop || 0;
     if (rect.top > viewportTop + viewportHeight + 480) return;
 
     const total = getCurrentItems().length;
@@ -571,11 +592,11 @@
     if ('IntersectionObserver' in window) {
       const autoLoadObserver = new IntersectionObserver(entries => {
         if (entries.some(entry => entry.isIntersecting)) scheduleAutoLoadCheck();
-      }, { rootMargin: '0px 0px 480px 0px', threshold: 0 });
+      }, { root: pageScrollRoot, rootMargin: '0px 0px 480px 0px', threshold: 0 });
       autoLoadObserver.observe(els.loadMoreWrap);
     }
 
-    window.addEventListener('scroll', scheduleAutoLoadCheck, { passive: true });
+    (pageScrollRoot || window).addEventListener('scroll', scheduleAutoLoadCheck, { passive: true });
     window.addEventListener('resize', scheduleAutoLoadCheck, { passive: true });
     window.addEventListener('pageshow', scheduleAutoLoadCheck, { passive: true });
     window.visualViewport?.addEventListener('scroll', scheduleAutoLoadCheck, { passive: true });
@@ -617,10 +638,7 @@
     const target = document.getElementById(id);
     if (!target) return;
     if (auto) {
-      const previousScrollBehavior = document.documentElement.style.scrollBehavior;
-      document.documentElement.style.scrollBehavior = 'auto';
-      target.scrollIntoView({ behavior: 'auto', block: 'start' });
-      document.documentElement.style.scrollBehavior = previousScrollBehavior;
+      withoutSmoothScroll(() => target.scrollIntoView({ behavior: 'auto', block: 'start' }));
     } else {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -660,7 +678,7 @@
     els.searchInput.value = '';
     resetWindow(); saveState(); render();
     if (!document.body.classList.contains('compact-header')) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollPageTo({ top: 0, behavior: 'smooth' });
     }
   }));
 
@@ -671,7 +689,7 @@
     els.searchInput.value = '';
     resetWindow(); saveState(); render();
     if (!document.body.classList.contains('compact-header')) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollPageTo({ top: 0, behavior: 'smooth' });
     }
   }));
 
@@ -721,7 +739,7 @@
     document.body.classList.toggle('dark');
     localStorage.setItem(THEME_KEY, document.body.classList.contains('dark') ? 'dark' : 'light');
   });
-  els.backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  els.backToTop.addEventListener('click', () => scrollPageTo({ top: 0, behavior: 'smooth' }));
 
   loadState();
   render();

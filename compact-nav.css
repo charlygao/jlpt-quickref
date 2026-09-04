@@ -143,7 +143,7 @@ body.compact-header .card {
 
 @supports (-webkit-touch-callout: none) {
   body.compact-header .card {
-    scroll-margin-top: calc(var(--topbar-height, 69px) + env(safe-area-inset-top) + var(--ios-sticky-top-buffer, 0px) + 12px);
+    scroll-margin-top: 12px;
   }
 }
 
