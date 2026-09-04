@@ -11,12 +11,14 @@
   --shadow: 0 12px 34px rgba(25, 28, 45, .07);
   --radius: 22px;
   --code-bg: #f3f4f8;
+  --topbar-height: 69px;
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
+  padding-top: var(--topbar-height);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "Noto Sans JP", sans-serif;
   color: var(--text);
   background:
@@ -46,14 +48,19 @@ button { color: inherit; }
 a { color: var(--accent); text-underline-offset: 3px; }
 
 .topbar {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: var(--topbar-height);
   z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 14px max(18px, env(safe-area-inset-right)) 14px max(18px, env(safe-area-inset-left));
   background: color-mix(in srgb, var(--bg) 84%, transparent);
+  -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
 }
@@ -92,7 +99,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .hero-stats span { color: var(--muted); font-size: 11px; }
 
 .controls { margin-top: 14px; padding: 16px; display: grid; gap: 13px; }
-.sticky-controls { position: sticky; top: 79px; z-index: 30; }
+.sticky-controls { position: sticky; top: calc(var(--topbar-height) + 10px); z-index: 30; }
 .segmented { display: grid; grid-template-columns: 1fr 1fr; background: var(--code-bg); padding: 4px; border-radius: 15px; }
 .segment { border: 0; background: transparent; padding: 10px 14px; border-radius: 11px; cursor: pointer; color: var(--muted); font-weight: 700; }
 .segment.is-active { background: var(--panel-solid); color: var(--text); box-shadow: 0 3px 10px rgba(0,0,0,.05); }
@@ -217,10 +224,11 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .modal-note { margin: 13px 0 0; color: var(--muted); font-size: 11px; line-height: 1.65; }
 
 @media (max-width: 700px) {
+  :root { --topbar-height: 57px; }
   .page-shell { width: min(100% - 20px, 920px); margin-top: 10px; }
   .hero { grid-template-columns: 1fr; padding: 20px; gap: 18px; }
   .hero h2 { font-size: 29px; }
-  .sticky-controls { top: 69px; }
+  .sticky-controls { top: calc(var(--topbar-height) + 10px); }
   .topbar { padding-top: 10px; padding-bottom: 10px; }
   .brand-mark { width: 36px; height: 36px; border-radius: 11px; }
   .brand p { display: none; }
