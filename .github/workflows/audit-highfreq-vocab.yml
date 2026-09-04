@@ -1,0 +1,33 @@
+name: Audit high-frequency vocabulary
+on:
+  push:
+    paths: ['.github/workflows/audit-highfreq-vocab.yml']
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print top 100 per JLPT level
+        run: |
+          node <<'NODE'
+          global.window = {};
+          [
+            './data/base.js',
+            './data/n5.js','./data/n4.js','./data/n3.js','./data/n2.js','./data/n1.js',
+            './data/extra-base.js',
+            './data/extra-n5.js','./data/extra-n4.js','./data/extra-n3.js','./data/extra-n2.js','./data/extra-n1.js',
+            './data/full-vocab.js','./data/vocab-order.js','./data/vocab-examples-review.js'
+          ].forEach(f => require(f));
+          for (const level of ['N5','N4','N3','N2','N1']) {
+            console.log(`=== ${level} TOP 100 ===`);
+            const top = (window.JLPT_DATA.vocab[level] || []).slice(0,100);
+            top.forEach((x,i) => console.log([
+              String(i+1).padStart(3,'0'), x.id, x.word, x.reading, x.pos,
+              `rank=${x.frequencyRank ?? '-'}`, `zipf=${x.frequency ?? '-'}`,
+              `example=${x.example?.reviewed ? 'YES' : 'NO'}`, `meaning=${x.meaning}`
+            ].join('\t')));
+            console.log(`COVERED ${top.filter(x=>x.example?.reviewed).length}/100`);
+          }
+          NODE
