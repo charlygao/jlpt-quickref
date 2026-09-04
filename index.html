@@ -87,14 +87,6 @@
       <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
     </section>
 
-    <section id="resumeBanner" class="resume-banner panel" hidden>
-      <div>
-        <strong>已找到上次阅读位置</strong>
-        <span id="resumeText"></span>
-      </div>
-      <button id="resumeButton" class="primary-btn">继续阅读</button>
-    </section>
-
     <section id="contentList" class="content-list" aria-live="polite"></section>
 
     <section id="loadMoreWrap" class="load-more-wrap panel" hidden>
@@ -114,6 +106,21 @@
       <p>完整分级词汇底库部分数据改编自 Tomoshi Dictionary Open Data / JMdict，并按 CC BY-SA 4.0 提供。<a href="FULL_VOCAB_NOTICE.md">查看数据来源、署名与修改说明</a>。词汇按常用度参考排序，详情见 <a href="FREQUENCY_NOTICE.md">词频排序说明</a>。</p>
     </section>
   </main>
+
+  <aside id="quickNav" class="quick-nav" aria-label="快速导航" hidden>
+    <output id="quickNavBubble" class="quick-nav-bubble" aria-live="polite" hidden></output>
+    <div id="quickNavTrack" class="quick-nav-track" role="slider" tabindex="0"
+      aria-label="在当前列表中快速跳转" aria-orientation="vertical"
+      aria-valuemin="1" aria-valuemax="1" aria-valuenow="1">
+      <span class="quick-nav-marks" aria-hidden="true"></span>
+      <span id="quickNavThumb" class="quick-nav-thumb" aria-hidden="true"></span>
+    </div>
+    <button id="quickNavFlag" class="quick-nav-flag" type="button" aria-label="跳转到上次阅读位置" hidden>
+      <svg viewBox="0 0 16 18" aria-hidden="true">
+        <path d="M4 15.5V2.5M4.5 3h7l-1.7 2.7L11.5 8h-7" />
+      </svg>
+    </button>
+  </aside>
 
   <aside class="floating-actions" aria-label="浏览操作">
     <div id="filterMenu" class="filter-menu" role="menu" aria-label="内容筛选" hidden>
