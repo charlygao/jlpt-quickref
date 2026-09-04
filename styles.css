@@ -323,7 +323,7 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
    the action rail can be re-parented by WebKit's sticky/fixed compositor. */
 @supports (-webkit-touch-callout: none) {
   :root {
-    --ios-top-buffer: 8px;
+    --ios-top-buffer: 24px;
     --ios-browser-bottom: 64px;
   }
 
