@@ -12,6 +12,14 @@ except ImportError:  # Unit tests for POS mapping do not need the frequency mode
 
 LEVELS = ["N5", "N4", "N3", "N2", "N1"]
 
+# A few JLPT rows point at narrower JMdict entries than the everyday headword.
+# Preserve the learner-relevant usages confirmed during the vocabulary audit.
+REQUIRED_POS_COMPONENTS = {
+    ("幾つ", "いくつ"): ("名词", "副词"),
+    ("後悔", "こうかい"): ("名词", "サ变"),
+    ("一時", "いちじ"): ("名词", "副词"),
+}
+
 
 def preferred(items):
     if not items:
@@ -268,6 +276,24 @@ def pos_label(entry):
     return detailed_pos(tags) if tags else "词汇"
 
 
+def apply_required_pos(word, reading, pos):
+    required = REQUIRED_POS_COMPONENTS.get((word, reading))
+    if not required:
+        return pos
+
+    parts = pos.split("・") if pos and pos != "词汇" else []
+    for component in required:
+        if component in parts:
+            continue
+        if component == "名词":
+            parts.insert(0, component)
+        elif component == "サ变" and "名词" in parts:
+            parts.insert(parts.index("名词") + 1, component)
+        else:
+            parts.append(component)
+    return "・".join(parts) or pos
+
+
 def usage_frequency(word):
     """Surface-form corpus estimate used only as a secondary tie-breaker."""
     if zipf_frequency is None:
@@ -302,6 +328,11 @@ def validate_pos_inventory(grouped):
     for row in rows:
         if row[0] in expected_na and "い形容词" in row[3]:
             raise ValueError(f"known な-adjective mislabeled as い形容词: {row[0]} ({row[3]})")
+
+    for row in rows:
+        required = REQUIRED_POS_COMPONENTS.get((row[0], row[1]))
+        if required and not all(component in row[3].split("・") for component in required):
+            raise ValueError(f"known POS usage missing for {row[0]}: {row[3]}")
 
     print(
         f"POS: {len(i_adjectives)} い-adjectives, {len(na_adjectives)} な-adjectives, "
@@ -342,7 +373,7 @@ def build(db_path, output_path):
 
         key = (word, reading)
         meaning = "；".join(glosses)
-        pos = pos_label(entry)
+        pos = apply_required_pos(word, reading, pos_label(entry))
         corpus_frequency = usage_frequency(word)
         entry_rank = int(row["frequency_rank"]) if row["frequency_rank"] is not None else None
         payload = [word, reading, meaning, pos, corpus_frequency, entry_rank]

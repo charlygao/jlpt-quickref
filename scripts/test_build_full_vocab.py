@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import unittest
 
-from build_full_vocab import detailed_pos, pos_label
+from build_full_vocab import apply_required_pos, detailed_pos, pos_label
 
 
 class DetailedPosTests(unittest.TestCase):
@@ -41,6 +41,15 @@ class DetailedPosTests(unittest.TestCase):
     def test_pos_inheritance_is_respected(self):
         entry = {"senses": [{"pos": ["v5r", "vt"]}, {"glosses": []}]}
         self.assertEqual(pos_label(entry), "五段动词・他动词")
+
+    def test_required_pos_adds_missing_usage(self):
+        self.assertEqual(apply_required_pos("幾つ", "いくつ", "副词"), "名词・副词")
+        self.assertEqual(apply_required_pos("後悔", "こうかい", "名词"), "名词・サ变")
+        self.assertEqual(apply_required_pos("一時", "いちじ", "名词"), "名词・副词")
+
+    def test_required_pos_preserves_existing_detail(self):
+        pos = "名词・サ变・他动词・自动词"
+        self.assertEqual(apply_required_pos("後悔", "こうかい", pos), pos)
 
 
 if __name__ == "__main__":
