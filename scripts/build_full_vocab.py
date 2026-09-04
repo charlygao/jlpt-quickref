@@ -5,6 +5,8 @@ import sys
 from collections import OrderedDict
 from pathlib import Path
 
+from wordfreq import zipf_frequency
+
 LEVELS = ["N5", "N4", "N3", "N2", "N1"]
 
 
@@ -69,12 +71,7 @@ def chinese_glosses(entry, zh_data):
 
 
 def detailed_pos(tags):
-    """Map JMdict POS labels to learner-facing Chinese classes.
-
-    Match individual tags rather than a joined substring. This matters because
-    labels such as "adverbial noun" contain the letters "verb", and
-    "intransitive verb" contains "transitive verb" as a substring.
-    """
+    """Map JMdict POS labels to learner-facing Chinese classes."""
     texts = [str(tag or "").strip().lower() for tag in tags if str(tag or "").strip()]
 
     def starts(prefix):
@@ -134,8 +131,6 @@ def detailed_pos(tags):
     elif has_pronoun:
         core = "代词"
     elif has_noun:
-        # Includes temporal/adverbial/proper nouns. Keeping them as nouns is
-        # more useful than falsely treating "adverbial noun" as a verb.
         core = "名词"
     elif starts("adverb"):
         core = "副词"
@@ -168,13 +163,23 @@ def detailed_pos(tags):
 
 
 def pos_label(entry):
-    # JMdict senses are ordered. Use the first sense that provides POS tags;
-    # those tags represent the primary sense shown by this compact card.
     for sense in entry.get("senses") or []:
         tags = sense.get("pos") or []
         if tags:
             return detailed_pos(tags)
     return "词汇"
+
+
+def usage_frequency(word):
+    """Return a corpus-based Japanese Zipf frequency score.
+
+    wordfreq combines several corpora; higher is more frequent. We only store
+    the resulting score/order, never generated example sentences.
+    """
+    try:
+        return round(float(zipf_frequency(word, "ja", wordlist="best")), 2)
+    except Exception:
+        return 0.0
 
 
 def build(db_path, output_path):
@@ -209,8 +214,9 @@ def build(db_path, output_path):
         key = (word, reading)
         meaning = "；".join(glosses)
         pos = pos_label(entry)
+        frequency = usage_frequency(word)
         if key not in grouped[level]:
-            grouped[level][key] = [word, reading, meaning, pos]
+            grouped[level][key] = [word, reading, meaning, pos, frequency]
         else:
             existing = grouped[level][key]
             existing_parts = existing[2].split("；")
@@ -218,22 +224,27 @@ def build(db_path, output_path):
                 if gloss not in existing_parts and len(existing_parts) < 10:
                     existing_parts.append(gloss)
             existing[2] = "；".join(existing_parts)
+            existing[4] = max(existing[4], frequency)
 
     conn.close()
 
     lines = [
         "// Generated from Tomoshi Dictionary Open Data; see FULL_VOCAB_NOTICE.md.",
-        "// The adapted data in this file is CC BY-SA 4.0.",
+        "// Frequency ordering is derived from wordfreq; see FREQUENCY_NOTICE.md.",
+        "// Adapted dictionary/frequency data is distributed under CC BY-SA terms.",
         "(() => {",
         "  const { addVocab } = window.JLPT_EXT;",
     ]
     total = 0
     for level in LEVELS:
         values = list(grouped[level].values())
+        values.sort(key=lambda x: (-x[4], x[1], x[0]))
         total += len(values)
         payload = json.dumps(values, ensure_ascii=False, separators=(",", ":"))
         lines.append(f"  addVocab('{level}', {payload});")
         print(f"{level}: {len(values)} full-list vocabulary entries")
+        if values:
+            print(f"  top frequency: {values[0][0]} {values[0][4]}")
     lines.append("})();")
     Path(output_path).write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"TOTAL: {total} generated entries; skipped: {skipped}")
