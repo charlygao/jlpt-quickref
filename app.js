@@ -458,8 +458,7 @@
 
   function updateFilterControls() {
     const label = FILTER_LABELS[state.filter];
-    const query = state.query.trim().toLowerCase();
-    const items = (DATA[state.type][state.level] || []).filter(item => !query || itemSearchText(item).includes(query));
+    const items = DATA[state.type][state.level] || [];
     const masteredCount = items.filter(item => state.mastered.has(item.id)).length;
     const counts = {
       all: items.length,
