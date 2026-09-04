@@ -1,0 +1,157 @@
+/* Compact controls shown inside the fixed header after the full filter panel scrolls away. */
+.sticky-controls {
+  position: static !important;
+  top: auto !important;
+}
+
+.compact-nav {
+  display: none;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  margin-left: 0;
+}
+
+body.compact-header .topbar .brand {
+  display: none;
+}
+body.compact-header .compact-nav {
+  display: flex;
+}
+
+.compact-main-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  transition: opacity .16s ease, transform .16s ease, width .16s ease;
+}
+
+.compact-type,
+.compact-levels {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel-solid) 74%, transparent);
+  border-radius: 12px;
+  padding: 3px;
+}
+
+.compact-type-btn,
+.compact-level-btn,
+.compact-icon-btn {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.compact-type-btn {
+  min-width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  font-size: 13px;
+}
+
+.compact-level-btn {
+  width: 30px;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.compact-type-btn.is-active,
+.compact-level-btn.is-active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.compact-search {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 40px;
+  height: 40px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  transition: flex .18s ease, width .18s ease, background .18s ease, border-color .18s ease;
+}
+
+.compact-search input {
+  width: 0;
+  min-width: 0;
+  opacity: 0;
+  pointer-events: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 0;
+  transition: width .18s ease, opacity .14s ease, padding .18s ease;
+}
+
+.compact-icon-btn {
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+body.compact-search-open .compact-main-controls {
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-8px);
+}
+
+body.compact-search-open .compact-search {
+  flex: 1 1 auto;
+  margin-left: 0;
+  background: var(--panel-solid);
+  border-color: var(--line);
+}
+body.compact-search-open .compact-search input {
+  width: 100%;
+  opacity: 1;
+  pointer-events: auto;
+  padding: 0 8px 0 12px;
+}
+
+body.compact-header .topbar > #themeToggle {
+  margin-left: 8px;
+  flex: 0 0 auto;
+}
+
+/* Keep card anchor offsets correct now that the large controls no longer stick. */
+body.compact-header .card {
+  scroll-margin-top: calc(var(--topbar-h, 69px) + 12px);
+}
+
+@media (max-width: 700px) {
+  .compact-nav { gap: 5px; }
+  .compact-main-controls { gap: 5px; }
+  .compact-type,
+  .compact-levels { border-radius: 11px; padding: 2px; }
+  .compact-type-btn { min-width: 31px; height: 32px; font-size: 12px; }
+  .compact-level-btn { width: 25px; height: 32px; font-size: 11px; }
+  .compact-search { height: 38px; min-width: 36px; }
+  .compact-icon-btn { width: 36px; height: 36px; flex-basis: 36px; }
+  body.compact-header .topbar > #themeToggle {
+    width: 36px;
+    height: 36px;
+    margin-left: 5px;
+  }
+}
+
+@media (max-width: 420px) {
+  .compact-level-btn { width: 23px; }
+  .compact-type-btn { min-width: 29px; }
+  .compact-main-controls { gap: 4px; }
+}
