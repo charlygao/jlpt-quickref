@@ -3,15 +3,18 @@ on:
   push:
     paths: ['.github/workflows/audit-highfreq-vocab.yml']
 permissions:
-  contents: read
+  contents: write
 jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Print top 100 per JLPT level
+        with:
+          fetch-depth: 0
+      - name: Materialize top 100 per JLPT level
         run: |
           node <<'NODE'
+          const fs = require('fs');
           global.window = {};
           [
             './data/base.js',
@@ -20,14 +23,20 @@ jobs:
             './data/extra-n5.js','./data/extra-n4.js','./data/extra-n3.js','./data/extra-n2.js','./data/extra-n1.js',
             './data/full-vocab.js','./data/vocab-order.js','./data/vocab-examples-review.js'
           ].forEach(f => require(f));
+          const out = {};
           for (const level of ['N5','N4','N3','N2','N1']) {
-            console.log(`=== ${level} TOP 100 ===`);
-            const top = (window.JLPT_DATA.vocab[level] || []).slice(0,100);
-            top.forEach((x,i) => console.log([
-              String(i+1).padStart(3,'0'), x.id, x.word, x.reading, x.pos,
-              `rank=${x.frequencyRank ?? '-'}`, `zipf=${x.frequency ?? '-'}`,
-              `example=${x.example?.reviewed ? 'YES' : 'NO'}`, `meaning=${x.meaning}`
-            ].join('\t')));
-            console.log(`COVERED ${top.filter(x=>x.example?.reviewed).length}/100`);
+            out[level] = (window.JLPT_DATA.vocab[level] || []).slice(0,100).map((x,i) => ({
+              order:i+1,id:x.id,word:x.word,reading:x.reading,pos:x.pos,meaning:x.meaning,
+              frequencyRank:x.frequencyRank ?? null,hasReviewedExample:Boolean(x.example?.reviewed)
+            }));
           }
+          fs.writeFileSync('data/highfreq-targets.json', JSON.stringify(out,null,2)+'\n');
           NODE
+      - name: Commit target snapshot
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/highfreq-targets.json
+          git commit -m 'chore: snapshot top-frequency vocabulary targets' || exit 0
+          git pull --rebase origin main
+          git push origin HEAD:main
