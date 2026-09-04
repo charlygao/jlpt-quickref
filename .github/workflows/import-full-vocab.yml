@@ -10,12 +10,18 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: import-full-vocab
+  cancel-in-progress: true
+
 jobs:
   import:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install frequency model
         run: |
@@ -37,6 +43,7 @@ jobs:
           node --check data/full-vocab.js
           test -s data/full-vocab.js
           grep -q 'FREQUENCY_NOTICE.md' data/full-vocab.js
+          grep -q 'entry-level JMdict-derived freq_rank' data/full-vocab.js
           ls -lh data/full-vocab.js
 
       - name: Commit generated vocabulary
@@ -48,5 +55,6 @@ jobs:
             echo 'Generated vocabulary is already up to date.'
             exit 0
           fi
-          git commit -m 'content: rank JLPT vocabulary by usage frequency'
-          git push
+          git commit -m 'content: rank JLPT vocabulary by entry frequency'
+          git pull --rebase origin main
+          git push origin HEAD:main
