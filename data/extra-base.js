@@ -23,7 +23,7 @@
     for (const row of rows) {
       // Vocabulary imports intentionally contain no example fields. Examples
       // are maintained only in explicit human-reviewed example data files.
-      const [word, reading, meaning, pos = '词汇', frequency = null] = row;
+      const [word, reading, meaning, pos = '词汇', frequency = null, frequencyRank = null] = row;
       const key = `${word}\u0000${reading}`;
       if (!word) continue;
 
@@ -31,6 +31,7 @@
       if (existing) {
         if (posSpecificity(pos) > posSpecificity(existing.pos)) existing.pos = pos;
         if (Number.isFinite(frequency)) existing.frequency = frequency;
+        if (Number.isInteger(frequencyRank) && frequencyRank > 0) existing.frequencyRank = frequencyRank;
         continue;
       }
 
@@ -42,6 +43,7 @@
         meaning,
         pos,
         frequency: Number.isFinite(frequency) ? frequency : null,
+        frequencyRank: Number.isInteger(frequencyRank) && frequencyRank > 0 ? frequencyRank : null,
         example: null,
         extended: true,
       };
