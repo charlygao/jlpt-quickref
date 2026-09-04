@@ -488,6 +488,7 @@
     }
     els.loadMoreWrap.hidden = false;
     els.loadMoreText.textContent = `已显示 ${end.toLocaleString()} / ${total.toLocaleString()} · 继续向下滑动自动载入`;
+    scheduleAutoLoadCheck();
   }
 
   function itemDisplayLabel(item) {
@@ -521,16 +522,54 @@
     cards.forEach(c => observer.observe(c));
   }
 
+  let autoLoadCheckPending = false;
+  let autoLoading = false;
+
+  function maybeAutoLoadMore() {
+    if (autoLoading || els.loadMoreWrap.hidden || state.type !== 'vocab') return;
+
+    const rect = els.loadMoreWrap.getBoundingClientRect();
+    const viewport = window.visualViewport;
+    const viewportHeight = viewport?.height || window.innerHeight || document.documentElement.clientHeight;
+    const viewportTop = viewport?.offsetTop || 0;
+    if (rect.top > viewportTop + viewportHeight + 480) return;
+
+    const total = getCurrentItems().length;
+    const end = Math.min(total, state.startIndex + state.visibleCount);
+    if (end >= total) return;
+
+    autoLoading = true;
+    state.visibleCount += VOCAB_BATCH_SIZE;
+    render();
+    autoLoading = false;
+    scheduleAutoLoadCheck();
+  }
+
+  function scheduleAutoLoadCheck() {
+    if (autoLoadCheckPending) return;
+    autoLoadCheckPending = true;
+    requestAnimationFrame(() => {
+      autoLoadCheckPending = false;
+      maybeAutoLoadMore();
+    });
+  }
+
   function attachAutoLoadObserver() {
-    const autoLoadObserver = new IntersectionObserver(entries => {
-      if (!entries.some(entry => entry.isIntersecting) || els.loadMoreWrap.hidden || state.type !== 'vocab') return;
-      const total = getCurrentItems().length;
-      const end = Math.min(total, state.startIndex + state.visibleCount);
-      if (end >= total) return;
-      state.visibleCount += VOCAB_BATCH_SIZE;
-      render();
-    }, { rootMargin: '0px 0px 480px 0px', threshold: 0 });
-    autoLoadObserver.observe(els.loadMoreWrap);
+    if ('IntersectionObserver' in window) {
+      const autoLoadObserver = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) scheduleAutoLoadCheck();
+      }, { rootMargin: '0px 0px 480px 0px', threshold: 0 });
+      autoLoadObserver.observe(els.loadMoreWrap);
+    }
+
+    window.addEventListener('scroll', scheduleAutoLoadCheck, { passive: true });
+    window.addEventListener('resize', scheduleAutoLoadCheck, { passive: true });
+    window.addEventListener('pageshow', scheduleAutoLoadCheck, { passive: true });
+    window.visualViewport?.addEventListener('scroll', scheduleAutoLoadCheck, { passive: true });
+    window.visualViewport?.addEventListener('resize', scheduleAutoLoadCheck, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) scheduleAutoLoadCheck();
+    });
   }
 
   function render({ reset = false } = {}) {
@@ -672,7 +711,8 @@
   els.backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
   loadState();
-  attachAutoLoadObserver();
   render();
+  attachAutoLoadObserver();
+  scheduleAutoLoadCheck();
   requestAnimationFrame(() => requestAnimationFrame(() => jumpToSaved({ auto: true })));
 })();
