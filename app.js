@@ -286,6 +286,7 @@
   }
 
   function conjugationRows(item) {
+    if (window.JLPT_CONJUGATION?.rows) return window.JLPT_CONJUGATION.rows(item);
     const type = detailedType(item);
     const word = String(item.word || '');
     const klass = inferVerbClass(item);
