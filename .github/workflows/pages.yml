@@ -30,6 +30,7 @@ jobs:
           for file in data/*.js; do node --check "$file"; done
           test -s data/full-vocab.js
           test -s data/grammar-terms.js
+          test -s data/conjugation.js
           test -s data/grammar-examples-base.js
           test -s FULL_VOCAB_NOTICE.md
 
@@ -44,6 +45,7 @@ jobs:
             './data/extra-n5.js', './data/extra-n4.js', './data/extra-n3.js', './data/extra-n2.js', './data/extra-n1.js',
             './data/full-vocab.js',
             './data/grammar-terms.js',
+            './data/conjugation.js',
             './data/grammar-examples-base.js',
             './data/grammar-examples-n5.js', './data/grammar-examples-n4.js', './data/grammar-examples-n3.js',
             './data/grammar-examples-n2.js', './data/grammar-examples-n1.js',
@@ -117,6 +119,26 @@ jobs:
           if (/动词/.test(vocab('N5', '秋', 'あき')?.pos || '')) throw new Error('秋 must not be classified as a verb');
           if (/动词/.test(vocab('N5', '朝', 'あさ')?.pos || '')) throw new Error('朝 must not be classified as a verb');
           if (/动词/.test(vocab('N5', '明日', 'あした')?.pos || '')) throw new Error('明日 must not be classified as a verb');
+
+          const conjugation = window.JLPT_CONJUGATION;
+          if (!conjugation?.rows) throw new Error('Conjugation reference is not loaded');
+          function asMap(item) {
+            return new Map(conjugation.rows(item));
+          }
+          function expectForm(item, label, expected) {
+            const rows = conjugation.rows(item);
+            if (rows.length < 10) throw new Error(`Too few conjugations for ${item.word}: ${rows.length}`);
+            const actual = new Map(rows).get(label);
+            if (actual !== expected) throw new Error(`${item.word} ${label}: expected ${expected}, got ${actual}`);
+          }
+          expectForm({word:'書く',reading:'かく',pos:'五段动词・他动词'}, 'て形', '書いて');
+          expectForm({word:'書く',reading:'かく',pos:'五段动词・他动词'}, 'ませんでした', '書きませんでした');
+          expectForm({word:'食べる',reading:'たべる',pos:'一段动词・他动词'}, '可能形', '食べられる');
+          expectForm({word:'勉強',reading:'べんきょう',pos:'名词・サ变'}, '辞书形', '勉強する');
+          expectForm({word:'来る',reading:'くる',pos:'カ变动词・自动词'}, 'ない形', '来ない（こない）');
+          expectForm({word:'高い',reading:'たかい',pos:'い形容词'}, '礼貌过去否定', '高くなかったです／高くありませんでした');
+          expectForm({word:'静か',reading:'しずか',pos:'な形容词'}, '连体形', '静かな + N');
+          if (asMap({word:'書く',reading:'かく',pos:'五段动词'}).size < 20) throw new Error('Comprehensive verb conjugation list is too small');
 
           console.log(`TOTAL: ${grammarTotal} grammar, ${exampleTotal} grammar examples (${branchTaggedExamples} branch-tagged), ${vocabTotal} vocab, ${detailedPosCount} detailed POS`);
           if (grammarTotal < 350) throw new Error(`Grammar coverage too small: ${grammarTotal}`);
