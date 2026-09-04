@@ -716,6 +716,10 @@
     const collection = btn.dataset.status === 'mastered' ? state.mastered : state.followed;
     collection.has(id) ? collection.delete(id) : collection.add(id);
     saveState();
+    window.JLPT_PROGRESS_SYNC?.saveItem(id, {
+      mastered: state.mastered.has(id),
+      followed: state.followed.has(id),
+    });
     render();
   });
 
@@ -749,6 +753,15 @@
 
   loadState();
   render();
+  window.JLPT_PROGRESS_SYNC?.init({
+    getProgress: () => ({ mastered: [...state.mastered], followed: [...state.followed] }),
+    applyProgress: ({ mastered, followed }) => {
+      state.mastered = new Set(mastered || []);
+      state.followed = new Set(followed || []);
+      saveState();
+      render();
+    },
+  });
   attachAutoLoadObserver();
   scheduleAutoLoadCheck();
   requestAnimationFrame(() => requestAnimationFrame(() => jumpToSaved({ auto: true })));

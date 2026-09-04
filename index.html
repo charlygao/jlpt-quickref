@@ -39,7 +39,16 @@
       </div>
     </nav>
 
-    <button id="themeToggle" class="icon-btn" aria-label="切换深浅色">◐</button>
+    <div class="topbar-actions">
+      <button id="accountButton" class="icon-btn account-btn" type="button" aria-label="登录并同步学习进度" title="登录并同步学习进度">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.25" />
+          <path d="M5.75 19c.55-3.35 2.63-5.25 6.25-5.25s5.7 1.9 6.25 5.25" />
+        </svg>
+        <span class="account-status-dot" aria-hidden="true"></span>
+      </button>
+      <button id="themeToggle" class="icon-btn" aria-label="切换深浅色">◐</button>
+    </div>
   </header>
 
   <aside class="floating-actions" aria-label="浏览操作">
@@ -73,7 +82,7 @@
       <div>
         <span class="eyebrow">Japanese Quick Reference</span>
         <h2>碎片时间，也能把语法和词汇串起来。</h2>
-        <p>按 JLPT 等级浏览核心语法、接续、中文解释、例句与分级词汇。掌握与关注状态保存在本机，回来会自动恢复到上次阅读位置。</p>
+        <p>按 JLPT 等级浏览核心语法、接续、中文解释、例句与分级词汇。未登录时进度保存在本机；登录后，掌握与关注状态会同步到云端。</p>
       </div>
       <div class="hero-stats">
         <div><strong id="grammarCount">0</strong><span>语法点</span></div>
@@ -133,6 +142,49 @@
     </section>
   </main>
 
+  <div id="authModal" class="modal-backdrop auth-modal-backdrop" hidden>
+    <section class="info-modal auth-modal-card" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+      <div class="modal-handle"></div>
+      <header class="modal-head">
+        <div>
+          <span class="modal-eyebrow">Cloud Progress</span>
+          <h3 id="authModalTitle">账号与进度同步</h3>
+        </div>
+        <button id="authModalClose" type="button" class="modal-close" aria-label="关闭">×</button>
+      </header>
+      <div class="modal-body auth-modal-body">
+        <div id="authSignedOut">
+          <p class="modal-summary">登录后，掌握与关注进度会安全地保存到云端，并可在其他设备上继续使用。</p>
+          <form id="authForm" class="auth-form">
+            <label>
+              <span>邮箱</span>
+              <input id="authEmail" type="email" inputmode="email" autocomplete="email" required placeholder="name@example.com" />
+            </label>
+            <label>
+              <span>密码</span>
+              <input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="至少 6 位" />
+            </label>
+            <button id="authLogin" type="submit" class="auth-primary-btn">登录</button>
+            <button id="authSignup" type="button" class="auth-secondary-btn">注册新账号</button>
+          </form>
+          <p class="auth-note">首次登录会合并本机已有进度；如果项目启用了邮箱确认，注册后请先查收确认邮件。</p>
+        </div>
+        <div id="authSignedIn" hidden>
+          <div class="auth-account-row">
+            <span class="auth-avatar" aria-hidden="true">日</span>
+            <div><span class="muted">当前账号</span><strong id="authCurrentEmail"></strong></div>
+          </div>
+          <div class="auth-sync-row">
+            <span id="authSyncIndicator" class="auth-sync-indicator" aria-hidden="true"></span>
+            <div><strong>掌握与关注</strong><span id="authSyncStatus">正在连接…</span></div>
+          </div>
+          <button id="authSignout" type="button" class="auth-secondary-btn">退出登录</button>
+        </div>
+        <p id="authMessage" class="auth-message" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+  </div>
+
   <script src="data/base.js"></script>
   <script src="data/n5.js"></script>
   <script src="data/n4.js"></script>
@@ -164,7 +216,9 @@
   <script src="data/grammar-examples-curated.js"></script>
   <script src="data/grammar-example-labels.js"></script>
   <script src="data/grammar-examples-review.js"></script>
-  <script src="app.js?v=20260904-safari-shell-1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-progress.js?v=20260904-supabase-1"></script>
+  <script src="app.js?v=20260904-supabase-1"></script>
   <script src="compact-nav.js?v=20260904-safari-shell-1"></script>
 </body>
 </html>

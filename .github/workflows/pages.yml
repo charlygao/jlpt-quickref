@@ -28,6 +28,7 @@ jobs:
         run: |
           node --check app.js
           node --check compact-nav.js
+          node --check supabase-progress.js
           for file in data/*.js; do node --check "$file"; done
 
           test -s data/full-vocab.js
@@ -43,6 +44,13 @@ jobs:
           test -s data/conjugation.js
           test -s FULL_VOCAB_NOTICE.md
           test -s FREQUENCY_NOTICE.md
+          test -s supabase/migrations/202609040001_create_user_progress.sql
+          grep -q 'alter table public.user_progress enable row level security' supabase/migrations/202609040001_create_user_progress.sql
+          grep -q 'using ((select auth.uid()) = user_id)' supabase/migrations/202609040001_create_user_progress.sql
+          if grep -qE 'service_role|sb_secret_' index.html supabase-progress.js; then
+            echo 'A server-only Supabase key must never be included in the static site.' >&2
+            exit 1
+          fi
 
           # Example sentences must be explicit reviewed data. Runtime/template
           # example generators are intentionally forbidden.

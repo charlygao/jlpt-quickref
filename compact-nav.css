@@ -131,7 +131,7 @@ body.compact-search-open .compact-search input {
   padding: 0 8px 0 12px;
 }
 
-body.compact-header .topbar > #themeToggle {
+body.compact-header .topbar > .topbar-actions {
   margin-left: 8px;
   flex: 0 0 auto;
 }
@@ -156,9 +156,7 @@ body.compact-header .card {
   .compact-level-btn { width: 29px; height: 32px; font-size: 10px; }
   .compact-search { height: 38px; min-width: 36px; }
   .compact-icon-btn { width: 36px; height: 36px; flex-basis: 36px; }
-  body.compact-header .topbar > #themeToggle {
-    width: 36px;
-    height: 36px;
+  body.compact-header .topbar > .topbar-actions {
     margin-left: 5px;
   }
 }
@@ -167,4 +165,10 @@ body.compact-header .card {
   .compact-level-btn { width: 27px; }
   .compact-type-btn { min-width: 29px; }
   .compact-main-controls { gap: 4px; }
+  body.compact-header .topbar > .topbar-actions { gap: 3px; margin-left: 3px; }
+  body.compact-header .topbar > .topbar-actions .icon-btn { width: 34px; height: 34px; }
+}
+
+@media (max-width: 390px) {
+  body.compact-header .topbar > .topbar-actions #themeToggle { display: none; }
 }
