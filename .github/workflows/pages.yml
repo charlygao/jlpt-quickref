@@ -148,6 +148,14 @@ jobs:
               if (!item.examples[0]?.covers?.trim()) {
                 throw new Error(`First grammar example has no connection label: ${item.id} ${item.title}`);
               }
+              const firstCovers = item.examples[0].covers.trim();
+              const hasBroadConnection = /[\/／]|普通形|形容词|→/.test(item.connection);
+              if (hasBroadConnection && firstCovers === item.connection) {
+                throw new Error(`First grammar example still uses broad connection metadata: ${item.id} ${item.title}`);
+              }
+              if (/[\/／]/.test(firstCovers)) {
+                throw new Error(`First grammar example connection is not granular: ${item.id} ${firstCovers}`);
+              }
               const jpSet = new Set();
               for (const ex of item.examples) {
                 if (!ex?.jp || !ex?.zh || !ex.covers?.trim()) throw new Error(`Incomplete grammar example: ${item.id}`);
