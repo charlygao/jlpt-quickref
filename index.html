@@ -121,12 +121,10 @@
       <button type="button" class="filter-option" data-filter="unmastered" role="menuitemradio" aria-checked="false">仅显示未掌握</button>
       <button type="button" class="filter-option" data-filter="followed" role="menuitemradio" aria-checked="false">仅显示关注</button>
     </div>
-    <div class="floating-action-row">
-      <button id="filterToggle" class="floating-filter-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="filterMenu">
-        <span aria-hidden="true">≡</span><span id="filterLabel">显示全部</span>
-      </button>
-      <button id="backToTop" class="floating-icon-btn" type="button" aria-label="返回顶部" title="返回顶部">↑</button>
-    </div>
+    <button id="filterToggle" class="floating-icon-btn filter-toggle-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="filterMenu" aria-label="筛选：显示全部" title="筛选：显示全部">
+      <span id="filterIcon" aria-hidden="true">☷</span><span id="filterLabel" class="sr-only">显示全部</span>
+    </button>
+    <button id="backToTop" class="floating-icon-btn" type="button" aria-label="返回顶部" title="返回顶部">↑</button>
   </aside>
 
   <script src="data/base.js"></script>

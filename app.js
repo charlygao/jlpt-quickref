@@ -36,6 +36,7 @@
     themeToggle: document.getElementById('themeToggle'),
     backToTop: document.getElementById('backToTop'),
     filterToggle: document.getElementById('filterToggle'),
+    filterIcon: document.getElementById('filterIcon'),
     filterLabel: document.getElementById('filterLabel'),
     filterMenu: document.getElementById('filterMenu'),
   };
@@ -446,9 +447,18 @@
     unmastered: '仅显示未掌握',
     followed: '仅显示关注',
   };
+  const FILTER_ICONS = {
+    all: '☷',
+    unmastered: '○',
+    followed: '★',
+  };
 
   function updateFilterControls() {
-    els.filterLabel.textContent = FILTER_LABELS[state.filter];
+    const label = FILTER_LABELS[state.filter];
+    els.filterIcon.textContent = FILTER_ICONS[state.filter];
+    els.filterLabel.textContent = label;
+    els.filterToggle.setAttribute('aria-label', `筛选：${label}`);
+    els.filterToggle.title = `筛选：${label}`;
     document.querySelectorAll('[data-filter]').forEach(button => {
       const active = button.dataset.filter === state.filter;
       button.classList.toggle('is-active', active);

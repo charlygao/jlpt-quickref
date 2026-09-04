@@ -50,6 +50,10 @@ body.dark {
 button, input { font: inherit; }
 button { color: inherit; }
 a { color: var(--accent); text-underline-offset: 3px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
 
 .topbar {
   position: fixed;
@@ -78,7 +82,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
 }
 .brand h1 { font-size: 16px; line-height: 1.2; margin: 0; }
 .brand p { font-size: 11px; margin: 4px 0 0; color: var(--muted); }
-.icon-btn, .floating-filter-btn, .floating-icon-btn {
+.icon-btn, .floating-icon-btn {
   border: 1px solid var(--line); background: var(--panel-solid);
   border-radius: 13px; cursor: pointer; box-shadow: var(--shadow);
 }
@@ -197,11 +201,8 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
   bottom: max(18px, env(safe-area-inset-bottom));
   display: grid; justify-items: end; gap: 9px;
 }
-.floating-action-row { display: flex; align-items: center; gap: 8px; }
-.floating-filter-btn, .floating-icon-btn { height: 46px; }
-.floating-filter-btn { display: flex; align-items: center; gap: 7px; padding: 0 14px; font-size: 12px; font-weight: 800; }
-.floating-filter-btn > span:first-child { color: var(--accent); font-size: 18px; line-height: 1; transform: rotate(90deg); }
-.floating-icon-btn { width: 46px; font-size: 18px; }
+.floating-icon-btn { display: grid; place-items: center; width: 46px; height: 46px; padding: 0; font-size: 18px; }
+.filter-toggle-btn { color: var(--accent); font-size: 21px; line-height: 1; }
 .filter-menu {
   width: 174px; padding: 6px; display: grid; gap: 3px;
   border: 1px solid var(--line); border-radius: 16px;
@@ -267,16 +268,15 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
   .meta-grid { grid-template-columns: 1fr; }
   .card { padding: 17px; scroll-margin-top: 230px; }
   .card h3 { font-size: 18px; }
-  .card-head { gap: 12px; flex-direction: column; }
-  .card-actions { width: 100%; justify-content: flex-start; }
+  .card-head { gap: 10px; }
+  .card-actions { justify-content: flex-end; flex-wrap: nowrap; }
   .card-actions button { white-space: nowrap; }
   .resume-banner { align-items: stretch; flex-direction: column; }
   .load-more-wrap { align-items: stretch; flex-direction: column; }
   .primary-btn { width: 100%; }
 
   .floating-actions { right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }
-  .floating-filter-btn, .floating-icon-btn { height: 44px; }
-  .floating-icon-btn { width: 44px; }
+  .floating-icon-btn { width: 44px; height: 44px; }
 
   .modal-backdrop {
     padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
