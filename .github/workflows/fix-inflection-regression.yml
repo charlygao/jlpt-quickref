@@ -1,0 +1,79 @@
+name: Fix inflection regression
+
+on:
+  push:
+    paths: ['.github/workflows/fix-inflection-regression.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch frontend guard and regression tests
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+
+          app = Path('app.js')
+          text = app.read_text()
+          old = """  function isInflectable(item) {
+            const type = detailedType(item);
+            return /五段动词|一段动词|サ变动词|カ变动词|名词・サ变|い形容词|な形容词/.test(type);
+          }
+          """
+          new = """  function isInflectable(item) {
+            // Render the button only when the conjugator can actually produce
+            // rows. This prevents a malformed/unknown POS from creating a
+            // clickable control whose modal immediately returns empty.
+            return conjugationRows(item).length > 0;
+          }
+          """
+          if old not in text:
+              raise SystemExit('isInflectable block not found')
+          app.write_text(text.replace(old, new, 1))
+
+          pages = Path('.github/workflows/pages.yml')
+          text = pages.read_text()
+          old_pos = """          expectPos('N5', '会う', 'あう', /五段动词.*自动词/);
+                    expectPos('N5', '開ける', 'あける', /一段动词.*他动词/);
+                    if (/动词/.test(vocabItem('N5', '秋', 'あき')?.pos || '')) throw new Error('秋 must not be classified as a verb');
+          """
+          new_pos = """          expectPos('N5', '会う', 'あう', /五段动词.*自动词/);
+                    expectPos('N5', '開ける', 'あける', /一段动词.*他动词/);
+                    expectPos('N3', '成長', 'せいちょう', /名词・サ变.*自动词/);
+                    expectPos('N5', '結婚', 'けっこん', /名词・サ变.*自动词/);
+                    expectPos('N5', '質問', 'しつもん', /名词・サ变.*他动词/);
+                    if (/动词/.test(vocabItem('N5', '秋', 'あき')?.pos || '')) throw new Error('秋 must not be classified as a verb');
+          """
+          if old_pos not in text:
+              raise SystemExit('POS regression insertion point not found')
+          text = text.replace(old_pos, new_pos, 1)
+
+          old_forms = """          expectForm({word:'勉強',reading:'べんきょう',pos:'名词・サ变'}, '辞书形', '勉強する');
+                    expectForm({word:'来る',reading:'くる',pos:'カ变动词・自动词'}, 'ない形', '来ない（こない）');
+          """
+          new_forms = """          expectForm({word:'勉強',reading:'べんきょう',pos:'名词・サ变'}, '辞书形', '勉強する');
+                    expectForm(vocabItem('N3', '成長', 'せいちょう'), '辞书形', '成長する');
+                    expectForm(vocabItem('N3', '成長', 'せいちょう'), 'ます形', '成長します');
+                    expectForm({word:'来る',reading:'くる',pos:'カ变动词・自动词'}, 'ない形', '来ない（こない）');
+          """
+          if old_forms not in text:
+              raise SystemExit('conjugation regression insertion point not found')
+          pages.write_text(text.replace(old_forms, new_forms, 1))
+          PY
+          node --check app.js
+
+      - name: Commit fix
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app.js .github/workflows/pages.yml
+          git commit -m 'fix: guard conjugation buttons and test suru nouns'
+          git pull --rebase origin main
+          git push origin HEAD:main
