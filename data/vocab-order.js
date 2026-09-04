@@ -5,6 +5,9 @@
     DATA.vocab[level] = list
       .map((item, index) => ({ item, index }))
       .sort((a, b) => {
+        const ar = Number.isInteger(a.item.frequencyRank) && a.item.frequencyRank > 0 ? a.item.frequencyRank : Infinity;
+        const br = Number.isInteger(b.item.frequencyRank) && b.item.frequencyRank > 0 ? b.item.frequencyRank : Infinity;
+        if (ar !== br) return ar - br;
         const af = Number.isFinite(a.item.frequency) ? a.item.frequency : -1;
         const bf = Number.isFinite(b.item.frequency) ? b.item.frequency : -1;
         if (bf !== af) return bf - af;
