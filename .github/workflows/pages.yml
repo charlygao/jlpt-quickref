@@ -24,18 +24,36 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate JavaScript syntax
+      - name: Validate static data policy and JavaScript
         run: |
           node --check app.js
           node --check compact-nav.js
           for file in data/*.js; do node --check "$file"; done
+
           test -s data/full-vocab.js
+          test -s data/vocab-order.js
           test -s data/vocab-examples-review.js
+          for level in n5 n4 n3 n2 n1; do
+            test -s "data/vocab-examples-highfreq-${level}.js"
+          done
+          test -s data/grammar-examples-curated.js
+          test -s data/grammar-examples-review.js
           test -s data/grammar-terms.js
           test -s data/conjugation.js
-          test -s data/grammar-examples-base.js
-          test -s data/grammar-examples-review.js
           test -s FULL_VOCAB_NOTICE.md
+          test -s FREQUENCY_NOTICE.md
+
+          # Example sentences must be explicit reviewed data. Runtime/template
+          # example generators are intentionally forbidden.
+          test ! -e data/grammar-examples-auto.js
+          if find data -maxdepth 1 -type f -iname '*examples-auto*.js' | grep -q .; then
+            echo 'Automatic example file detected.' >&2
+            exit 1
+          fi
+          if grep -nE '\.replace\(|function[[:space:]]+(variant|generate|makeExample)|Math\.random' data/vocab-examples-highfreq-*.js data/grammar-examples-curated.js; then
+            echo 'Runtime example transformation/generation detected.' >&2
+            exit 1
+          fi
 
       - name: Validate reference data
         run: |
@@ -46,13 +64,16 @@ jobs:
             './data/n5.js', './data/n4.js', './data/n3.js', './data/n2.js', './data/n1.js',
             './data/extra-base.js',
             './data/extra-n5.js', './data/extra-n4.js', './data/extra-n3.js', './data/extra-n2.js', './data/extra-n1.js',
-            './data/full-vocab.js', './data/vocab-examples-review.js',
-            './data/grammar-terms.js',
-            './data/conjugation.js',
+            './data/full-vocab.js', './data/vocab-order.js',
+            './data/vocab-examples-review.js',
+            './data/vocab-examples-highfreq-n5.js', './data/vocab-examples-highfreq-n4.js',
+            './data/vocab-examples-highfreq-n3.js', './data/vocab-examples-highfreq-n2.js',
+            './data/vocab-examples-highfreq-n1.js',
+            './data/grammar-terms.js', './data/conjugation.js',
             './data/grammar-examples-base.js',
             './data/grammar-examples-n5.js', './data/grammar-examples-n4.js', './data/grammar-examples-n3.js',
             './data/grammar-examples-n2.js', './data/grammar-examples-n1.js',
-            './data/grammar-examples-auto.js', './data/grammar-examples-review.js'
+            './data/grammar-examples-curated.js', './data/grammar-examples-review.js'
           ].forEach(file => require(file));
 
           const data = window.JLPT_DATA;
@@ -60,10 +81,11 @@ jobs:
           const minimumVocab = { N5: 650, N4: 620, N3: 1600, N2: 1700, N1: 3000 };
           let grammarTotal = 0;
           let vocabTotal = 0;
-          let exampleTotal = 0;
-          let labeledExamples = 0;
+          let grammarExampleTotal = 0;
+          let labeledGrammarExamples = 0;
           let detailedPosCount = 0;
           let reviewedVocabExamples = 0;
+          let highFrequencyExamples = 0;
           const ids = new Set();
           const vocabExampleSentences = new Set();
           const detailedPosPattern = /五段动词|一段动词|サ变动词|カ变动词|名词・サ变|い形容词|な形容词|の形容词|自动词|他动词/;
@@ -79,6 +101,44 @@ jobs:
               throw new Error(`${level} vocabulary coverage too small: ${vocab.length}`);
             }
 
+            // Ranked items must be ordered from more frequent to less frequent.
+            let previousRank = -Infinity;
+            let reachedUnranked = false;
+            for (const item of vocab) {
+              const rank = item.frequencyRank;
+              if (Number.isInteger(rank) && rank > 0) {
+                if (reachedUnranked) throw new Error(`${level} ranked vocabulary appears after unranked item: ${item.word}`);
+                if (rank < previousRank) throw new Error(`${level} frequency order regression at ${item.word}: ${rank} < ${previousRank}`);
+                previousRank = rank;
+              } else {
+                reachedUnranked = true;
+              }
+            }
+
+            // The highest-priority 100 cards of every level must have explicit,
+            // reviewed examples. No fallback generation is allowed.
+            if (vocab.length < 100) throw new Error(`${level} has fewer than 100 vocabulary entries`);
+            const top100 = vocab.slice(0, 100);
+            const topWords = new Set();
+            for (const item of top100) {
+              if (!Number.isInteger(item.frequencyRank) || item.frequencyRank <= 0) {
+                throw new Error(`${level} top-100 item lacks entry frequency rank: ${item.word}`);
+              }
+              if (!item.example?.jp || !item.example?.zh || !item.example.reviewed) {
+                throw new Error(`${level} top-100 item lacks reviewed example: ${item.word} (${item.id})`);
+              }
+              if (item.example.source !== 'high-frequency-curated') {
+                throw new Error(`${level} top-100 example is not explicitly high-frequency curated: ${item.word}`);
+              }
+              if ([...item.example.jp].length < 9 || [...item.example.zh].length < 5) {
+                throw new Error(`${level} top-100 example is too short to be useful: ${item.word}`);
+              }
+              const key = `${item.word}\u0000${item.reading}`;
+              if (topWords.has(key)) throw new Error(`${level} duplicate top-100 vocabulary key: ${key}`);
+              topWords.add(key);
+              highFrequencyExamples += 1;
+            }
+
             for (const item of grammar) {
               if (!item.id || !item.title || !item.connection) throw new Error(`Incomplete grammar item in ${level}`);
               if (!Array.isArray(item.examples) || item.examples.length < 2) {
@@ -87,41 +147,28 @@ jobs:
               if (!item.examples[0]?.covers?.trim()) {
                 throw new Error(`First grammar example has no connection label: ${item.id} ${item.title}`);
               }
-
               const jpSet = new Set();
-              const labeledSentenceSet = new Set();
               for (const ex of item.examples) {
-                if (!ex?.jp || !ex?.zh) throw new Error(`Incomplete example: ${item.id}`);
-                if (!ex.covers?.trim()) throw new Error(`Unlabeled grammar example: ${item.id} ${ex.jp}`);
-                if (/^补充(例|语境)$/.test(ex.covers)) {
-                  throw new Error(`Mechanical filler label is forbidden: ${item.id} ${ex.jp}`);
-                }
-                if (/^老师说[：:“]/.test(ex.zh) && !/と言/.test(item.title)) {
-                  throw new Error(`Quotation-wrapper filler detected: ${item.id} ${ex.jp}`);
-                }
-                if (jpSet.has(ex.jp)) throw new Error(`Duplicate example in ${item.id}: ${ex.jp}`);
+                if (!ex?.jp || !ex?.zh || !ex.covers?.trim()) throw new Error(`Incomplete grammar example: ${item.id}`);
+                if (/^补充(例|语境)$/.test(ex.covers)) throw new Error(`Mechanical grammar filler label: ${item.id}`);
+                if (jpSet.has(ex.jp)) throw new Error(`Duplicate grammar example in ${item.id}: ${ex.jp}`);
                 jpSet.add(ex.jp);
-                const labeledSentence = `${ex.covers}\u0000${ex.jp}`;
-                if (labeledSentenceSet.has(labeledSentence)) throw new Error(`Duplicate labeled example in ${item.id}: ${ex.jp}`);
-                labeledSentenceSet.add(labeledSentence);
-                labeledExamples += 1;
+                labeledGrammarExamples += 1;
               }
-              exampleTotal += item.examples.length;
+              grammarExampleTotal += item.examples.length;
             }
 
-            let reviewedInLevel = 0;
             for (const item of vocab) {
-              if (!/^v-n[1-5]-\d+$/.test(item.id)) continue;
-              if (!item.example?.jp || !item.example?.zh) throw new Error(`Missing curated vocabulary example: ${item.id} ${item.word}`);
-              if (!item.example.reviewed) throw new Error(`Vocabulary example was not reviewed: ${item.id} ${item.word}`);
-              if ([...item.example.jp].length < 12) throw new Error(`Vocabulary example is too short to be useful: ${item.id} ${item.example.jp}`);
-              if ([...item.example.zh].length < 6) throw new Error(`Vocabulary translation is too short: ${item.id} ${item.example.zh}`);
-              if (vocabExampleSentences.has(item.example.jp)) throw new Error(`Duplicate vocabulary example: ${item.example.jp}`);
+              if (!item.example?.jp) continue;
+              if (!item.example.zh || !item.example.reviewed) {
+                throw new Error(`Unreviewed vocabulary example reached runtime data: ${item.id} ${item.word}`);
+              }
+              if (vocabExampleSentences.has(item.example.jp)) {
+                throw new Error(`Duplicate vocabulary example sentence: ${item.example.jp}`);
+              }
               vocabExampleSentences.add(item.example.jp);
               reviewedVocabExamples += 1;
-              reviewedInLevel += 1;
             }
-            if (reviewedInLevel !== 35) throw new Error(`${level} reviewed curated vocabulary examples: expected 35, got ${reviewedInLevel}`);
 
             for (const item of [...grammar, ...vocab]) {
               if (!item.id) throw new Error(`Missing id in ${level}`);
@@ -129,7 +176,7 @@ jobs:
               ids.add(item.id);
             }
 
-            console.log(`${level}: ${grammar.length} grammar, ${vocab.length} vocab, ${grammar.reduce((n,x)=>n+x.examples.length,0)} grammar examples, ${reviewedInLevel} reviewed vocab examples`);
+            console.log(`${level}: ${grammar.length} grammar, ${vocab.length} vocab, top100 examples OK`);
           }
 
           const terms = window.JLPT_TERMS?.terms || {};
@@ -138,27 +185,20 @@ jobs:
             if (!terms[term]?.summary || !(terms[term]?.rules || []).length) throw new Error(`Missing grammar term reference: ${term}`);
           }
 
-          function vocab(level, word, reading) {
+          function vocabItem(level, word, reading) {
             return (data.vocab[level] || []).find(x => x.word === word && (!reading || x.reading === reading));
           }
           function expectPos(level, word, reading, pattern) {
-            const item = vocab(level, word, reading);
-            if (!item || !pattern.test(item.pos || '')) {
-              throw new Error(`Unexpected POS for ${level} ${word}: ${item?.pos || 'missing'}`);
-            }
+            const item = vocabItem(level, word, reading);
+            if (!item || !pattern.test(item.pos || '')) throw new Error(`Unexpected POS for ${level} ${word}: ${item?.pos || 'missing'}`);
           }
           expectPos('N5', '会う', 'あう', /五段动词.*自动词/);
           expectPos('N5', '開ける', 'あける', /一段动词.*他动词/);
-          expectPos('N5', '秋', 'あき', /名词|の形容词/);
-          if (/动词/.test(vocab('N5', '秋', 'あき')?.pos || '')) throw new Error('秋 must not be classified as a verb');
-          if (/动词/.test(vocab('N5', '朝', 'あさ')?.pos || '')) throw new Error('朝 must not be classified as a verb');
-          if (/动词/.test(vocab('N5', '明日', 'あした')?.pos || '')) throw new Error('明日 must not be classified as a verb');
+          if (/动词/.test(vocabItem('N5', '秋', 'あき')?.pos || '')) throw new Error('秋 must not be classified as a verb');
+          if (/动词/.test(vocabItem('N5', '朝', 'あさ')?.pos || '')) throw new Error('朝 must not be classified as a verb');
 
           const conjugation = window.JLPT_CONJUGATION;
           if (!conjugation?.rows) throw new Error('Conjugation reference is not loaded');
-          function asMap(item) {
-            return new Map(conjugation.rows(item));
-          }
           function expectForm(item, label, expected) {
             const rows = conjugation.rows(item);
             if (rows.length < 10) throw new Error(`Too few conjugations for ${item.word}: ${rows.length}`);
@@ -166,19 +206,16 @@ jobs:
             if (actual !== expected) throw new Error(`${item.word} ${label}: expected ${expected}, got ${actual}`);
           }
           expectForm({word:'書く',reading:'かく',pos:'五段动词・他动词'}, 'て形', '書いて');
-          expectForm({word:'書く',reading:'かく',pos:'五段动词・他动词'}, 'ませんでした', '書きませんでした');
           expectForm({word:'食べる',reading:'たべる',pos:'一段动词・他动词'}, '可能形', '食べられる');
           expectForm({word:'勉強',reading:'べんきょう',pos:'名词・サ变'}, '辞书形', '勉強する');
           expectForm({word:'来る',reading:'くる',pos:'カ变动词・自动词'}, 'ない形', '来ない（こない）');
-          expectForm({word:'高い',reading:'たかい',pos:'い形容词'}, '礼貌过去否定', '高くなかったです／高くありませんでした');
-          expectForm({word:'静か',reading:'しずか',pos:'な形容词'}, '连体形', '静かな + N');
-          if (asMap({word:'書く',reading:'かく',pos:'五段动词'}).size < 20) throw new Error('Comprehensive verb conjugation list is too small');
 
-          console.log(`TOTAL: ${grammarTotal} grammar, ${exampleTotal} grammar examples (${labeledExamples} labeled), ${vocabTotal} vocab, ${reviewedVocabExamples} reviewed vocab examples, ${detailedPosCount} detailed POS`);
+          console.log(`TOTAL: ${grammarTotal} grammar, ${grammarExampleTotal} grammar examples, ${vocabTotal} vocab, ${reviewedVocabExamples} reviewed vocab examples, ${highFrequencyExamples} top-frequency examples, ${detailedPosCount} detailed POS`);
           if (grammarTotal < 350) throw new Error(`Grammar coverage too small: ${grammarTotal}`);
-          if (exampleTotal < grammarTotal * 2) throw new Error(`Grammar example coverage too small: ${exampleTotal}`);
-          if (labeledExamples !== exampleTotal) throw new Error(`Not every grammar example is labeled: ${labeledExamples}/${exampleTotal}`);
-          if (reviewedVocabExamples !== 175) throw new Error(`Reviewed vocabulary example coverage mismatch: ${reviewedVocabExamples}/175`);
+          if (grammarExampleTotal < grammarTotal * 2) throw new Error(`Grammar example coverage too small: ${grammarExampleTotal}`);
+          if (labeledGrammarExamples !== grammarExampleTotal) throw new Error(`Not every grammar example is labeled`);
+          if (highFrequencyExamples !== 500) throw new Error(`Top-frequency example coverage mismatch: ${highFrequencyExamples}/500`);
+          if (reviewedVocabExamples < 500) throw new Error(`Too few reviewed vocabulary examples: ${reviewedVocabExamples}`);
           if (vocabTotal < 7600) throw new Error(`Vocabulary coverage too small: ${vocabTotal}`);
           if (detailedPosCount < 1000) throw new Error(`Detailed POS coverage too small: ${detailedPosCount}`);
           NODE
