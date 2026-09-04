@@ -175,6 +175,21 @@
     return target;
   }
 
+  async function fetchAllProgress() {
+    const rows = [];
+    const pageSize = 1000;
+    for (let from = 0; ; from += pageSize) {
+      const { data, error } = await client
+        .from('user_progress')
+        .select('item_id,mastered,followed')
+        .order('item_id')
+        .range(from, from + pageSize - 1);
+      if (error) return { data: null, error };
+      rows.push(...(data || []));
+      if (!data || data.length < pageSize) return { data: rows, error: null };
+    }
+  }
+
   async function flushQueue(userId = currentUser?.id) {
     if (!client || !userId || !navigator.onLine) {
       if (userId) setSyncState('syncing', '等待网络后同步');
@@ -252,9 +267,7 @@
     reconciledUserId = nextUserId;
     setSyncState('syncing', '正在读取云端进度…');
 
-    const { data, error } = await client
-      .from('user_progress')
-      .select('item_id,mastered,followed');
+    const { data, error } = await fetchAllProgress();
 
     if (currentUser?.id !== nextUserId) return;
     if (error) {
