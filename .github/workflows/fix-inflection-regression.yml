@@ -15,66 +15,69 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Patch frontend guard and regression tests
+      - name: Patch frontend conjugation guard
         run: |
           python3 <<'PY'
           from pathlib import Path
           import re
 
-          app = Path('app.js')
-          text = app.read_text()
+          path = Path('app.js')
+          text = path.read_text()
           pattern = re.compile(
               r"  function isInflectable\(item\) \{\n"
               r"    const type = detailedType\(item\);\n"
               r"    return /五段动词\|一段动词\|サ变动词\|カ变动词\|名词・サ变\|い形容词\|な形容词/\.test\(type\);\n"
               r"  \}"
           )
-          replacement = """  function isInflectable(item) {
-            // Render the button only when the conjugator can actually produce
-            // rows. This prevents a malformed/unknown POS from creating a
-            // clickable control whose modal immediately returns empty.
-            return conjugationRows(item).length > 0;
-          }"""
+          replacement = (
+              "  function isInflectable(item) {\n"
+              "    // Only show the control when the conjugator can really produce forms.\n"
+              "    // This prevents a malformed POS from creating a dead button.\n"
+              "    return conjugationRows(item).length > 0;\n"
+              "  }"
+          )
           text, count = pattern.subn(replacement, text, count=1)
           if count != 1:
               raise SystemExit(f'isInflectable replacement count: {count}')
-          app.write_text(text)
-
-          pages = Path('.github/workflows/pages.yml')
-          text = pages.read_text()
-
-          marker = "expectPos('N5', '開ける', 'あける', /一段动词.*他动词/);"
-          if "expectPos('N3', '成長'" not in text:
-              pos_lines = (
-                  marker + "\n"
-                  "          expectPos('N3', '成長', 'せいちょう', /名词・サ变.*自动词/);\n"
-                  "          expectPos('N5', '結婚', 'けっこん', /名词・サ变.*自动词/);\n"
-                  "          expectPos('N5', '質問', 'しつもん', /名词・サ变.*他动词/);"
-              )
-              if marker not in text:
-                  raise SystemExit('POS regression insertion point not found')
-              text = text.replace(marker, pos_lines, 1)
-
-          marker = "expectForm({word:'勉強',reading:'べんきょう',pos:'名词・サ变'}, '辞书形', '勉強する');"
-          if "expectForm(vocabItem('N3', '成長'" not in text:
-              form_lines = (
-                  marker + "\n"
-                  "          expectForm(vocabItem('N3', '成長', 'せいちょう'), '辞书形', '成長する');\n"
-                  "          expectForm(vocabItem('N3', '成長', 'せいちょう'), 'ます形', '成長します');"
-              )
-              if marker not in text:
-                  raise SystemExit('conjugation regression insertion point not found')
-              text = text.replace(marker, form_lines, 1)
-
-          pages.write_text(text)
+          path.write_text(text)
           PY
           node --check app.js
+          grep -Fq 'return conjugationRows(item).length > 0;' app.js
 
-      - name: Commit fix
+      - name: Validate 成長 as a suru noun
+        run: |
+          node <<'NODE'
+          global.window = {};
+          [
+            './data/base.js',
+            './data/n5.js','./data/n4.js','./data/n3.js','./data/n2.js','./data/n1.js',
+            './data/extra-base.js',
+            './data/extra-n5.js','./data/extra-n4.js','./data/extra-n3.js','./data/extra-n2.js','./data/extra-n1.js',
+            './data/full-vocab.js','./data/vocab-order.js','./data/conjugation.js'
+          ].forEach(f => require(f));
+
+          const growth = (window.JLPT_DATA.vocab.N3 || [])
+            .find(x => x.word === '成長' && x.reading === 'せいちょう');
+          if (!growth) throw new Error('N3 成長 not found');
+          if (!/名词・サ变.*自动词/.test(growth.pos || '')) {
+            throw new Error(`Unexpected POS for 成長: ${growth.pos}`);
+          }
+          const forms = new Map(window.JLPT_CONJUGATION.rows(growth));
+          if (forms.get('辞书形') !== '成長する') {
+            throw new Error(`Unexpected dictionary form: ${forms.get('辞书形')}`);
+          }
+          if (forms.get('ます形') !== '成長します') {
+            throw new Error(`Unexpected masu form: ${forms.get('ます形')}`);
+          }
+          if (forms.size < 10) throw new Error(`Too few 成長 forms: ${forms.size}`);
+          console.log(`成長 POS=${growth.pos}; 辞书形=${forms.get('辞书形')}; ます形=${forms.get('ます形')}; forms=${forms.size}`);
+          NODE
+
+      - name: Commit frontend fix
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add app.js .github/workflows/pages.yml
-          git commit -m 'fix: guard conjugation buttons and test suru nouns'
+          git add app.js
+          git commit -m 'fix: prevent dead conjugation buttons'
           git pull --rebase origin main
           git push origin HEAD:main
