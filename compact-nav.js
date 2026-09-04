@@ -3,7 +3,6 @@
   const topbar = document.querySelector('.topbar');
   const controls = document.querySelector('.controls');
   const fullSearch = document.getElementById('searchInput');
-  const compactSearch = document.getElementById('compactSearch');
   const compactInput = document.getElementById('compactSearchInput');
   const compactSearchButton = document.getElementById('compactSearchButton');
   const compactTypeButtons = [...document.querySelectorAll('[data-compact-type]')];
@@ -49,7 +48,7 @@
   function updateCompactMode() {
     ticking = false;
     const headerBottom = topbar.getBoundingClientRect().bottom;
-    const shouldCompact = controls.getBoundingClientRect().bottom <= headerBottom + 1;
+    const shouldCompact = controls.getBoundingClientRect().top <= headerBottom + 1;
     if (shouldCompact === compact) return;
     compact = shouldCompact;
     body.classList.toggle('compact-header', compact);
@@ -63,19 +62,29 @@
     requestAnimationFrame(updateCompactMode);
   }
 
+  function proxyClickWithoutPageJump(target) {
+    if (!target) return;
+    const originalScrollTo = window.scrollTo;
+    try {
+      window.scrollTo = () => {};
+      target.click();
+    } finally {
+      window.scrollTo = originalScrollTo;
+    }
+    syncCompactState();
+  }
+
   compactTypeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const target = document.querySelector(`.controls .segment[data-type="${btn.dataset.compactType}"]`);
-      target?.click();
-      syncCompactState();
+      proxyClickWithoutPageJump(target);
     });
   });
 
   compactLevelButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const target = document.querySelector(`.controls .level-chip[data-level="${btn.dataset.compactLevel}"]`);
-      target?.click();
-      syncCompactState();
+      proxyClickWithoutPageJump(target);
     });
   });
 
@@ -98,7 +107,7 @@
   });
 
   // app.js changes active classes after every render. Observe those class changes so
-  // full and compact controls stay synchronized even after resume/navigation actions.
+  // full and compact controls stay synchronized after navigation and resume actions.
   const stateObserver = new MutationObserver(() => queueMicrotask(syncCompactState));
   document.querySelectorAll('.controls .segment, .controls .level-chip').forEach(el => {
     stateObserver.observe(el, { attributes: true, attributeFilter: ['class'] });
