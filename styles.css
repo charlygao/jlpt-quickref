@@ -321,12 +321,16 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
 /* iOS Safari can retain a keyboard-sized fixed-position viewport after an input
    closes. Keep persistent chrome in the document's sticky scroll layer instead. */
 @supports (-webkit-touch-callout: none) {
+  :root {
+    --ios-sticky-top-buffer: 8px;
+  }
+
   .topbar {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
-    height: calc(var(--topbar-height) + env(safe-area-inset-top));
-    padding-top: calc(10px + env(safe-area-inset-top));
+    height: calc(var(--topbar-height) + env(safe-area-inset-top) + var(--ios-sticky-top-buffer));
+    padding-top: calc(10px + env(safe-area-inset-top) + var(--ios-sticky-top-buffer));
     padding-bottom: 10px;
     -webkit-transform: none;
     transform: none;
