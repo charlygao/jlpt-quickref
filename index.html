@@ -89,9 +89,9 @@
 
     <section id="contentList" class="content-list" aria-live="polite"></section>
 
-    <section id="loadMoreWrap" class="load-more-wrap panel" hidden>
+    <section id="loadMoreWrap" class="load-more-wrap panel" role="status" aria-live="polite" hidden>
+      <span class="auto-load-indicator" aria-hidden="true"></span>
       <span id="loadMoreText" class="muted"></span>
-      <button id="loadMoreButton" class="primary-btn">继续显示</button>
     </section>
 
     <section id="emptyState" class="empty-state panel" hidden>

@@ -30,7 +30,6 @@
     progressBar: document.getElementById('progressBar'),
     loadMoreWrap: document.getElementById('loadMoreWrap'),
     loadMoreText: document.getElementById('loadMoreText'),
-    loadMoreButton: document.getElementById('loadMoreButton'),
     themeToggle: document.getElementById('themeToggle'),
     backToTop: document.getElementById('backToTop'),
     filterToggle: document.getElementById('filterToggle'),
@@ -480,19 +479,15 @@
     document.querySelectorAll('.level-chip').forEach(x => x.classList.toggle('is-active', x.dataset.level === state.level));
   }
 
-  function updateLoadMore(total, start, end) {
+  function updateLoadMore(total, end) {
     if (!els.loadMoreWrap) return;
     const remaining = Math.max(0, total - end);
-    const before = start;
-    if (state.type !== 'vocab' || state.query || (!remaining && !before)) {
+    if (state.type !== 'vocab' || !remaining) {
       els.loadMoreWrap.hidden = true;
       return;
     }
     els.loadMoreWrap.hidden = false;
-    els.loadMoreText.textContent = before
-      ? `从第 ${start + 1} 条继续 · 后面还有 ${remaining.toLocaleString()} 条`
-      : `已显示 ${end.toLocaleString()} / ${total.toLocaleString()} · 还有 ${remaining.toLocaleString()} 条`;
-    els.loadMoreButton.hidden = remaining === 0;
+    els.loadMoreText.textContent = `已显示 ${end.toLocaleString()} / ${total.toLocaleString()} · 继续向下滑动自动载入`;
   }
 
   function itemDisplayLabel(item) {
@@ -526,6 +521,18 @@
     cards.forEach(c => observer.observe(c));
   }
 
+  function attachAutoLoadObserver() {
+    const autoLoadObserver = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting) || els.loadMoreWrap.hidden || state.type !== 'vocab') return;
+      const total = getCurrentItems().length;
+      const end = Math.min(total, state.startIndex + state.visibleCount);
+      if (end >= total) return;
+      state.visibleCount += VOCAB_BATCH_SIZE;
+      render();
+    }, { rootMargin: '0px 0px 480px 0px', threshold: 0 });
+    autoLoadObserver.observe(els.loadMoreWrap);
+  }
+
   function render({ reset = false } = {}) {
     if (reset) resetWindow();
     updateControls();
@@ -536,7 +543,7 @@
     const visibleItems = allItems.slice(start, end);
     els.contentList.innerHTML = visibleItems.map((item, i) => state.type === 'grammar' ? grammarCard(item, start + i) : vocabCard(item, start + i)).join('');
     els.emptyState.hidden = allItems.length !== 0;
-    updateLoadMore(allItems.length, start, end);
+    updateLoadMore(allItems.length, end);
     updateStats();
     updateBookmarkControl();
     attachObserver();
@@ -657,7 +664,6 @@
     if (modal && !modal.hidden) closeModal();
     else setFilterMenuOpen(false);
   });
-  els.loadMoreButton?.addEventListener('click', () => { state.visibleCount += VOCAB_BATCH_SIZE; render(); });
   els.resumeBookmark.addEventListener('click', () => jumpToSaved());
   els.themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark');
@@ -666,6 +672,7 @@
   els.backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
   loadState();
+  attachAutoLoadObserver();
   render();
   requestAnimationFrame(() => requestAnimationFrame(() => jumpToSaved({ auto: true })));
 })();
