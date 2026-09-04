@@ -29,6 +29,8 @@ jobs:
           node --check app.js
           for file in data/*.js; do node --check "$file"; done
           test -s data/full-vocab.js
+          test -s data/grammar-terms.js
+          test -s data/grammar-examples-base.js
           test -s FULL_VOCAB_NOTICE.md
 
       - name: Validate reference data
@@ -40,7 +42,12 @@ jobs:
             './data/n5.js', './data/n4.js', './data/n3.js', './data/n2.js', './data/n1.js',
             './data/extra-base.js',
             './data/extra-n5.js', './data/extra-n4.js', './data/extra-n3.js', './data/extra-n2.js', './data/extra-n1.js',
-            './data/full-vocab.js'
+            './data/full-vocab.js',
+            './data/grammar-terms.js',
+            './data/grammar-examples-base.js',
+            './data/grammar-examples-n5.js', './data/grammar-examples-n4.js', './data/grammar-examples-n3.js',
+            './data/grammar-examples-n2.js', './data/grammar-examples-n1.js',
+            './data/grammar-examples-auto.js'
           ].forEach(file => require(file));
 
           const data = window.JLPT_DATA;
@@ -48,6 +55,8 @@ jobs:
           const minimumVocab = { N5: 650, N4: 620, N3: 1600, N2: 1700, N1: 3000 };
           let grammarTotal = 0;
           let vocabTotal = 0;
+          let exampleTotal = 0;
+          let branchTaggedExamples = 0;
           const ids = new Set();
 
           for (const level of levels) {
@@ -55,10 +64,24 @@ jobs:
             const vocab = data.vocab[level] || [];
             grammarTotal += grammar.length;
             vocabTotal += vocab.length;
-            console.log(`${level}: ${grammar.length} grammar, ${vocab.length} vocab`);
 
             if (vocab.length < minimumVocab[level]) {
               throw new Error(`${level} vocabulary coverage too small: ${vocab.length}`);
+            }
+
+            for (const item of grammar) {
+              if (!item.id || !item.title || !item.connection) throw new Error(`Incomplete grammar item in ${level}`);
+              if (!Array.isArray(item.examples) || item.examples.length < 2) {
+                throw new Error(`Grammar needs at least 2 examples: ${item.id} ${item.title}`);
+              }
+              const jpSet = new Set();
+              for (const ex of item.examples) {
+                if (!ex?.jp || !ex?.zh) throw new Error(`Incomplete example: ${item.id}`);
+                if (jpSet.has(ex.jp)) throw new Error(`Duplicate example in ${item.id}: ${ex.jp}`);
+                jpSet.add(ex.jp);
+                if (ex.covers) branchTaggedExamples += 1;
+              }
+              exampleTotal += item.examples.length;
             }
 
             for (const item of [...grammar, ...vocab]) {
@@ -66,10 +89,20 @@ jobs:
               if (ids.has(item.id)) throw new Error(`Duplicate id: ${item.id}`);
               ids.add(item.id);
             }
+
+            console.log(`${level}: ${grammar.length} grammar, ${vocab.length} vocab, ${grammar.reduce((n,x)=>n+x.examples.length,0)} examples`);
           }
 
-          console.log(`TOTAL: ${grammarTotal} grammar, ${vocabTotal} vocab`);
+          const terms = window.JLPT_TERMS?.terms || {};
+          const requiredTerms = ['N','V','普通形','辞书形','ます形','Vて','Vた','Vない','ば形','可能形','意向形','被动形','使役形','命令形','い形','な形'];
+          for (const term of requiredTerms) {
+            if (!terms[term]?.summary || !(terms[term]?.rules || []).length) throw new Error(`Missing grammar term reference: ${term}`);
+          }
+
+          console.log(`TOTAL: ${grammarTotal} grammar, ${exampleTotal} grammar examples (${branchTaggedExamples} branch-tagged), ${vocabTotal} vocab`);
           if (grammarTotal < 350) throw new Error(`Grammar coverage too small: ${grammarTotal}`);
+          if (exampleTotal < grammarTotal * 2) throw new Error(`Grammar example coverage too small: ${exampleTotal}`);
+          if (branchTaggedExamples < 100) throw new Error(`Connection-branch tagged examples too small: ${branchTaggedExamples}`);
           if (vocabTotal < 7600) throw new Error(`Vocabulary coverage too small: ${vocabTotal}`);
           NODE
 
