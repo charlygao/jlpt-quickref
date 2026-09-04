@@ -12,7 +12,6 @@
   --radius: 22px;
   --code-bg: #f3f4f8;
   --topbar-height: 69px;
-  --ios-viewport-offset-y: 0px;
 }
 
 * { box-sizing: border-box; }
@@ -71,10 +70,6 @@ a { color: var(--accent); text-underline-offset: 3px; }
   background: color-mix(in srgb, var(--bg) 84%, transparent);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
   border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
 }
 .brand { display: flex; gap: 11px; align-items: center; }
@@ -211,11 +206,6 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
   right: max(18px, env(safe-area-inset-right));
   bottom: max(18px, env(safe-area-inset-bottom));
   display: grid; justify-items: end; gap: 9px;
-  -webkit-transform: translate3d(0, var(--ios-viewport-offset-y), 0);
-  transform: translate3d(0, var(--ios-viewport-offset-y), 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  will-change: transform;
 }
 .floating-icon-btn { display: grid; place-items: center; width: 46px; height: 46px; padding: 0; font-size: 18px; }
 .filter-toggle-btn { color: var(--accent); font-size: 21px; line-height: 1; }
@@ -326,6 +316,47 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
   .modal-head { padding: 14px 18px 12px; }
   .modal-body { padding: 18px 18px max(26px, env(safe-area-inset-bottom)); }
   .conj-row { grid-template-columns: 94px 1fr; }
+}
+
+/* iOS Safari can retain a keyboard-sized fixed-position viewport after an input
+   closes. Keep persistent chrome in the document's sticky scroll layer instead. */
+@supports (-webkit-touch-callout: none) {
+  .topbar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    -webkit-transform: none;
+    transform: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--panel-solid);
+  }
+
+  .floating-actions {
+    --floating-actions-height: 150px;
+    --floating-safe-bottom: 12px;
+    --floating-safe-bottom: max(12px, env(safe-area-inset-bottom));
+    position: -webkit-sticky;
+    position: sticky;
+    top: calc(100vh - var(--floating-actions-height) - var(--floating-safe-bottom));
+    top: calc(100svh - var(--floating-actions-height) - var(--floating-safe-bottom));
+    right: auto;
+    bottom: auto;
+    width: max-content;
+    height: 0;
+    margin-right: max(12px, env(safe-area-inset-right));
+    margin-left: auto;
+    overflow: visible;
+    -webkit-transform: none;
+    transform: none;
+    will-change: auto;
+  }
+
+  .floating-actions .filter-menu {
+    position: absolute;
+    right: 0;
+    bottom: 9px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

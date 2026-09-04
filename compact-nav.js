@@ -7,23 +7,14 @@
   const compactSearchButton = document.getElementById('compactSearchButton');
   const compactTypeButtons = [...document.querySelectorAll('[data-compact-type]')];
   const compactLevelButtons = [...document.querySelectorAll('[data-compact-level]')];
-  const root = document.documentElement;
-  const visualViewport = window.visualViewport;
-  const isIOSWebKit = /AppleWebKit/i.test(navigator.userAgent) && (
-    /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-  );
 
   if (!topbar || !controls || !fullSearch || !compactInput || !compactSearchButton) return;
 
   let ticking = false;
-  let viewportTicking = false;
   let compact = false;
   let searchOpen = false;
   let compactThreshold = 0;
   let measuredWidth = window.innerWidth;
-
-  if (isIOSWebKit) root.classList.add('ios-webkit');
 
   function activeFullType() {
     return document.querySelector('.controls .segment.is-active')?.dataset.type || 'grammar';
@@ -78,27 +69,12 @@
     compactThreshold = controls.getBoundingClientRect().bottom + scrollTop - topbar.offsetHeight;
   }
 
-  function updateViewportOffset() {
-    viewportTicking = false;
-    if (!isIOSWebKit || !visualViewport) return;
-    const atDefaultScale = Math.abs((visualViewport.scale || 1) - 1) < .01;
-    const offset = atDefaultScale ? Math.min(80, Math.max(0, visualViewport.offsetTop || 0)) : 0;
-    root.style.setProperty('--ios-viewport-offset-y', `${offset}px`);
-  }
-
-  function scheduleViewportOffsetUpdate() {
-    if (viewportTicking) return;
-    viewportTicking = true;
-    requestAnimationFrame(updateViewportOffset);
-  }
-
   function handleViewportResize() {
     if (Math.abs(window.innerWidth - measuredWidth) > 1) {
       measuredWidth = window.innerWidth;
       measureCompactThreshold();
     }
     scheduleCompactModeUpdate();
-    scheduleViewportOffsetUpdate();
   }
 
   function proxyClickWithoutPageJump(target) {
@@ -152,21 +128,10 @@
     stateObserver.observe(el, { attributes: true, attributeFilter: ['class'] });
   });
 
-  window.addEventListener('scroll', () => {
-    scheduleCompactModeUpdate();
-    scheduleViewportOffsetUpdate();
-  }, { passive: true });
+  window.addEventListener('scroll', scheduleCompactModeUpdate, { passive: true });
   window.addEventListener('resize', handleViewportResize, { passive: true });
-  visualViewport?.addEventListener('scroll', scheduleViewportOffsetUpdate, { passive: true });
-  visualViewport?.addEventListener('resize', handleViewportResize, { passive: true });
-  window.addEventListener('pageshow', scheduleViewportOffsetUpdate, { passive: true });
-  document.addEventListener('focusout', () => {
-    scheduleViewportOffsetUpdate();
-    setTimeout(scheduleViewportOffsetUpdate, 300);
-  });
 
   measureCompactThreshold();
-  updateViewportOffset();
   syncCompactState();
   requestAnimationFrame(updateCompactMode);
 })();
