@@ -1,0 +1,5012 @@
+{
+  "N5": [
+    {
+      "order": 1,
+      "id": "vx-n5-2fwjn8",
+      "word": "意味",
+      "reading": "いみ",
+      "pos": "动词・他动词",
+      "meaning": "意思；意义",
+      "frequencyRank": 8,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 2,
+      "id": "vx-n5-m85jtr",
+      "word": "一つ",
+      "reading": "ひとつ",
+      "pos": "词汇",
+      "meaning": "一；其一；首先；仅仅；只有；连；甚至；姑且；不妨；某种；某一类",
+      "frequencyRank": 12,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 3,
+      "id": "vx-n5-tdjvez",
+      "word": "一番",
+      "reading": "いちばん",
+      "pos": "の形容词",
+      "meaning": "第一；最……",
+      "frequencyRank": 15,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 4,
+      "id": "vx-n5-1ub6vv3",
+      "word": "右",
+      "reading": "みぎ",
+      "pos": "の形容词",
+      "meaning": "右边",
+      "frequencyRank": 18,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 5,
+      "id": "vx-n5-1kakqw4",
+      "word": "映画",
+      "reading": "えいが",
+      "pos": "名词",
+      "meaning": "电影",
+      "frequencyRank": 21,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 6,
+      "id": "vx-n5-njt86l",
+      "word": "音楽",
+      "reading": "おんがく",
+      "pos": "名词",
+      "meaning": "音乐",
+      "frequencyRank": 24,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 7,
+      "id": "vx-n5-kr5n6k",
+      "word": "夏",
+      "reading": "なつ",
+      "pos": "名词",
+      "meaning": "夏天",
+      "frequencyRank": 29,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 8,
+      "id": "vx-n5-11oiqd8",
+      "word": "家族",
+      "reading": "かぞく",
+      "pos": "名词",
+      "meaning": "家人；家庭",
+      "frequencyRank": 30,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 9,
+      "id": "vx-n5-5qaqkf",
+      "word": "家庭",
+      "reading": "かてい",
+      "pos": "名词",
+      "meaning": "家庭",
+      "frequencyRank": 31,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 10,
+      "id": "vx-n5-w8kiz5",
+      "word": "花",
+      "reading": "はな",
+      "pos": "名词",
+      "meaning": "花",
+      "frequencyRank": 32,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 11,
+      "id": "v-n5-007",
+      "word": "会社",
+      "reading": "かいしゃ",
+      "pos": "名词",
+      "meaning": "公司",
+      "frequencyRank": 38,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 12,
+      "id": "vx-n5-1bagnym",
+      "word": "外国",
+      "reading": "がいこく",
+      "pos": "の形容词",
+      "meaning": "外国",
+      "frequencyRank": 48,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 13,
+      "id": "vx-n5-wpozfd",
+      "word": "外国人",
+      "reading": "がいこくじん",
+      "pos": "名词",
+      "meaning": "外国人",
+      "frequencyRank": 49,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 14,
+      "id": "v-n5-006",
+      "word": "学校",
+      "reading": "がっこう",
+      "pos": "名词",
+      "meaning": "学校",
+      "frequencyRank": 54,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 15,
+      "id": "v-n5-009",
+      "word": "学生",
+      "reading": "がくせい",
+      "pos": "名词",
+      "meaning": "学生",
+      "frequencyRank": 55,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 16,
+      "id": "vx-n5-vtzqh",
+      "word": "銀行",
+      "reading": "ぎんこう",
+      "pos": "名词",
+      "meaning": "银行",
+      "frequencyRank": 102,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 17,
+      "id": "vx-n5-dkzaa7",
+      "word": "言葉",
+      "reading": "ことば",
+      "pos": "名词",
+      "meaning": "词语；语言",
+      "frequencyRank": 130,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 18,
+      "id": "vx-n5-1aotb4n",
+      "word": "五",
+      "reading": "ご",
+      "pos": "词汇",
+      "meaning": "五；5",
+      "frequencyRank": 132,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 19,
+      "id": "vx-n5-1j68kkj",
+      "word": "午後",
+      "reading": "ごご",
+      "pos": "名词",
+      "meaning": "下午",
+      "frequencyRank": 134,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 20,
+      "id": "vx-n5-1j89bpv",
+      "word": "午前",
+      "reading": "ごぜん",
+      "pos": "名词",
+      "meaning": "上午",
+      "frequencyRank": 135,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 21,
+      "id": "vx-n5-280r5f",
+      "word": "後",
+      "reading": "あと",
+      "pos": "の形容词",
+      "meaning": "之后；后面",
+      "frequencyRank": 136,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 22,
+      "id": "vx-n5-1a39usd",
+      "word": "今月",
+      "reading": "こんげつ",
+      "pos": "名词",
+      "meaning": "这个月",
+      "frequencyRank": 157,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 23,
+      "id": "vx-n5-n69oyp",
+      "word": "左",
+      "reading": "ひだり",
+      "pos": "の形容词",
+      "meaning": "左边",
+      "frequencyRank": 159,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 24,
+      "id": "vx-n5-1b915xc",
+      "word": "仕事",
+      "reading": "しごと",
+      "pos": "动词・自动词",
+      "meaning": "工作",
+      "frequencyRank": 179,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 25,
+      "id": "vx-n5-osy8k2",
+      "word": "子供",
+      "reading": "こども",
+      "pos": "名词",
+      "meaning": "孩子",
+      "frequencyRank": 184,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 26,
+      "id": "v-n5-001",
+      "word": "私",
+      "reading": "わたし",
+      "pos": "代词",
+      "meaning": "我",
+      "frequencyRank": 194,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 27,
+      "id": "v-n5-005",
+      "word": "時間",
+      "reading": "じかん",
+      "pos": "名词",
+      "meaning": "时间；小时",
+      "frequencyRank": 205,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 28,
+      "id": "vx-n5-17jh9mz",
+      "word": "自動車",
+      "reading": "じどうしゃ",
+      "pos": "名词",
+      "meaning": "汽车",
+      "frequencyRank": 213,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 29,
+      "id": "vx-n5-1ykhbvm",
+      "word": "自分",
+      "reading": "じぶん",
+      "pos": "名词",
+      "meaning": "自己",
+      "frequencyRank": 214,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 30,
+      "id": "vx-n5-1xphdau",
+      "word": "七",
+      "reading": "しち",
+      "pos": "词汇",
+      "meaning": "七；数字七",
+      "frequencyRank": 216,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 31,
+      "id": "vx-n5-qmev1q",
+      "word": "質問",
+      "reading": "しつもん",
+      "pos": "动词・他动词・自动词",
+      "meaning": "问题；提问",
+      "frequencyRank": 218,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 32,
+      "id": "vx-n5-1b4jysn",
+      "word": "写真",
+      "reading": "しゃしん",
+      "pos": "名词",
+      "meaning": "照片",
+      "frequencyRank": 220,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 33,
+      "id": "vx-n5-t0kc5x",
+      "word": "車",
+      "reading": "くるま",
+      "pos": "名词",
+      "meaning": "车；汽车",
+      "frequencyRank": 224,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 34,
+      "id": "vx-n5-dq4bk8",
+      "word": "手",
+      "reading": "て",
+      "pos": "名词",
+      "meaning": "手",
+      "frequencyRank": 225,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 35,
+      "id": "vx-n5-iv835n",
+      "word": "秋",
+      "reading": "あき",
+      "pos": "名词",
+      "meaning": "秋天",
+      "frequencyRank": 230,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 36,
+      "id": "vx-n5-1sg8boi",
+      "word": "春",
+      "reading": "はる",
+      "pos": "名词",
+      "meaning": "春天",
+      "frequencyRank": 246,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 37,
+      "id": "vx-n5-13tnn4g",
+      "word": "少し",
+      "reading": "すこし",
+      "pos": "副词",
+      "meaning": "一点；少量",
+      "frequencyRank": 253,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 38,
+      "id": "vx-n5-p8of4c",
+      "word": "新聞",
+      "reading": "しんぶん",
+      "pos": "名词",
+      "meaning": "报纸",
+      "frequencyRank": 266,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 39,
+      "id": "v-n5-014",
+      "word": "水",
+      "reading": "みず",
+      "pos": "名词",
+      "meaning": "水",
+      "frequencyRank": 271,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 40,
+      "id": "vx-n5-vxii86",
+      "word": "声",
+      "reading": "こえ",
+      "pos": "名词",
+      "meaning": "声音（人声）",
+      "frequencyRank": 285,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 41,
+      "id": "vx-n5-1j1yjkc",
+      "word": "千",
+      "reading": "せん",
+      "pos": "数词",
+      "meaning": "一千",
+      "frequencyRank": 288,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 42,
+      "id": "vx-n5-gae2ox",
+      "word": "足",
+      "reading": "あし",
+      "pos": "名词",
+      "meaning": "脚；腿",
+      "frequencyRank": 305,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 43,
+      "id": "vx-n5-uqs9jx",
+      "word": "大学",
+      "reading": "だいがく",
+      "pos": "名词",
+      "meaning": "大学",
+      "frequencyRank": 314,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 44,
+      "id": "vx-n5-1rit1dl",
+      "word": "男",
+      "reading": "おとこ",
+      "pos": "名词",
+      "meaning": "男人；男性",
+      "frequencyRank": 321,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 45,
+      "id": "vx-n5-136htie",
+      "word": "電話",
+      "reading": "でんわ",
+      "pos": "动词・他动词・自动词",
+      "meaning": "电话",
+      "frequencyRank": 340,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 46,
+      "id": "vx-n5-jrgjo7",
+      "word": "東",
+      "reading": "ひがし",
+      "pos": "名词",
+      "meaning": "东；东方",
+      "frequencyRank": 348,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 47,
+      "id": "vx-n5-1o72mi6",
+      "word": "道",
+      "reading": "みち",
+      "pos": "名词",
+      "meaning": "道路；方法",
+      "frequencyRank": 358,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 48,
+      "id": "vx-n5-13umau0",
+      "word": "南",
+      "reading": "みなみ",
+      "pos": "名词",
+      "meaning": "南；南方",
+      "frequencyRank": 363,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 49,
+      "id": "vx-n5-ae9bhq",
+      "word": "二",
+      "reading": "に",
+      "pos": "词汇",
+      "meaning": "二；2",
+      "frequencyRank": 364,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 50,
+      "id": "vx-n5-1polhv1",
+      "word": "百",
+      "reading": "ひゃく",
+      "pos": "数词",
+      "meaning": "一百",
+      "frequencyRank": 382,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 51,
+      "id": "vx-n5-pup1nb",
+      "word": "病院",
+      "reading": "びょういん",
+      "pos": "名词",
+      "meaning": "医院",
+      "frequencyRank": 383,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 52,
+      "id": "vx-n5-i8ax1i",
+      "word": "北",
+      "reading": "きた",
+      "pos": "名词",
+      "meaning": "北；北方",
+      "frequencyRank": 408,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 53,
+      "id": "vx-n5-1l3mg9m",
+      "word": "毎日",
+      "reading": "まいにち",
+      "pos": "名词",
+      "meaning": "每天",
+      "frequencyRank": 414,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 54,
+      "id": "vx-n5-dl612g",
+      "word": "木",
+      "reading": "き",
+      "pos": "名词",
+      "meaning": "树；木头",
+      "frequencyRank": 419,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 55,
+      "id": "vx-n5-ecn5dp",
+      "word": "問題",
+      "reading": "もんだい",
+      "pos": "名词",
+      "meaning": "问题；题目",
+      "frequencyRank": 422,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 56,
+      "id": "vx-n5-15r9su5",
+      "word": "来年",
+      "reading": "らいねん",
+      "pos": "名词",
+      "meaning": "明年",
+      "frequencyRank": 435,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 57,
+      "id": "vx-n5-c9ww6g",
+      "word": "九",
+      "reading": "きゅう",
+      "pos": "数词",
+      "meaning": "九",
+      "frequencyRank": 451,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 58,
+      "id": "vx-n5-14qjbdz",
+      "word": "今年",
+      "reading": "ことし",
+      "pos": "名词",
+      "meaning": "今年",
+      "frequencyRank": 454,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 59,
+      "id": "vx-n5-1n9hiuw",
+      "word": "三",
+      "reading": "さん",
+      "pos": "词汇",
+      "meaning": "三；3",
+      "frequencyRank": 455,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 60,
+      "id": "vx-n5-zxmpnf",
+      "word": "四",
+      "reading": "し",
+      "pos": "词汇",
+      "meaning": "四；4",
+      "frequencyRank": 456,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 61,
+      "id": "vx-n5-xjnmnz",
+      "word": "十",
+      "reading": "じゅう",
+      "pos": "词汇",
+      "meaning": "十；10；十岁；十岁的年纪；诗集",
+      "frequencyRank": 457,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 62,
+      "id": "vx-n5-dp9sfl",
+      "word": "二人",
+      "reading": "ふたり",
+      "pos": "名词",
+      "meaning": "两人；两个人；一对；一双",
+      "frequencyRank": 463,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 63,
+      "id": "vx-n5-1lmnoiu",
+      "word": "八",
+      "reading": "はち",
+      "pos": "词汇",
+      "meaning": "八；8",
+      "frequencyRank": 464,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 64,
+      "id": "vx-n5-2z8g7k",
+      "word": "六",
+      "reading": "ろく",
+      "pos": "词汇",
+      "meaning": "六；数字六",
+      "frequencyRank": 466,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 65,
+      "id": "vx-n5-5cs1ln",
+      "word": "言う",
+      "reading": "いう",
+      "pos": "五段动词・他动词",
+      "meaning": "说",
+      "frequencyRank": 467,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 66,
+      "id": "vx-n5-m6taai",
+      "word": "国",
+      "reading": "くに",
+      "pos": "名词",
+      "meaning": "国家",
+      "frequencyRank": 475,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 67,
+      "id": "vx-n5-suqpo2",
+      "word": "話",
+      "reading": "はなし",
+      "pos": "名词",
+      "meaning": "话；故事",
+      "frequencyRank": 482,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 68,
+      "id": "vx-n5-1un34t2",
+      "word": "一緒",
+      "reading": "いっしょ",
+      "pos": "名词",
+      "meaning": "一起；同样",
+      "frequencyRank": 509,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 69,
+      "id": "vx-n5-f5ctbw",
+      "word": "雨",
+      "reading": "あめ",
+      "pos": "名词",
+      "meaning": "雨",
+      "frequencyRank": 511,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 70,
+      "id": "vx-n5-12wetoe",
+      "word": "英語",
+      "reading": "えいご",
+      "pos": "名词",
+      "meaning": "英语",
+      "frequencyRank": 516,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 71,
+      "id": "vx-n5-1n87ef2",
+      "word": "歌",
+      "reading": "うた",
+      "pos": "名词",
+      "meaning": "歌",
+      "frequencyRank": 523,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 72,
+      "id": "vx-n5-p9g1zd",
+      "word": "海",
+      "reading": "うみ",
+      "pos": "名词",
+      "meaning": "海",
+      "frequencyRank": 531,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 73,
+      "id": "vx-n5-1kbl7mw",
+      "word": "絵",
+      "reading": "え",
+      "pos": "名词",
+      "meaning": "画；图画",
+      "frequencyRank": 532,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 74,
+      "id": "vx-n5-1bzzkfy",
+      "word": "外",
+      "reading": "そと",
+      "pos": "名词",
+      "meaning": "外面",
+      "frequencyRank": 536,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 75,
+      "id": "vx-n5-1tqspv",
+      "word": "結婚",
+      "reading": "けっこん",
+      "pos": "动词・自动词",
+      "meaning": "结婚",
+      "frequencyRank": 590,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 76,
+      "id": "vx-n5-n7ts77",
+      "word": "呼ぶ",
+      "reading": "よぶ",
+      "pos": "五段动词・他动词",
+      "meaning": "叫；呼喊；邀请",
+      "frequencyRank": 606,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 77,
+      "id": "vx-n5-egqqap",
+      "word": "公園",
+      "reading": "こうえん",
+      "pos": "名词",
+      "meaning": "公园",
+      "frequencyRank": 612,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 78,
+      "id": "vx-n5-9efeku",
+      "word": "口",
+      "reading": "くち",
+      "pos": "名词",
+      "meaning": "嘴；入口",
+      "frequencyRank": 618,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 79,
+      "id": "vx-n5-11g07bw",
+      "word": "雑誌",
+      "reading": "ざっし",
+      "pos": "名词",
+      "meaning": "杂志",
+      "frequencyRank": 647,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 80,
+      "id": "vx-n5-1gzqhze",
+      "word": "山",
+      "reading": "やま",
+      "pos": "名词",
+      "meaning": "山",
+      "frequencyRank": 648,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 81,
+      "id": "vx-n5-1yy94xt",
+      "word": "使う",
+      "reading": "つかう",
+      "pos": "五段动词・他动词",
+      "meaning": "使用",
+      "frequencyRank": 651,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 82,
+      "id": "vx-n5-1gmy6l",
+      "word": "女",
+      "reading": "おんな",
+      "pos": "名词",
+      "meaning": "女人；女性",
+      "frequencyRank": 702,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 83,
+      "id": "vx-n5-8m6glw",
+      "word": "色",
+      "reading": "いろ",
+      "pos": "名词",
+      "meaning": "颜色",
+      "frequencyRank": 715,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 84,
+      "id": "vx-n5-9aoy3l",
+      "word": "生徒",
+      "reading": "せいと",
+      "pos": "名词",
+      "meaning": "学生（中小学生）",
+      "frequencyRank": 739,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 85,
+      "id": "vx-n5-1822m98",
+      "word": "西",
+      "reading": "にし",
+      "pos": "名词",
+      "meaning": "西；西方",
+      "frequencyRank": 744,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 86,
+      "id": "vx-n5-1348h9v",
+      "word": "先月",
+      "reading": "せんげつ",
+      "pos": "名词",
+      "meaning": "上个月",
+      "frequencyRank": 753,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 87,
+      "id": "v-n5-008",
+      "word": "先生",
+      "reading": "せんせい",
+      "pos": "名词",
+      "meaning": "老师；医生等敬称",
+      "frequencyRank": 755,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 88,
+      "id": "vx-n5-12e7qfi",
+      "word": "体",
+      "reading": "からだ",
+      "pos": "名词",
+      "meaning": "身体",
+      "frequencyRank": 783,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 89,
+      "id": "vx-n5-1x46g8t",
+      "word": "大切",
+      "reading": "たいせつ",
+      "pos": "な形容词",
+      "meaning": "重要；珍贵",
+      "frequencyRank": 791,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 90,
+      "id": "vx-n5-1d0eusl",
+      "word": "大変",
+      "reading": "たいへん",
+      "pos": "な形容词",
+      "meaning": "辛苦；严重；非常",
+      "frequencyRank": 792,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 91,
+      "id": "vx-n5-cwcir9",
+      "word": "知る",
+      "reading": "しる",
+      "pos": "五段动词・他动词",
+      "meaning": "知道；认识",
+      "frequencyRank": 796,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 92,
+      "id": "vx-n5-1ooo3qu",
+      "word": "電気",
+      "reading": "でんき",
+      "pos": "名词",
+      "meaning": "电；电灯",
+      "frequencyRank": 820,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 93,
+      "id": "vx-n5-1nodd9c",
+      "word": "動物",
+      "reading": "どうぶつ",
+      "pos": "名词",
+      "meaning": "动物",
+      "frequencyRank": 830,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 94,
+      "id": "vx-n5-1ax6u1p",
+      "word": "二つ",
+      "reading": "ふたつ",
+      "pos": "词汇",
+      "meaning": "二；两",
+      "frequencyRank": 844,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 95,
+      "id": "vx-n5-199295o",
+      "word": "年",
+      "reading": "とし",
+      "pos": "名词",
+      "meaning": "年；年龄",
+      "frequencyRank": 848,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 96,
+      "id": "vx-n5-152f5hq",
+      "word": "半分",
+      "reading": "はんぶん",
+      "pos": "名词",
+      "meaning": "一半",
+      "frequencyRank": 857,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 97,
+      "id": "vx-n5-ednvv4",
+      "word": "病気",
+      "reading": "びょうき",
+      "pos": "名词",
+      "meaning": "疾病；生病",
+      "frequencyRank": 871,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 98,
+      "id": "vx-n5-jykdaw",
+      "word": "部屋",
+      "reading": "へや",
+      "pos": "名词",
+      "meaning": "房间",
+      "frequencyRank": 884,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 99,
+      "id": "vx-n5-13151nw",
+      "word": "本当",
+      "reading": "ほんとう",
+      "pos": "い形容词",
+      "meaning": "真的；真实",
+      "frequencyRank": 909,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 100,
+      "id": "vx-n5-1rf2dx7",
+      "word": "名前",
+      "reading": "なまえ",
+      "pos": "名词",
+      "meaning": "名字",
+      "frequencyRank": 916,
+      "hasReviewedExample": false
+    }
+  ],
+  "N4": [
+    {
+      "order": 1,
+      "id": "vx-n4-1h00npe",
+      "word": "安全",
+      "reading": "あんぜん",
+      "pos": "な形容词",
+      "meaning": "安全",
+      "frequencyRank": 1,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 2,
+      "id": "vx-n4-j9ofg7",
+      "word": "意見",
+      "reading": "いけん",
+      "pos": "名词",
+      "meaning": "意见",
+      "frequencyRank": 7,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 3,
+      "id": "vx-n4-ln9j0n",
+      "word": "運動",
+      "reading": "うんどう",
+      "pos": "动词・自动词",
+      "meaning": "运动",
+      "frequencyRank": 19,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 4,
+      "id": "vx-n4-1637c98",
+      "word": "会議",
+      "reading": "かいぎ",
+      "pos": "动词・他动词・自动词",
+      "meaning": "会议",
+      "frequencyRank": 36,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 5,
+      "id": "vx-n4-9jhlsw",
+      "word": "関係",
+      "reading": "かんけい",
+      "pos": "动词・自动词",
+      "meaning": "关系",
+      "frequencyRank": 64,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 6,
+      "id": "vx-n4-yjxozh",
+      "word": "気",
+      "reading": "き",
+      "pos": "名词",
+      "meaning": "精神；心灵；内心；性质；性格；气质；意图；想法；意愿；动机；心情；感受；意识；知觉；关心；注意；体贴；担心；兴趣；关注；空气；气氛",
+      "frequencyRank": 78,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 7,
+      "id": "vx-n4-169e02z",
+      "word": "技術",
+      "reading": "ぎじゅつ",
+      "pos": "名词",
+      "meaning": "技术；工程学；技巧；技能；艺术；工艺",
+      "frequencyRank": 84,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 8,
+      "id": "vx-n4-65b99c",
+      "word": "客",
+      "reading": "きゃく",
+      "pos": "名词",
+      "meaning": "客人；顾客",
+      "frequencyRank": 89,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 9,
+      "id": "vx-n4-lne6kl",
+      "word": "教育",
+      "reading": "きょういく",
+      "pos": "动词・他动词",
+      "meaning": "教育",
+      "frequencyRank": 95,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 10,
+      "id": "vx-n4-6sftea",
+      "word": "空港",
+      "reading": "くうこう",
+      "pos": "名词",
+      "meaning": "机场",
+      "frequencyRank": 105,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 11,
+      "id": "vx-n4-1q1r348",
+      "word": "形",
+      "reading": "かたち",
+      "pos": "名词",
+      "meaning": "形状",
+      "frequencyRank": 108,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 12,
+      "id": "vx-n4-1whw8bo",
+      "word": "経済",
+      "reading": "けいざい",
+      "pos": "名词",
+      "meaning": "经济",
+      "frequencyRank": 111,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 13,
+      "id": "vx-n4-199feuz",
+      "word": "計画",
+      "reading": "けいかく",
+      "pos": "动词・他动词",
+      "meaning": "计划",
+      "frequencyRank": 112,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 14,
+      "id": "vx-n4-udrubm",
+      "word": "警察",
+      "reading": "けいさつ",
+      "pos": "名词",
+      "meaning": "警察",
+      "frequencyRank": 113,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 15,
+      "id": "vx-n4-eziptv",
+      "word": "研究",
+      "reading": "けんきゅう",
+      "pos": "动词・他动词",
+      "meaning": "研究",
+      "frequencyRank": 120,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 16,
+      "id": "vx-n4-dmlqj4",
+      "word": "原因",
+      "reading": "げんいん",
+      "pos": "动词・自动词",
+      "meaning": "原因",
+      "frequencyRank": 123,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 17,
+      "id": "vx-n4-whmq17",
+      "word": "光",
+      "reading": "ひかり",
+      "pos": "名词",
+      "meaning": "光；光亮；光线；光束；闪光；光辉；幸福；希望；影响；权势；视力；视觉；光纤",
+      "frequencyRank": 140,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 18,
+      "id": "vx-n4-1x0b8uy",
+      "word": "高校",
+      "reading": "こうこう",
+      "pos": "名词",
+      "meaning": "高中",
+      "frequencyRank": 147,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 19,
+      "id": "vx-n4-7qapvg",
+      "word": "国際",
+      "reading": "こくさい",
+      "pos": "の形容词",
+      "meaning": "国际的；国际性的；外交往来；邦交往来",
+      "frequencyRank": 152,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 20,
+      "id": "vx-n4-1qf7lxg",
+      "word": "最も",
+      "reading": "もっとも",
+      "pos": "副词",
+      "meaning": "最；极其；非常",
+      "frequencyRank": 160,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 21,
+      "id": "v-n4-035",
+      "word": "最近",
+      "reading": "さいきん",
+      "pos": "の形容词",
+      "meaning": "最近",
+      "frequencyRank": 161,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 22,
+      "id": "vx-n4-156gft6",
+      "word": "最後",
+      "reading": "さいご",
+      "pos": "名词",
+      "meaning": "最后",
+      "frequencyRank": 162,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 23,
+      "id": "vx-n4-1u4hr81",
+      "word": "最初",
+      "reading": "さいしょ",
+      "pos": "の形容词",
+      "meaning": "最初",
+      "frequencyRank": 165,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 24,
+      "id": "vx-n4-m1ijcw",
+      "word": "妻",
+      "reading": "つま",
+      "pos": "名词",
+      "meaning": "妻子；配菜（尤指刺身的装饰菜）；装饰菜；伴奏；附带说明",
+      "frequencyRank": 167,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 25,
+      "id": "vx-n4-16yulpq",
+      "word": "産業",
+      "reading": "さんぎょう",
+      "pos": "名词",
+      "meaning": "产业；工业；生计；职业",
+      "frequencyRank": 178,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 26,
+      "id": "vx-n4-196pzgq",
+      "word": "子",
+      "reading": "こ",
+      "pos": "名词",
+      "meaning": "小孩；少年；青少年；年轻人；孩子；子女；儿女；年轻女子；少女；幼崽；小动物；分枝；衍生物；利息；孳息；新股；增发股；闲家；非庄家的玩家",
+      "frequencyRank": 183,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 27,
+      "id": "vx-n4-kxqn4j",
+      "word": "市民",
+      "reading": "しみん",
+      "pos": "名词",
+      "meaning": "市民",
+      "frequencyRank": 188,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 28,
+      "id": "vx-n4-1gsctw",
+      "word": "試合",
+      "reading": "しあい",
+      "pos": "动词・自动词",
+      "meaning": "比赛",
+      "frequencyRank": 195,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 29,
+      "id": "vx-n4-8od3fe",
+      "word": "事故",
+      "reading": "じこ",
+      "pos": "名词",
+      "meaning": "事故；意外；麻烦；情况；原因；缘由",
+      "frequencyRank": 199,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 30,
+      "id": "vx-n4-nq0xsf",
+      "word": "事務所",
+      "reading": "じむしょ",
+      "pos": "名词",
+      "meaning": "办公室；事务所",
+      "frequencyRank": 204,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 31,
+      "id": "vx-n4-53f0mm",
+      "word": "時代",
+      "reading": "じだい",
+      "pos": "名词",
+      "meaning": "时代；时期；年代；纪元；那个时代；当时；彼时；年代久远；古老；古朴；古董；时代物件",
+      "frequencyRank": 207,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 32,
+      "id": "v-n4-029",
+      "word": "自由",
+      "reading": "じゆう",
+      "pos": "な形容词",
+      "meaning": "自由",
+      "frequencyRank": 215,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 33,
+      "id": "vx-n4-25fu2a",
+      "word": "社会",
+      "reading": "しゃかい",
+      "pos": "名词",
+      "meaning": "社会",
+      "frequencyRank": 221,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 34,
+      "id": "vx-n4-1m7wdke",
+      "word": "社長",
+      "reading": "しゃちょう",
+      "pos": "名词",
+      "meaning": "公司社长",
+      "frequencyRank": 223,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 35,
+      "id": "vx-n4-vxe9d3",
+      "word": "女性",
+      "reading": "じょせい",
+      "pos": "の形容词",
+      "meaning": "女性",
+      "frequencyRank": 250,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 36,
+      "id": "vx-n4-g4rw1t",
+      "word": "将来",
+      "reading": "しょうらい",
+      "pos": "名词",
+      "meaning": "将来；未来",
+      "frequencyRank": 252,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 37,
+      "id": "vx-n4-1otn0jz",
+      "word": "場所",
+      "reading": "ばしょ",
+      "pos": "名词",
+      "meaning": "地方；场所；位置；地点；空间；余地；相扑大赛",
+      "frequencyRank": 255,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 38,
+      "id": "vx-n4-1lmtuya",
+      "word": "人口",
+      "reading": "じんこう",
+      "pos": "名词",
+      "meaning": "人口；传言；谣言；民间说法",
+      "frequencyRank": 269,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 39,
+      "id": "vx-n4-8rda4d",
+      "word": "世界",
+      "reading": "せかい",
+      "pos": "名词",
+      "meaning": "世界",
+      "frequencyRank": 272,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 40,
+      "id": "vx-n4-4vayxa",
+      "word": "政治",
+      "reading": "せいじ",
+      "pos": "名词",
+      "meaning": "政治；政务",
+      "frequencyRank": 279,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 41,
+      "id": "vx-n4-1d1jfj1",
+      "word": "生活",
+      "reading": "せいかつ",
+      "pos": "动词・自动词",
+      "meaning": "生活",
+      "frequencyRank": 283,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 42,
+      "id": "vx-n4-110os56",
+      "word": "生産",
+      "reading": "せいさん",
+      "pos": "动词・他动词",
+      "meaning": "生产；制造",
+      "frequencyRank": 284,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 43,
+      "id": "vx-n4-1tmjs9x",
+      "word": "戦争",
+      "reading": "せんそう",
+      "pos": "动词・自动词",
+      "meaning": "战争",
+      "frequencyRank": 290,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 44,
+      "id": "vx-n4-1v3p8cn",
+      "word": "男性",
+      "reading": "だんせい",
+      "pos": "の形容词",
+      "meaning": "男性",
+      "frequencyRank": 323,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 45,
+      "id": "vx-n4-ddsos7",
+      "word": "特に",
+      "reading": "とくに",
+      "pos": "副词",
+      "meaning": "特别；尤其；格外；特意",
+      "frequencyRank": 359,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 46,
+      "id": "v-n4-030",
+      "word": "特別",
+      "reading": "とくべつ",
+      "pos": "い形容词",
+      "meaning": "特别",
+      "frequencyRank": 360,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 47,
+      "id": "vx-n4-w1irqr",
+      "word": "反対",
+      "reading": "はんたい",
+      "pos": "动词・自动词",
+      "meaning": "反对；相反",
+      "frequencyRank": 376,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 48,
+      "id": "vx-n4-16m3adp",
+      "word": "番組",
+      "reading": "ばんぐみ",
+      "pos": "名词",
+      "meaning": "节目",
+      "frequencyRank": 378,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 49,
+      "id": "v-n4-001",
+      "word": "必要",
+      "reading": "ひつよう",
+      "pos": "な形容词",
+      "meaning": "必要",
+      "frequencyRank": 381,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 50,
+      "id": "vx-n4-j3ffnj",
+      "word": "夫",
+      "reading": "おっと",
+      "pos": "名词",
+      "meaning": "丈夫",
+      "frequencyRank": 385,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 51,
+      "id": "vx-n4-1k4ofkk",
+      "word": "部長",
+      "reading": "ぶちょう",
+      "pos": "名词",
+      "meaning": "部长；部门主管",
+      "frequencyRank": 388,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 52,
+      "id": "vx-n4-1wup3vs",
+      "word": "文化",
+      "reading": "ぶんか",
+      "pos": "名词",
+      "meaning": "文化",
+      "frequencyRank": 392,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 53,
+      "id": "vx-n4-n8ic7e",
+      "word": "放送",
+      "reading": "ほうそう",
+      "pos": "动词・他动词",
+      "meaning": "广播；播送",
+      "frequencyRank": 400,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 54,
+      "id": "vx-n4-m9arww",
+      "word": "貿易",
+      "reading": "ぼうえき",
+      "pos": "动词・自动词",
+      "meaning": "贸易",
+      "frequencyRank": 406,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 55,
+      "id": "vx-n4-1g0kicb",
+      "word": "輸出",
+      "reading": "ゆしゅつ",
+      "pos": "动词・他动词",
+      "meaning": "出口；输出",
+      "frequencyRank": 426,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 56,
+      "id": "vx-n4-baexz6",
+      "word": "輸入",
+      "reading": "ゆにゅう",
+      "pos": "动词・他动词",
+      "meaning": "进口；输入",
+      "frequencyRank": 427,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 57,
+      "id": "v-n4-002",
+      "word": "予定",
+      "reading": "よてい",
+      "pos": "动词・他动词",
+      "meaning": "计划；预定",
+      "frequencyRank": 431,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 58,
+      "id": "v-n4-004",
+      "word": "理由",
+      "reading": "りゆう",
+      "pos": "名词",
+      "meaning": "理由",
+      "frequencyRank": 437,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 59,
+      "id": "vx-n4-19mfl37",
+      "word": "歴史",
+      "reading": "れきし",
+      "pos": "名词",
+      "meaning": "历史",
+      "frequencyRank": 441,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 60,
+      "id": "vx-n4-1ut5qxa",
+      "word": "工場",
+      "reading": "こうじょう",
+      "pos": "名词",
+      "meaning": "工厂",
+      "frequencyRank": 453,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 61,
+      "id": "vx-n4-gf6nj6",
+      "word": "行う",
+      "reading": "おこなう",
+      "pos": "五段动词・他动词",
+      "meaning": "进行；执行；实施",
+      "frequencyRank": 469,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 62,
+      "id": "vx-n4-uno8mm",
+      "word": "気持ち",
+      "reading": "きもち",
+      "pos": "名词",
+      "meaning": "心情；感觉",
+      "frequencyRank": 472,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 63,
+      "id": "vx-n4-1bqt2vp",
+      "word": "以内",
+      "reading": "いない",
+      "pos": "名词",
+      "meaning": "以内",
+      "frequencyRank": 502,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 64,
+      "id": "vx-n4-5tgj5l",
+      "word": "医学",
+      "reading": "いがく",
+      "pos": "名词",
+      "meaning": "医学",
+      "frequencyRank": 507,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 65,
+      "id": "vx-n4-1w067q4",
+      "word": "運転",
+      "reading": "うんてん",
+      "pos": "动词・他动词・自动词",
+      "meaning": "驾驶；运转",
+      "frequencyRank": 513,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 66,
+      "id": "vx-n4-mbqbq",
+      "word": "科学",
+      "reading": "かがく",
+      "pos": "名词",
+      "meaning": "科学",
+      "frequencyRank": 522,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 67,
+      "id": "vx-n4-129drgk",
+      "word": "火",
+      "reading": "ひ",
+      "pos": "名词",
+      "meaning": "火",
+      "frequencyRank": 524,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 68,
+      "id": "vx-n4-xj033r",
+      "word": "課長",
+      "reading": "かちょう",
+      "pos": "名词",
+      "meaning": "科长；课长",
+      "frequencyRank": 525,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 69,
+      "id": "vx-n4-v872fv",
+      "word": "会場",
+      "reading": "かいじょう",
+      "pos": "名词",
+      "meaning": "会场",
+      "frequencyRank": 527,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 70,
+      "id": "vx-n4-e5uw1w",
+      "word": "簡単",
+      "reading": "かんたん",
+      "pos": "な形容词",
+      "meaning": "简单的",
+      "frequencyRank": 551,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 71,
+      "id": "vx-n4-xlm42h",
+      "word": "危険",
+      "reading": "きけん",
+      "pos": "な形容词",
+      "meaning": "危险",
+      "frequencyRank": 559,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 72,
+      "id": "vx-n4-1d8wdlo",
+      "word": "機会",
+      "reading": "きかい",
+      "pos": "名词",
+      "meaning": "机会；机遇；时机",
+      "frequencyRank": 564,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 73,
+      "id": "vx-n4-1qqahf5",
+      "word": "競争",
+      "reading": "きょうそう",
+      "pos": "动词・他动词・自动词",
+      "meaning": "竞争；竞赛；角逐；比赛；竞争（生物体或物种之间）",
+      "frequencyRank": 571,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 74,
+      "id": "v-n4-005",
+      "word": "経験",
+      "reading": "けいけん",
+      "pos": "动词・他动词",
+      "meaning": "经验；经历",
+      "frequencyRank": 583,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 75,
+      "id": "vx-n4-zfsghq",
+      "word": "交通",
+      "reading": "こうつう",
+      "pos": "动词",
+      "meaning": "交通；运输；交流；沟通；往来；交际",
+      "frequencyRank": 611,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 76,
+      "id": "vx-n4-1ri5n33",
+      "word": "工業",
+      "reading": "こうぎょう",
+      "pos": "名词",
+      "meaning": "工业",
+      "frequencyRank": 619,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 77,
+      "id": "vx-n4-ymuqxs",
+      "word": "今度",
+      "reading": "こんど",
+      "pos": "名词",
+      "meaning": "这次；下次",
+      "frequencyRank": 638,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 78,
+      "id": "vx-n4-gcn02b",
+      "word": "試験",
+      "reading": "しけん",
+      "pos": "动词・他动词",
+      "meaning": "考试；测试；检查；试验；实验；测试",
+      "frequencyRank": 658,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 79,
+      "id": "vx-n4-wfq332",
+      "word": "寺",
+      "reading": "てら",
+      "pos": "名词",
+      "meaning": "寺庙",
+      "frequencyRank": 662,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 80,
+      "id": "v-n4-027",
+      "word": "十分",
+      "reading": "じゅうぶん",
+      "pos": "な形容词/副词",
+      "meaning": "充分",
+      "frequencyRank": 696,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 81,
+      "id": "v-n4-006",
+      "word": "準備",
+      "reading": "じゅんび",
+      "pos": "动词・他动词",
+      "meaning": "准备",
+      "frequencyRank": 698,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 82,
+      "id": "vx-n4-1wbmfln",
+      "word": "森",
+      "reading": "もり",
+      "pos": "名词",
+      "meaning": "森林",
+      "frequencyRank": 719,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 83,
+      "id": "vx-n4-1uvvwp",
+      "word": "親",
+      "reading": "おや",
+      "pos": "名词",
+      "meaning": "父母；双亲；庄家；银行家；创始人；发明人；（宠物）主人；饲主；核心的；母体（组织）；主要的；祖先；先祖",
+      "frequencyRank": 721,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 84,
+      "id": "vx-n4-q1ic1x",
+      "word": "昔",
+      "reading": "むかし",
+      "pos": "の形容词",
+      "meaning": "从前；以前",
+      "frequencyRank": 747,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 85,
+      "id": "v-n4-009",
+      "word": "説明",
+      "reading": "せつめい",
+      "pos": "动词・他动词",
+      "meaning": "说明",
+      "frequencyRank": 752,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 86,
+      "id": "vx-n4-1t40wy6",
+      "word": "相談",
+      "reading": "そうだん",
+      "pos": "动词・他动词",
+      "meaning": "商量；咨询",
+      "frequencyRank": 772,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 87,
+      "id": "vx-n4-1ont4yq",
+      "word": "地震",
+      "reading": "じしん",
+      "pos": "名词",
+      "meaning": "地震",
+      "frequencyRank": 799,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 88,
+      "id": "vx-n4-1plldmm",
+      "word": "島",
+      "reading": "しま",
+      "pos": "名词",
+      "meaning": "岛",
+      "frequencyRank": 824,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 89,
+      "id": "vx-n4-1vyhxac",
+      "word": "彼ら",
+      "reading": "かれら",
+      "pos": "代词",
+      "meaning": "他们；她们；它们",
+      "frequencyRank": 859,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 90,
+      "id": "vx-n4-1hbq4s0",
+      "word": "彼女",
+      "reading": "かのじょ",
+      "pos": "代词",
+      "meaning": "她；女朋友",
+      "frequencyRank": 860,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 91,
+      "id": "vx-n4-1sziudh",
+      "word": "比べる",
+      "reading": "くらべる",
+      "pos": "一段动词・他动词",
+      "meaning": "比较",
+      "frequencyRank": 861,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 92,
+      "id": "vx-n4-1enbbz0",
+      "word": "普通",
+      "reading": "ふつう",
+      "pos": "い形容词",
+      "meaning": "普通；一般",
+      "frequencyRank": 878,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 93,
+      "id": "vx-n4-1s3ya1i",
+      "word": "文学",
+      "reading": "ぶんがく",
+      "pos": "名词",
+      "meaning": "文学",
+      "frequencyRank": 890,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 94,
+      "id": "vx-n4-wy8qa4",
+      "word": "壁",
+      "reading": "かべ",
+      "pos": "名词",
+      "meaning": "墙",
+      "frequencyRank": 891,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 95,
+      "id": "vx-n4-1b5z38c",
+      "word": "法律",
+      "reading": "ほうりつ",
+      "pos": "名词",
+      "meaning": "法律",
+      "frequencyRank": 902,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 96,
+      "id": "vx-n4-v7x2ku",
+      "word": "夢",
+      "reading": "ゆめ",
+      "pos": "名词",
+      "meaning": "梦；梦境；梦；希望；愿望；志向；抱负；不切实际的幻想；白日梦；空想；妄想；幻觉；错觉；转瞬即逝的事物；昙花一现的东西",
+      "frequencyRank": 912,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 97,
+      "id": "vx-n4-rzzh7t",
+      "word": "娘",
+      "reading": "むすめ",
+      "pos": "名词",
+      "meaning": "女儿",
+      "frequencyRank": 914,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 98,
+      "id": "vx-n4-f48fdk",
+      "word": "利用",
+      "reading": "りよう",
+      "pos": "动词・他动词",
+      "meaning": "利用；使用",
+      "frequencyRank": 934,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 99,
+      "id": "vx-n4-1ktl7i2",
+      "word": "林",
+      "reading": "はやし",
+      "pos": "名词",
+      "meaning": "树林",
+      "frequencyRank": 941,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 100,
+      "id": "vx-n4-1preaqh",
+      "word": "例えば",
+      "reading": "たとえば",
+      "pos": "副词",
+      "meaning": "例如；比如；譬如",
+      "frequencyRank": 943,
+      "hasReviewedExample": false
+    }
+  ],
+  "N3": [
+    {
+      "order": 1,
+      "id": "vx-n3-y0tzxi",
+      "word": "以来",
+      "reading": "いらい",
+      "pos": "名词",
+      "meaning": "自……以来；此后；从今以后；自……以来；一直以来",
+      "frequencyRank": 3,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 2,
+      "id": "vx-n3-kcogz7",
+      "word": "委員",
+      "reading": "いいん",
+      "pos": "名词",
+      "meaning": "委员",
+      "frequencyRank": 4,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 3,
+      "id": "vx-n3-1ohh7l1",
+      "word": "維持",
+      "reading": "いじ",
+      "pos": "动词・他动词",
+      "meaning": "维持",
+      "frequencyRank": 9,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 4,
+      "id": "vx-n3-ymkzmt",
+      "word": "違反",
+      "reading": "いはん",
+      "pos": "动词・自动词",
+      "meaning": "违反；违背；违规；违犯；侵犯；违抗",
+      "frequencyRank": 10,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 5,
+      "id": "vx-n3-chphv",
+      "word": "医療",
+      "reading": "いりょう",
+      "pos": "名词",
+      "meaning": "医疗",
+      "frequencyRank": 11,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 6,
+      "id": "vx-n3-135ffl2",
+      "word": "一般",
+      "reading": "いっぱん",
+      "pos": "の形容词",
+      "meaning": "一般；普遍；通用；普通；平均；常见；非名人；相同；无异；如同",
+      "frequencyRank": 14,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 7,
+      "id": "v-n3-029",
+      "word": "一方",
+      "reading": "いっぽう",
+      "pos": "名词/副词",
+      "meaning": "一方面；另一方面",
+      "frequencyRank": 17,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 8,
+      "id": "v-n3-004",
+      "word": "影響",
+      "reading": "えいきょう",
+      "pos": "动词・自动词",
+      "meaning": "影响",
+      "frequencyRank": 20,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 9,
+      "id": "vx-n3-1e7iali",
+      "word": "援助",
+      "reading": "えんじょ",
+      "pos": "动词・他动词",
+      "meaning": "援助；帮助；支持",
+      "frequencyRank": 22,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 10,
+      "id": "vx-n3-yy3spv",
+      "word": "価格",
+      "reading": "かかく",
+      "pos": "名词",
+      "meaning": "价格；价值；成本",
+      "frequencyRank": 25,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 11,
+      "id": "vx-n3-f8p4fo",
+      "word": "可能",
+      "reading": "かのう",
+      "pos": "い形容词",
+      "meaning": "可能的；潜在的；可行的；可实现的",
+      "frequencyRank": 27,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 12,
+      "id": "vx-n3-1xs1ky8",
+      "word": "過去",
+      "reading": "かこ",
+      "pos": "の形容词",
+      "meaning": "过去；往日；昔日；（不愿为人所知的）往事；黑历史；过去时；过去式；前世；前生",
+      "frequencyRank": 34,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 13,
+      "id": "vx-n3-nwtqdu",
+      "word": "会員",
+      "reading": "かいいん",
+      "pos": "名词",
+      "meaning": "会员；会籍",
+      "frequencyRank": 35,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 14,
+      "id": "vx-n3-zys9oy",
+      "word": "解決",
+      "reading": "かいけつ",
+      "pos": "动词・他动词・自动词",
+      "meaning": "解决",
+      "frequencyRank": 41,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 15,
+      "id": "vx-n3-15iq15n",
+      "word": "回復",
+      "reading": "かいふく",
+      "pos": "动词・他动词・自动词",
+      "meaning": "恢复",
+      "frequencyRank": 42,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 16,
+      "id": "vx-n3-1x57bs7",
+      "word": "海外",
+      "reading": "かいがい",
+      "pos": "の形容词",
+      "meaning": "国外；海外；异国",
+      "frequencyRank": 45,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 17,
+      "id": "vx-n3-1etzl84",
+      "word": "外交",
+      "reading": "がいこう",
+      "pos": "名词",
+      "meaning": "外交",
+      "frequencyRank": 47,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 18,
+      "id": "vx-n3-sz4sep",
+      "word": "拡大",
+      "reading": "かくだい",
+      "pos": "动词・他动词・自动词",
+      "meaning": "扩大；扩展；放大；扩大；升级；蔓延",
+      "frequencyRank": 52,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 19,
+      "id": "vx-n3-1gh9l5j",
+      "word": "活動",
+      "reading": "かつどう",
+      "pos": "动词・自动词",
+      "meaning": "活动",
+      "frequencyRank": 56,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 20,
+      "id": "vx-n3-v8dkck",
+      "word": "患者",
+      "reading": "かんじゃ",
+      "pos": "名词",
+      "meaning": "患者",
+      "frequencyRank": 60,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 21,
+      "id": "v-n3-006",
+      "word": "環境",
+      "reading": "かんきょう",
+      "pos": "名词",
+      "meaning": "环境",
+      "frequencyRank": 61,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 22,
+      "id": "vx-n3-1ezc88e",
+      "word": "監督",
+      "reading": "かんとく",
+      "pos": "动词・他动词",
+      "meaning": "监督；管理；监察；指挥；导演；主管；监督人；教练；工头；经理；监察员；主任；上司",
+      "frequencyRank": 62,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 23,
+      "id": "vx-n3-1p0bzhq",
+      "word": "管理",
+      "reading": "かんり",
+      "pos": "动词・他动词",
+      "meaning": "管理",
+      "frequencyRank": 63,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 24,
+      "id": "vx-n3-1hujty",
+      "word": "関心",
+      "reading": "かんしん",
+      "pos": "名词",
+      "meaning": "关心；兴趣",
+      "frequencyRank": 66,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 25,
+      "id": "vx-n3-1sxrxfd",
+      "word": "関連",
+      "reading": "かんれん",
+      "pos": "动词・自动词",
+      "meaning": "关联；关系；相关性",
+      "frequencyRank": 67,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 26,
+      "id": "vx-n3-hfv3vz",
+      "word": "企業",
+      "reading": "きぎょう",
+      "pos": "名词",
+      "meaning": "企业",
+      "frequencyRank": 70,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 27,
+      "id": "vx-n3-53gidu",
+      "word": "基本",
+      "reading": "きほん",
+      "pos": "の形容词",
+      "meaning": "基本",
+      "frequencyRank": 72,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 28,
+      "id": "vx-n3-nbbg5q",
+      "word": "期間",
+      "reading": "きかん",
+      "pos": "名词",
+      "meaning": "期间",
+      "frequencyRank": 73,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 29,
+      "id": "vx-n3-ot2ws1",
+      "word": "期待",
+      "reading": "きたい",
+      "pos": "动词・他动词・自动词",
+      "meaning": "期待",
+      "frequencyRank": 74,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 30,
+      "id": "vx-n3-1ep131d",
+      "word": "機関",
+      "reading": "きかん",
+      "pos": "名词",
+      "meaning": "发动机；引擎；机构；机关；组织；团体；部门；系统；设施；设备",
+      "frequencyRank": 75,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 31,
+      "id": "vx-n3-1omvmdy",
+      "word": "機能",
+      "reading": "きのう",
+      "pos": "动词・自动词",
+      "meaning": "功能；设施；能力；特性",
+      "frequencyRank": 77,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 32,
+      "id": "vx-n3-1elm2s1",
+      "word": "記事",
+      "reading": "きじ",
+      "pos": "名词",
+      "meaning": "报道；文章",
+      "frequencyRank": 81,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 33,
+      "id": "vx-n3-1n8p87",
+      "word": "記者",
+      "reading": "きしゃ",
+      "pos": "名词",
+      "meaning": "记者；新闻记者",
+      "frequencyRank": 82,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 34,
+      "id": "vx-n3-em549k",
+      "word": "記録",
+      "reading": "きろく",
+      "pos": "动词・他动词",
+      "meaning": "记录",
+      "frequencyRank": 83,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 35,
+      "id": "vx-n3-1y5pe4d",
+      "word": "議員",
+      "reading": "ぎいん",
+      "pos": "名词",
+      "meaning": "议员；议会成员；国会议员",
+      "frequencyRank": 86,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 36,
+      "id": "vx-n3-xioojq",
+      "word": "議会",
+      "reading": "ぎかい",
+      "pos": "名词",
+      "meaning": "议会；议院；国会",
+      "frequencyRank": 87,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 37,
+      "id": "vx-n3-112qp04",
+      "word": "議長",
+      "reading": "ぎちょう",
+      "pos": "名词",
+      "meaning": "议长；主席；主持人",
+      "frequencyRank": 88,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 38,
+      "id": "vx-n3-1kup3rp",
+      "word": "教授",
+      "reading": "きょうじゅ",
+      "pos": "名词",
+      "meaning": "教授；教学；授课",
+      "frequencyRank": 96,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 39,
+      "id": "vx-n3-1ak5xvr",
+      "word": "筋",
+      "reading": "すじ",
+      "pos": "名词",
+      "meaning": "筋；肌腱；腱；血管；静脉；动脉；纤维；纤维状物；丝；线；条纹；斑纹；道理；逻辑；理由；情节；故事线；血统；世系；家系；流派；学派；派系",
+      "frequencyRank": 99,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 40,
+      "id": "vx-n3-75n36t",
+      "word": "金融",
+      "reading": "きんゆう",
+      "pos": "名词",
+      "meaning": "金融；融资；信用交易；借贷；货币流通；金融的；货币的；信用的",
+      "frequencyRank": 100,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 41,
+      "id": "vx-n3-iluyk",
+      "word": "契約",
+      "reading": "けいやく",
+      "pos": "动词・他动词",
+      "meaning": "合同；契约",
+      "frequencyRank": 107,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 42,
+      "id": "vx-n3-1kjw44z",
+      "word": "景気",
+      "reading": "けいき",
+      "pos": "名词",
+      "meaning": "经济形势；市场；经济活动；经济气候；经济繁荣；景气；繁华；兴旺；生气；活力；朝气；精力",
+      "frequencyRank": 109,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 43,
+      "id": "vx-n3-qs4nm4",
+      "word": "経営",
+      "reading": "けいえい",
+      "pos": "动词・他动词",
+      "meaning": "经营",
+      "frequencyRank": 110,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 44,
+      "id": "vx-n3-1v6dzll",
+      "word": "決定",
+      "reading": "けってい",
+      "pos": "动词・他动词・自动词",
+      "meaning": "决定；决断",
+      "frequencyRank": 115,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 45,
+      "id": "v-n3-002",
+      "word": "結果",
+      "reading": "けっか",
+      "pos": "名词",
+      "meaning": "结果",
+      "frequencyRank": 116,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 46,
+      "id": "vx-n3-1iegrgv",
+      "word": "建設",
+      "reading": "けんせつ",
+      "pos": "动词・他动词",
+      "meaning": "建设；建立",
+      "frequencyRank": 117,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 47,
+      "id": "vx-n3-1ovy9ur",
+      "word": "憲法",
+      "reading": "けんぽう",
+      "pos": "名词",
+      "meaning": "宪法；规则；规定",
+      "frequencyRank": 118,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 48,
+      "id": "vx-n3-tjorlg",
+      "word": "現在",
+      "reading": "げんざい",
+      "pos": "の形容词",
+      "meaning": "现在；当前",
+      "frequencyRank": 125,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 49,
+      "id": "vx-n3-hctt5l",
+      "word": "現実",
+      "reading": "げんじつ",
+      "pos": "名词",
+      "meaning": "现实",
+      "frequencyRank": 126,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 50,
+      "id": "vx-n3-1vn1n2m",
+      "word": "現場",
+      "reading": "げんば",
+      "pos": "名词",
+      "meaning": "现场；犯罪现场；事故现场；现场；实地；一线；工地；摄制地点；电影片场",
+      "frequencyRank": 127,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 51,
+      "id": "vx-n3-17qwai3",
+      "word": "言わば",
+      "reading": "いわば",
+      "pos": "副词",
+      "meaning": "可以说；如此说来；打个比方说",
+      "frequencyRank": 129,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 52,
+      "id": "vx-n3-1sd0qps",
+      "word": "個人",
+      "reading": "こじん",
+      "pos": "名词",
+      "meaning": "个人",
+      "frequencyRank": 131,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 53,
+      "id": "vx-n3-g277kq",
+      "word": "候補",
+      "reading": "こうほ",
+      "pos": "名词",
+      "meaning": "候选人；竞争者；候选项；选项；名单；候选资格；候选人身份；提名",
+      "frequencyRank": 139,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 54,
+      "id": "vx-n3-1o4xt9m",
+      "word": "効果",
+      "reading": "こうか",
+      "pos": "の形容词",
+      "meaning": "效果",
+      "frequencyRank": 141,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 55,
+      "id": "vx-n3-ys65ch",
+      "word": "攻撃",
+      "reading": "こうげき",
+      "pos": "动词・他动词",
+      "meaning": "攻击；进攻；突袭；袭击；攻势；批评；指责；谴责；非难；网络攻击",
+      "frequencyRank": 142,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 56,
+      "id": "vx-n3-92qczo",
+      "word": "考え",
+      "reading": "かんがえ",
+      "pos": "名词",
+      "meaning": "思考；想法；观点；意见；概念；主意；念头；想象；意图；计划；设想；考虑；判断；斟酌；反思；希望；盼望；期望",
+      "frequencyRank": 144,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 57,
+      "id": "vx-n3-w9h1p4",
+      "word": "行動",
+      "reading": "こうどう",
+      "pos": "动词・自动词",
+      "meaning": "行动；行为",
+      "frequencyRank": 146,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 58,
+      "id": "vx-n3-zh3hs5",
+      "word": "国家",
+      "reading": "こっか",
+      "pos": "名词",
+      "meaning": "国家",
+      "frequencyRank": 150,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 59,
+      "id": "vx-n3-l1hldb",
+      "word": "国会",
+      "reading": "こっかい",
+      "pos": "名词",
+      "meaning": "国会；日本国会（1947年以后）；帝国议会；日本帝国议会（1889—1947年）；议会；国会；代表大会",
+      "frequencyRank": 151,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 60,
+      "id": "vx-n3-1vq0zgt",
+      "word": "国民",
+      "reading": "こくみん",
+      "pos": "名词",
+      "meaning": "国民；人民；公民；国民民主党",
+      "frequencyRank": 154,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 61,
+      "id": "vx-n3-1smi5dq",
+      "word": "今回",
+      "reading": "こんかい",
+      "pos": "名词",
+      "meaning": "这次；此次；现在",
+      "frequencyRank": 156,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 62,
+      "id": "vx-n3-1f8ou8p",
+      "word": "今後",
+      "reading": "こんご",
+      "pos": "名词",
+      "meaning": "今后；从今以后；此后",
+      "frequencyRank": 158,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 63,
+      "id": "vx-n3-ljuzeb",
+      "word": "最高",
+      "reading": "さいこう",
+      "pos": "い形容词",
+      "meaning": "最好；最棒；最佳；最妙；最高；最大；最多；至高",
+      "frequencyRank": 163,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 64,
+      "id": "vx-n3-12qud7y",
+      "word": "最終",
+      "reading": "さいしゅう",
+      "pos": "の形容词",
+      "meaning": "最后；最终；末尾；末班车；末班公交；末班飞机",
+      "frequencyRank": 164,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 65,
+      "id": "vx-n3-on72w8",
+      "word": "裁判",
+      "reading": "さいばん",
+      "pos": "动词・他动词",
+      "meaning": "审判；判决",
+      "frequencyRank": 168,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 66,
+      "id": "vx-n3-1iww5sw",
+      "word": "作業",
+      "reading": "さぎょう",
+      "pos": "动词・自动词",
+      "meaning": "工作；操作；任务",
+      "frequencyRank": 170,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 67,
+      "id": "vx-n3-d0fx25",
+      "word": "作品",
+      "reading": "さくひん",
+      "pos": "名词",
+      "meaning": "作品；著作；创作",
+      "frequencyRank": 171,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 68,
+      "id": "vx-n3-zpgvry",
+      "word": "参加",
+      "reading": "さんか",
+      "pos": "动词・自动词",
+      "meaning": "参加",
+      "frequencyRank": 177,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 69,
+      "id": "vx-n3-1x59qu8",
+      "word": "姿",
+      "reading": "すがた",
+      "pos": "名词",
+      "meaning": "身形；体形；姿态；外观；衣着；装扮；状态；情况；景象；形象；和歌的格式；穿着……；穿戴……",
+      "frequencyRank": 181,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 70,
+      "id": "vx-n3-1yc359i",
+      "word": "市場",
+      "reading": "いちば",
+      "pos": "名词",
+      "meaning": "(城镇)市场；街市；集市",
+      "frequencyRank": 185,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 71,
+      "id": "vx-n3-k5qapq",
+      "word": "指導",
+      "reading": "しどう",
+      "pos": "动词・他动词",
+      "meaning": "指导",
+      "frequencyRank": 189,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 72,
+      "id": "vx-n3-1vhop7g",
+      "word": "事件",
+      "reading": "じけん",
+      "pos": "名词",
+      "meaning": "事件",
+      "frequencyRank": 198,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 73,
+      "id": "vx-n3-1n5g3hv",
+      "word": "事実",
+      "reading": "じじつ",
+      "pos": "名词",
+      "meaning": "事实",
+      "frequencyRank": 200,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 74,
+      "id": "vx-n3-1o5w8nu",
+      "word": "事情",
+      "reading": "じじょう",
+      "pos": "名词",
+      "meaning": "情况；缘由",
+      "frequencyRank": 201,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 75,
+      "id": "vx-n3-1epcwqz",
+      "word": "事務",
+      "reading": "じむ",
+      "pos": "名词",
+      "meaning": "办公工作；文书工作；行政；业务；事务",
+      "frequencyRank": 202,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 76,
+      "id": "vx-n3-1iuowyp",
+      "word": "時期",
+      "reading": "じき",
+      "pos": "名词",
+      "meaning": "时期；季节；时段；阶段",
+      "frequencyRank": 206,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 77,
+      "id": "vx-n3-hk1s24",
+      "word": "自身",
+      "reading": "じしん",
+      "pos": "名词",
+      "meaning": "自己；自身；你自己；他自己；她自己",
+      "frequencyRank": 210,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 78,
+      "id": "vx-n3-1mq2f0p",
+      "word": "自然",
+      "reading": "しぜん",
+      "pos": "名词",
+      "meaning": "自然",
+      "frequencyRank": 211,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 79,
+      "id": "vx-n3-cbd3uz",
+      "word": "実施",
+      "reading": "じっし",
+      "pos": "动词・他动词",
+      "meaning": "实施",
+      "frequencyRank": 219,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 80,
+      "id": "vx-n3-1ppbfhj",
+      "word": "首相",
+      "reading": "しゅしょう",
+      "pos": "名词",
+      "meaning": "首相；总理；（德国、奥地利等国的）总理",
+      "frequencyRank": 226,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 81,
+      "id": "vx-n3-1trdvkn",
+      "word": "州",
+      "reading": "しゅう",
+      "pos": "名词",
+      "meaning": "州（美国、澳大利亚、印度、德国等的）；省（如加拿大）；郡（如英国）；地区（如意大利）；（瑞士的）州；大陆；洲；（日本古代的）州；（中国古代的）州；府；亲（表亲昵的后缀）",
+      "frequencyRank": 229,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 82,
+      "id": "vx-n3-1nwbop0",
+      "word": "住宅",
+      "reading": "じゅうたく",
+      "pos": "名词",
+      "meaning": "住宅；住房；居住建筑",
+      "frequencyRank": 232,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 83,
+      "id": "vx-n3-1qxdbl0",
+      "word": "住民",
+      "reading": "じゅうみん",
+      "pos": "名词",
+      "meaning": "居民；住户；市民；人口",
+      "frequencyRank": 233,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 84,
+      "id": "v-n3-026",
+      "word": "重要",
+      "reading": "じゅうよう",
+      "pos": "な形容词",
+      "meaning": "重要",
+      "frequencyRank": 244,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 85,
+      "id": "vx-n3-1ojwbe5",
+      "word": "出身",
+      "reading": "しゅっしん",
+      "pos": "名词",
+      "meaning": "出身；籍贯；身世",
+      "frequencyRank": 245,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 86,
+      "id": "vx-n3-ekvzqs",
+      "word": "女子",
+      "reading": "じょし",
+      "pos": "名词",
+      "meaning": "女子；女性",
+      "frequencyRank": 249,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 87,
+      "id": "vx-n3-1mf74mv",
+      "word": "商品",
+      "reading": "しょうひん",
+      "pos": "名词",
+      "meaning": "商品；货物；商品物资；库存品；商业物品",
+      "frequencyRank": 251,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 88,
+      "id": "vx-n3-8ldfwr",
+      "word": "情報",
+      "reading": "じょうほう",
+      "pos": "名词",
+      "meaning": "信息；情报",
+      "frequencyRank": 257,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 89,
+      "id": "v-n3-008",
+      "word": "条件",
+      "reading": "じょうけん",
+      "pos": "名词",
+      "meaning": "条件",
+      "frequencyRank": 258,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 90,
+      "id": "v-n3-001",
+      "word": "状況",
+      "reading": "じょうきょう",
+      "pos": "名词",
+      "meaning": "状况",
+      "frequencyRank": 260,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 91,
+      "id": "vx-n3-1sjkmuc",
+      "word": "状態",
+      "reading": "じょうたい",
+      "pos": "名词",
+      "meaning": "状态",
+      "frequencyRank": 261,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 92,
+      "id": "vx-n3-n5kr92",
+      "word": "新た",
+      "reading": "あらた",
+      "pos": "い形容词",
+      "meaning": "新的；崭新的；新颖的",
+      "frequencyRank": 264,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 93,
+      "id": "vx-n3-1u7bxhf",
+      "word": "人間",
+      "reading": "にんげん",
+      "pos": "名词",
+      "meaning": "人；人类；人间；人品；品格；性格",
+      "frequencyRank": 267,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 94,
+      "id": "vx-n3-1kf4llj",
+      "word": "人気",
+      "reading": "にんき",
+      "pos": "の形容词",
+      "meaning": "人气；受欢迎程度；人望；（市场等的）行情；动向；状况；气氛",
+      "frequencyRank": 268,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 95,
+      "id": "v-n3-005",
+      "word": "制度",
+      "reading": "せいど",
+      "pos": "名词",
+      "meaning": "制度",
+      "frequencyRank": 273,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 96,
+      "id": "vx-n3-szrvwr",
+      "word": "成長",
+      "reading": "せいちょう",
+      "pos": "动词・自动词",
+      "meaning": "成长",
+      "frequencyRank": 275,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 97,
+      "id": "vx-n3-4o5hhk",
+      "word": "政府",
+      "reading": "せいふ",
+      "pos": "名词",
+      "meaning": "政府；行政；内阁",
+      "frequencyRank": 282,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 98,
+      "id": "vx-n3-gwbcl7",
+      "word": "積極的",
+      "reading": "せっきょくてき",
+      "pos": "い形容词",
+      "meaning": "积极的；主动的；进取的；能动的；有为的",
+      "frequencyRank": 286,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 99,
+      "id": "vx-n3-yp01dm",
+      "word": "責任",
+      "reading": "せきにん",
+      "pos": "名词",
+      "meaning": "责任",
+      "frequencyRank": 287,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 100,
+      "id": "vx-n3-1kjjh8u",
+      "word": "選手",
+      "reading": "せんしゅ",
+      "pos": "名词",
+      "meaning": "运动员；选手；队员",
+      "frequencyRank": 292,
+      "hasReviewedExample": false
+    }
+  ],
+  "N2": [
+    {
+      "order": 1,
+      "id": "vx-n2-v70bmv",
+      "word": "改正",
+      "reading": "かいせい",
+      "pos": "动词・他动词",
+      "meaning": "修改；修正（法规）",
+      "frequencyRank": 44,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 2,
+      "id": "vx-n2-1ceo06j",
+      "word": "強化",
+      "reading": "きょうか",
+      "pos": "动词・他动词",
+      "meaning": "强化；加强；增强；巩固；强化；加强",
+      "frequencyRank": 94,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 3,
+      "id": "vx-n2-sd4e5k",
+      "word": "交流",
+      "reading": "こうりゅう",
+      "pos": "动词・自动词",
+      "meaning": "交流；往来；互动；融合；汇聚；交流电；交变电流；AC",
+      "frequencyRank": 138,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 4,
+      "id": "vx-n2-rd6187",
+      "word": "構造",
+      "reading": "こうぞう",
+      "pos": "名词",
+      "meaning": "结构；构造；组成；框架；体系；样式",
+      "frequencyRank": 143,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 5,
+      "id": "vx-n2-1kttqn2",
+      "word": "姿勢",
+      "reading": "しせい",
+      "pos": "名词",
+      "meaning": "姿态；姿势；身体位置；体态；态度；立场；方式",
+      "frequencyRank": 182,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 6,
+      "id": "vx-n2-10chg7o",
+      "word": "周辺",
+      "reading": "しゅうへん",
+      "pos": "名词",
+      "meaning": "周围；郊外；周边；附近；近郊；（计算机）外围设备",
+      "frequencyRank": 228,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 7,
+      "id": "vx-n2-ufnut9",
+      "word": "政党",
+      "reading": "せいとう",
+      "pos": "名词",
+      "meaning": "政党",
+      "frequencyRank": 281,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 8,
+      "id": "vx-n2-lqx1s8",
+      "word": "体制",
+      "reading": "たいせい",
+      "pos": "名词",
+      "meaning": "体制；制度；组织；结构；体系",
+      "frequencyRank": 306,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 9,
+      "id": "v-n2-003",
+      "word": "対策",
+      "reading": "たいさく",
+      "pos": "名词",
+      "meaning": "对策",
+      "frequencyRank": 308,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 10,
+      "id": "vx-n2-1b6na0s",
+      "word": "段階",
+      "reading": "だんかい",
+      "pos": "名词",
+      "meaning": "阶段；步骤；时期；等级；等次；品级；分级；顺序；台阶；楼梯",
+      "frequencyRank": 320,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 11,
+      "id": "vx-n2-2fjj6r",
+      "word": "調整",
+      "reading": "ちょうせい",
+      "pos": "动词・他动词",
+      "meaning": "调整",
+      "frequencyRank": 335,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 12,
+      "id": "vx-n2-68ttdi",
+      "word": "長男",
+      "reading": "ちょうなん",
+      "pos": "名词",
+      "meaning": "长男；长子；嫡长子",
+      "frequencyRank": 337,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 13,
+      "id": "vx-n2-1d0kga6",
+      "word": "統一",
+      "reading": "とういつ",
+      "pos": "动词・他动词",
+      "meaning": "统一；合并；一致；统一化；兼容",
+      "frequencyRank": 353,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 14,
+      "id": "v-n2-004",
+      "word": "方針",
+      "reading": "ほうしん",
+      "pos": "名词",
+      "meaning": "方针",
+      "frequencyRank": 402,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 15,
+      "id": "vx-n2-1vqfvxp",
+      "word": "本部",
+      "reading": "ほんぶ",
+      "pos": "名词",
+      "meaning": "总部；总公司；主办公室",
+      "frequencyRank": 413,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 16,
+      "id": "vx-n2-eaq707",
+      "word": "民間",
+      "reading": "みんかん",
+      "pos": "の形容词",
+      "meaning": "私人的；非政府的；非官方的；民间的；民用的；民间的；民俗的；通俗的",
+      "frequencyRank": 416,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 17,
+      "id": "vx-n2-12whjeh",
+      "word": "連合",
+      "reading": "れんごう",
+      "pos": "动词・他动词・自动词",
+      "meaning": "联合；结合；同盟；联邦；联合体；协会；组织；日本劳动组合总连合会（日本工会组织）",
+      "frequencyRank": 442,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 18,
+      "id": "v-n2-005",
+      "word": "基準",
+      "reading": "きじゅん",
+      "pos": "名词",
+      "meaning": "标准",
+      "frequencyRank": 471,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 19,
+      "id": "vx-n2-f80etk",
+      "word": "問い合わせ",
+      "reading": "といあわせ",
+      "pos": "名词",
+      "meaning": "询问；咨询；查询",
+      "frequencyRank": 480,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 20,
+      "id": "vx-n2-atenlr",
+      "word": "延長",
+      "reading": "えんちょう",
+      "pos": "动词・他动词・自动词",
+      "meaning": "延长；拉长；延伸；延长；（总）长度；延续；继续；延伸（如工作的延伸）；线段的延长线；广延性；占据空间的属性；延长年间（923年4月11日—931年4月26日）；延长赛；加时赛；延长局",
+      "frequencyRank": 519,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 21,
+      "id": "vx-n2-4ql2am",
+      "word": "解散",
+      "reading": "かいさん",
+      "pos": "动词・他动词・自动词",
+      "meaning": "散会；解散（会议、集会等）；解散；清算；遣散；分裂（公司、组织等）；解散（议会、国会等）",
+      "frequencyRank": 528,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 22,
+      "id": "vx-n2-1xgn1aw",
+      "word": "回答",
+      "reading": "かいとう",
+      "pos": "动词・他动词・自动词",
+      "meaning": "回答；答复",
+      "frequencyRank": 529,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 23,
+      "id": "vx-n2-xpaki",
+      "word": "開放",
+      "reading": "かいほう",
+      "pos": "动词・他动词",
+      "meaning": "打开；敞开；开放；向公众开放；允许公众使用",
+      "frequencyRank": 535,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 24,
+      "id": "vx-n2-35rhc2",
+      "word": "学部",
+      "reading": "がくぶ",
+      "pos": "名词",
+      "meaning": "（大学的）学部；学院；系",
+      "frequencyRank": 543,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 25,
+      "id": "vx-n2-32pbvw",
+      "word": "観測",
+      "reading": "かんそく",
+      "pos": "动词・他动词",
+      "meaning": "观测；观察；测量；见解；预测；推断",
+      "frequencyRank": 554,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 26,
+      "id": "vx-n2-18knjld",
+      "word": "関西",
+      "reading": "かんさい",
+      "pos": "名词",
+      "meaning": "关西（日本近畿地区，包括京都、大阪、神户及周边府县）；关西（封建时代日本西半部）",
+      "frequencyRank": 556,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 27,
+      "id": "vx-n2-1athf1",
+      "word": "基礎",
+      "reading": "きそ",
+      "pos": "の形容词",
+      "meaning": "基础；根基；基底",
+      "frequencyRank": 561,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 28,
+      "id": "vx-n2-65xisb",
+      "word": "基地",
+      "reading": "きち",
+      "pos": "名词",
+      "meaning": "基地；军事基地；根据地；迷；狂热爱好者；狂热者；痴",
+      "frequencyRank": 562,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 29,
+      "id": "vx-n2-1muwmxz",
+      "word": "公共",
+      "reading": "こうきょう",
+      "pos": "の形容词",
+      "meaning": "公共的；公用的",
+      "frequencyRank": 615,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 30,
+      "id": "vx-n2-nwntrp",
+      "word": "公式",
+      "reading": "こうしき",
+      "pos": "の形容词",
+      "meaning": "官方；正式；公式；数学式；官方账号；官方账户",
+      "frequencyRank": 616,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 31,
+      "id": "vx-n2-17081ji",
+      "word": "工事",
+      "reading": "こうじ",
+      "pos": "动词・他动词・自动词",
+      "meaning": "工程；施工；建筑工程",
+      "frequencyRank": 620,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 32,
+      "id": "vx-n2-6n6p7n",
+      "word": "国籍",
+      "reading": "こくせき",
+      "pos": "名词",
+      "meaning": "国籍；国民身份；（船舶、飞机等的）国籍；登记国；船旗国",
+      "frequencyRank": 634,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 33,
+      "id": "vx-n2-1m8l9wr",
+      "word": "国立",
+      "reading": "こくりつ",
+      "pos": "の形容词",
+      "meaning": "国立；由中央政府创办并运营的",
+      "frequencyRank": 636,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 34,
+      "id": "vx-n2-lh939j",
+      "word": "資料",
+      "reading": "しりょう",
+      "pos": "名词",
+      "meaning": "材料；资料；数据；信息；文献",
+      "frequencyRank": 660,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 35,
+      "id": "vx-n2-4az4b5",
+      "word": "自治",
+      "reading": "じち",
+      "pos": "名词",
+      "meaning": "自治；自主管理；地方自治",
+      "frequencyRank": 666,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 36,
+      "id": "vx-n2-1ryc2ex",
+      "word": "実績",
+      "reading": "じっせき",
+      "pos": "名词",
+      "meaning": "实际成绩；业绩",
+      "frequencyRank": 673,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 37,
+      "id": "vx-n2-fnmwyf",
+      "word": "実力",
+      "reading": "じつりょく",
+      "pos": "名词",
+      "meaning": "实力；真实能力；本领；效率；胜任力；武力；兵力",
+      "frequencyRank": 675,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 38,
+      "id": "vx-n2-5rhylm",
+      "word": "受験",
+      "reading": "じゅけん",
+      "pos": "动词・他动词",
+      "meaning": "参加考试；应试（尤指升学考试）",
+      "frequencyRank": 687,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 39,
+      "id": "vx-n2-krefoh",
+      "word": "就任",
+      "reading": "しゅうにん",
+      "pos": "动词・自动词",
+      "meaning": "就任；上任；就职；赴任",
+      "frequencyRank": 692,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 40,
+      "id": "vx-n2-1r6xlo8",
+      "word": "集会",
+      "reading": "しゅうかい",
+      "pos": "动词・自动词",
+      "meaning": "集会；集合；聚集；大会；集结",
+      "frequencyRank": 694,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 41,
+      "id": "vx-n2-xfj46b",
+      "word": "焦点",
+      "reading": "しょうてん",
+      "pos": "名词",
+      "meaning": "焦点；焦点处；焦点；中心；争议点；焦点",
+      "frequencyRank": 709,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 42,
+      "id": "vx-n2-ze1avp",
+      "word": "成立",
+      "reading": "せいりつ",
+      "pos": "动词・自动词",
+      "meaning": "成立",
+      "frequencyRank": 735,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 43,
+      "id": "vx-n2-1ql5aki",
+      "word": "整備",
+      "reading": "せいび",
+      "pos": "动词・他动词",
+      "meaning": "维修；保养；维护；整备；建设；改善；准备；配备；装备",
+      "frequencyRank": 736,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 44,
+      "id": "vx-n2-1srqeve",
+      "word": "狙い",
+      "reading": "ねらい",
+      "pos": "名词",
+      "meaning": "（枪、弓等的）瞄准；准星；目的；目标；意图；企图",
+      "frequencyRank": 767,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 45,
+      "id": "vx-n2-18mv2xb",
+      "word": "対立",
+      "reading": "たいりつ",
+      "pos": "动词・自动词",
+      "meaning": "对立",
+      "frequencyRank": 785,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 46,
+      "id": "vx-n2-1jxing3",
+      "word": "中間",
+      "reading": "ちゅうかん",
+      "pos": "名词",
+      "meaning": "中间；中途；中点；中心；中间立场；温和立场；中立立场；中间路线立场；临时；过渡；中间；中期",
+      "frequencyRank": 800,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 47,
+      "id": "vx-n2-1n16wqk",
+      "word": "直後",
+      "reading": "ちょくご",
+      "pos": "名词",
+      "meaning": "之后不久；紧接着",
+      "frequencyRank": 807,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 48,
+      "id": "vx-n2-16j0jy2",
+      "word": "直前",
+      "reading": "ちょくぜん",
+      "pos": "名词",
+      "meaning": "刚好之前；恰好之前；正前方；正好在前面",
+      "frequencyRank": 809,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 49,
+      "id": "vx-n2-gv2rv8",
+      "word": "通貨",
+      "reading": "つうか",
+      "pos": "名词",
+      "meaning": "货币",
+      "frequencyRank": 810,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 50,
+      "id": "vx-n2-iotarw",
+      "word": "停止",
+      "reading": "ていし",
+      "pos": "动词・他动词・自动词",
+      "meaning": "停止；停顿；中止；静止；停工；暂停；中断；切断；暂停；禁止；禁令；停演；停舞（作为哀悼重要人物的标志）",
+      "frequencyRank": 812,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 51,
+      "id": "vx-n2-45jigb",
+      "word": "展開",
+      "reading": "てんかい",
+      "pos": "动词・他动词・自动词",
+      "meaning": "展开；发展",
+      "frequencyRank": 817,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 52,
+      "id": "vx-n2-3j57cb",
+      "word": "南北",
+      "reading": "なんぼく",
+      "pos": "名词",
+      "meaning": "南北；南方与北方；朝鲜半岛南北；韩国与朝鲜",
+      "frequencyRank": 842,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 53,
+      "id": "vx-n2-1d39cwj",
+      "word": "日程",
+      "reading": "にってい",
+      "pos": "名词",
+      "meaning": "日程；议程；计划",
+      "frequencyRank": 845,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 54,
+      "id": "vx-n2-95x2v2",
+      "word": "防止",
+      "reading": "ぼうし",
+      "pos": "动词・他动词",
+      "meaning": "预防；遏制",
+      "frequencyRank": 905,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 55,
+      "id": "vx-n2-1e9rfj7",
+      "word": "輸送",
+      "reading": "ゆそう",
+      "pos": "动词・他动词",
+      "meaning": "运输；运送；中转；运输方式",
+      "frequencyRank": 922,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 56,
+      "id": "vx-n2-14ktflq",
+      "word": "臨時",
+      "reading": "りんじ",
+      "pos": "の形容词",
+      "meaning": "临时",
+      "frequencyRank": 942,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 57,
+      "id": "vx-n2-kab8nk",
+      "word": "天皇",
+      "reading": "てんのう",
+      "pos": "名词",
+      "meaning": "日本皇帝；日本天皇",
+      "frequencyRank": 959,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 58,
+      "id": "vx-n2-fcx748",
+      "word": "会館",
+      "reading": "かいかん",
+      "pos": "名词",
+      "meaning": "会馆；集会厅",
+      "frequencyRank": 970,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 59,
+      "id": "vx-n2-1i6mrjy",
+      "word": "少なくとも",
+      "reading": "すくなくとも",
+      "pos": "副词",
+      "meaning": "至少；最少",
+      "frequencyRank": 971,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 60,
+      "id": "vx-n2-1h073gy",
+      "word": "相互",
+      "reading": "そうご",
+      "pos": "の形容词",
+      "meaning": "相互的；互相的；互惠的",
+      "frequencyRank": 972,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 61,
+      "id": "vx-n2-xje4gh",
+      "word": "手続き",
+      "reading": "てつづき",
+      "pos": "名词",
+      "meaning": "手续；程序；办理过程；手续办理",
+      "frequencyRank": 974,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 62,
+      "id": "vx-n2-36zl0i",
+      "word": "編集",
+      "reading": "へんしゅう",
+      "pos": "动词・他动词",
+      "meaning": "编辑；编纂",
+      "frequencyRank": 978,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 63,
+      "id": "vx-n2-t4kppx",
+      "word": "為替",
+      "reading": "かわせ",
+      "pos": "名词",
+      "meaning": "汇票；汇款单；外汇；汇兑",
+      "frequencyRank": 997,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 64,
+      "id": "vx-n2-we5tbu",
+      "word": "一定",
+      "reading": "いってい",
+      "pos": "动词・他动词・自动词",
+      "meaning": "一定；固定",
+      "frequencyRank": 1004,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 65,
+      "id": "vx-n2-xp9hdy",
+      "word": "応援",
+      "reading": "おうえん",
+      "pos": "动词・他动词",
+      "meaning": "援助；协助；帮助；支援；增援；欢呼助威；加油；声援；支持",
+      "frequencyRank": 1015,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 66,
+      "id": "vx-n2-mzgesw",
+      "word": "下車",
+      "reading": "げしゃ",
+      "pos": "动词・自动词",
+      "meaning": "下车；下车；下（车）",
+      "frequencyRank": 1019,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 67,
+      "id": "vx-n2-6kihm0",
+      "word": "課税",
+      "reading": "かぜい",
+      "pos": "动词・自动词",
+      "meaning": "课税",
+      "frequencyRank": 1025,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 68,
+      "id": "vx-n2-rtoo0h",
+      "word": "過程",
+      "reading": "かてい",
+      "pos": "名词",
+      "meaning": "过程",
+      "frequencyRank": 1026,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 69,
+      "id": "vx-n2-1wcixlm",
+      "word": "解放",
+      "reading": "かいほう",
+      "pos": "动词・他动词",
+      "meaning": "释放；解放；解除束缚；使自由；（计算机内存的）释放；解除分配",
+      "frequencyRank": 1029,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 70,
+      "id": "vx-n2-1uv0php",
+      "word": "基盤",
+      "reading": "きばん",
+      "pos": "名词",
+      "meaning": "基础；根基；基石；地基；基础设施；基岩；岩床；平台",
+      "frequencyRank": 1046,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 71,
+      "id": "vx-n2-190y4iu",
+      "word": "期限",
+      "reading": "きげん",
+      "pos": "名词",
+      "meaning": "期限；期间；时间范围；期限；截止期限；截止日期",
+      "frequencyRank": 1048,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 72,
+      "id": "vx-n2-1820jo0",
+      "word": "継続",
+      "reading": "けいぞく",
+      "pos": "动词・他动词・自动词",
+      "meaning": "继续；持续",
+      "frequencyRank": 1085,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 73,
+      "id": "vx-n2-1fr1jlh",
+      "word": "研修",
+      "reading": "けんしゅう",
+      "pos": "动词・他动词",
+      "meaning": "培训；在职培训；岗位培训",
+      "frequencyRank": 1097,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 74,
+      "id": "vx-n2-je95u5",
+      "word": "講師",
+      "reading": "こうし",
+      "pos": "名词",
+      "meaning": "演讲者；讲演人；大学讲师；讲师；兼职教师；补习班讲师；辅导教师",
+      "frequencyRank": 1121,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 75,
+      "id": "vx-n2-wkzjs2",
+      "word": "合同",
+      "reading": "ごうどう",
+      "pos": "动词・他动词・自动词",
+      "meaning": "联合；结合；合并；并入；融合；联合的；共同的；统一的；共享的；全等；一致",
+      "frequencyRank": 1126,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 76,
+      "id": "vx-n2-1iznrcd",
+      "word": "撮影",
+      "reading": "さつえい",
+      "pos": "动词・他动词",
+      "meaning": "摄影；拍摄；摄制；录像",
+      "frequencyRank": 1148,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 77,
+      "id": "vx-n2-1pchceb",
+      "word": "指定",
+      "reading": "してい",
+      "pos": "动词・他动词",
+      "meaning": "指定；规定；指派；任命；指向",
+      "frequencyRank": 1161,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 78,
+      "id": "vx-n2-47ulkh",
+      "word": "氏名",
+      "reading": "しめい",
+      "pos": "名词",
+      "meaning": "姓名；身份",
+      "frequencyRank": 1166,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 79,
+      "id": "vx-n2-160l8dy",
+      "word": "私立",
+      "reading": "しりつ",
+      "pos": "の形容词",
+      "meaning": "私立的",
+      "frequencyRank": 1167,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 80,
+      "id": "vx-n2-t4gof5",
+      "word": "児童",
+      "reading": "じどう",
+      "pos": "名词",
+      "meaning": "儿童；少年",
+      "frequencyRank": 1174,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 81,
+      "id": "vx-n2-hjm8t6",
+      "word": "勝負",
+      "reading": "しょうぶ",
+      "pos": "名词",
+      "meaning": "胜负；胜败；比赛；竞赛；对决；较量",
+      "frequencyRank": 1212,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 82,
+      "id": "vx-n2-1jmanp2",
+      "word": "新幹線",
+      "reading": "しんかんせん",
+      "pos": "名词",
+      "meaning": "新干线；子弹头列车",
+      "frequencyRank": 1230,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 83,
+      "id": "vx-n2-1qhcode",
+      "word": "深夜",
+      "reading": "しんや",
+      "pos": "名词",
+      "meaning": "深夜；午夜",
+      "frequencyRank": 1231,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 84,
+      "id": "vx-n2-izb4pg",
+      "word": "申請",
+      "reading": "しんせい",
+      "pos": "动词・他动词",
+      "meaning": "申请",
+      "frequencyRank": 1232,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 85,
+      "id": "vx-n2-50vglq",
+      "word": "制作",
+      "reading": "せいさく",
+      "pos": "动词・他动词",
+      "meaning": "（电影、书籍等的）作品；制作；创作；生产；开发",
+      "frequencyRank": 1239,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 86,
+      "id": "vx-n2-1t53pms",
+      "word": "相撲",
+      "reading": "すもう",
+      "pos": "名词",
+      "meaning": "相扑；相扑选手；力士",
+      "frequencyRank": 1269,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 87,
+      "id": "vx-n2-1g92aa9",
+      "word": "追加",
+      "reading": "ついか",
+      "pos": "动词・他动词",
+      "meaning": "添加；补充；附加；附录",
+      "frequencyRank": 1309,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 88,
+      "id": "vx-n2-jiv86p",
+      "word": "低下",
+      "reading": "ていか",
+      "pos": "动词・自动词",
+      "meaning": "下降；衰退；降低；恶化；退化",
+      "frequencyRank": 1311,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 89,
+      "id": "vx-n2-ikgss9",
+      "word": "電力",
+      "reading": "でんりょく",
+      "pos": "名词",
+      "meaning": "电力；电能",
+      "frequencyRank": 1320,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 90,
+      "id": "vx-n2-15n7cr3",
+      "word": "東西",
+      "reading": "とうざい",
+      "pos": "の形容词",
+      "meaning": "东西方；东方与西方；东方与西方；东洋与西洋；诸位！；各位请看！",
+      "frequencyRank": 1327,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 91,
+      "id": "vx-n2-o8qgp1",
+      "word": "特定",
+      "reading": "とくてい",
+      "pos": "の形容词",
+      "meaning": "特定的；指定的；专门的；特定；指定；识别；确定",
+      "frequencyRank": 1336,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 92,
+      "id": "vx-n2-rnru8w",
+      "word": "年度",
+      "reading": "ねんど",
+      "pos": "名词",
+      "meaning": "财政年度；会计年度；学年；教学年度；产品年份",
+      "frequencyRank": 1344,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 93,
+      "id": "vx-n2-x42ilu",
+      "word": "売買",
+      "reading": "ばいばい",
+      "pos": "动词・他动词",
+      "meaning": "买卖；贸易；交易（如人口贩运、军火走私、毒品贩运等）",
+      "frequencyRank": 1354,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 94,
+      "id": "vx-n2-dqqrt",
+      "word": "迫る",
+      "reading": "せまる",
+      "pos": "五段动词・自动词",
+      "meaning": "逼近；临近；迫在眼前；催促；强迫；逼迫",
+      "frequencyRank": 1357,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 95,
+      "id": "vx-n2-l9vcco",
+      "word": "発売",
+      "reading": "はつばい",
+      "pos": "动词・他动词",
+      "meaning": "销售；上市；发售；推出",
+      "frequencyRank": 1359,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 96,
+      "id": "vx-n2-6s5gh9",
+      "word": "付近",
+      "reading": "ふきん",
+      "pos": "名词",
+      "meaning": "附近；邻近；周围；区域",
+      "frequencyRank": 1375,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 97,
+      "id": "vx-n2-rhwl5m",
+      "word": "普及",
+      "reading": "ふきゅう",
+      "pos": "动词・他动词・自动词",
+      "meaning": "普及；传播；推广；宣传；推广应用",
+      "frequencyRank": 1376,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 98,
+      "id": "vx-n2-wjmdqn",
+      "word": "部品",
+      "reading": "ぶひん",
+      "pos": "名词",
+      "meaning": "零件；配件；部件",
+      "frequencyRank": 1378,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 99,
+      "id": "vx-n2-1gy061h",
+      "word": "複数",
+      "reading": "ふくすう",
+      "pos": "の形容词",
+      "meaning": "复数；多个；复数（语法数）",
+      "frequencyRank": 1380,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 100,
+      "id": "vx-n2-13mp3wp",
+      "word": "本来",
+      "reading": "ほんらい",
+      "pos": "の形容词",
+      "meaning": "本来；原本",
+      "frequencyRank": 1404,
+      "hasReviewedExample": false
+    }
+  ],
+  "N1": [
+    {
+      "order": 1,
+      "id": "vx-n1-1qhbi8i",
+      "word": "一部",
+      "reading": "いちぶ",
+      "pos": "名词",
+      "meaning": "一部分；一个部分；一段；一册（书）；一套（丛书）",
+      "frequencyRank": 16,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 2,
+      "id": "vx-n1-1i8atga",
+      "word": "課題",
+      "reading": "かだい",
+      "pos": "名词",
+      "meaning": "课题；主题；问题；事项；作业；练习；难题；课题；挑战；问题；路线；攀岩路线",
+      "frequencyRank": 33,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 3,
+      "id": "vx-n1-ct2dbl",
+      "word": "会見",
+      "reading": "かいけん",
+      "pos": "动词・自动词",
+      "meaning": "会见；会面；接见；观影会",
+      "frequencyRank": 37,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 4,
+      "id": "vx-n1-o78ttw",
+      "word": "会談",
+      "reading": "かいだん",
+      "pos": "动词・自动词",
+      "meaning": "会谈；会议；正式讨论",
+      "frequencyRank": 39,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 5,
+      "id": "vx-n1-m40oj8",
+      "word": "改革",
+      "reading": "かいかく",
+      "pos": "动词・他动词",
+      "meaning": "改革；变革；重组",
+      "frequencyRank": 43,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 6,
+      "id": "vx-n1-11hwmd8",
+      "word": "開発",
+      "reading": "かいはつ",
+      "pos": "动词・他动词",
+      "meaning": "开发；开拓；应用；（资源的）开采；开发",
+      "frequencyRank": 46,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 7,
+      "id": "vx-n1-fqx7or",
+      "word": "外相",
+      "reading": "がいしょう",
+      "pos": "名词",
+      "meaning": "外交部长；外相",
+      "frequencyRank": 50,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 8,
+      "id": "vx-n1-1399ycn",
+      "word": "株式",
+      "reading": "かぶしき",
+      "pos": "名词",
+      "meaning": "股份；股票",
+      "frequencyRank": 57,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 9,
+      "id": "vx-n1-10s4ggc",
+      "word": "幹部",
+      "reading": "かんぶ",
+      "pos": "名词",
+      "meaning": "管理层；领导层；干部；高层领导；上层领导",
+      "frequencyRank": 59,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 10,
+      "id": "vx-n1-qtb1nh",
+      "word": "危機",
+      "reading": "きき",
+      "pos": "名词",
+      "meaning": "危机",
+      "frequencyRank": 71,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 11,
+      "id": "vx-n1-t4h61p",
+      "word": "機構",
+      "reading": "きこう",
+      "pos": "名词",
+      "meaning": "机制；机械装置；系统；结构；组织；框架",
+      "frequencyRank": 76,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 12,
+      "id": "vx-n1-3jsiu0",
+      "word": "規制",
+      "reading": "きせい",
+      "pos": "动词・他动词",
+      "meaning": "规制；管制；控制；限制",
+      "frequencyRank": 79,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 13,
+      "id": "vx-n1-191e0m",
+      "word": "規模",
+      "reading": "きぼ",
+      "pos": "名词",
+      "meaning": "规模；范围；计划；结构",
+      "frequencyRank": 80,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 14,
+      "id": "vx-n1-1ybl22q",
+      "word": "協会",
+      "reading": "きょうかい",
+      "pos": "名词",
+      "meaning": "协会；社团；组织",
+      "frequencyRank": 91,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 15,
+      "id": "vx-n1-betdz3",
+      "word": "協議",
+      "reading": "きょうぎ",
+      "pos": "动词・他动词",
+      "meaning": "协商；会议；讨论；谈判",
+      "frequencyRank": 92,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 16,
+      "id": "vx-n1-fp1wq7",
+      "word": "協定",
+      "reading": "きょうてい",
+      "pos": "名词",
+      "meaning": "协定",
+      "frequencyRank": 93,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 17,
+      "id": "vx-n1-12i2iyu",
+      "word": "業者",
+      "reading": "ぎょうしゃ",
+      "pos": "名词",
+      "meaning": "商人；经销商；供应商；制造商；承包商；同行；同业者",
+      "frequencyRank": 98,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 18,
+      "id": "vx-n1-8gegei",
+      "word": "軍事",
+      "reading": "ぐんじ",
+      "pos": "名词",
+      "meaning": "军事",
+      "frequencyRank": 106,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 19,
+      "id": "vx-n1-kgqngy",
+      "word": "決議",
+      "reading": "けつぎ",
+      "pos": "动词・他动词",
+      "meaning": "决议；表决；决定",
+      "frequencyRank": 114,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 20,
+      "id": "vx-n1-9pee9q",
+      "word": "見方",
+      "reading": "みかた",
+      "pos": "名词",
+      "meaning": "观点；视角；看法；角度；欣赏方式（如歌剧等）；理解方式；读法（地图、时刻表等）",
+      "frequencyRank": 122,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 21,
+      "id": "vx-n1-1gdp8si",
+      "word": "原則",
+      "reading": "げんそく",
+      "pos": "名词",
+      "meaning": "原则",
+      "frequencyRank": 124,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 22,
+      "id": "vx-n1-mgqd0l",
+      "word": "現地",
+      "reading": "げんち",
+      "pos": "名词",
+      "meaning": "现场；现地；实地；当地；现住地；现居地",
+      "frequencyRank": 128,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 23,
+      "id": "vx-n1-b12myx",
+      "word": "交渉",
+      "reading": "こうしょう",
+      "pos": "动词・他动词・自动词",
+      "meaning": "谈判；协商；商议；讨论；联系；关系；往来",
+      "frequencyRank": 137,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 24,
+      "id": "vx-n1-1foltls",
+      "word": "行政",
+      "reading": "ぎょうせい",
+      "pos": "名词",
+      "meaning": "行政机构；政府；行政；施政；当局；权力机关",
+      "frequencyRank": 145,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 25,
+      "id": "vx-n1-14jmpfq",
+      "word": "合意",
+      "reading": "ごうい",
+      "pos": "动词・自动词",
+      "meaning": "同意；赞同；相互理解；协议；共识",
+      "frequencyRank": 148,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 26,
+      "id": "vx-n1-9vl2g0",
+      "word": "国連",
+      "reading": "こくれん",
+      "pos": "名词",
+      "meaning": "联合国；联合国（UN）",
+      "frequencyRank": 155,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 27,
+      "id": "vx-n1-1og36yu",
+      "word": "財政",
+      "reading": "ざいせい",
+      "pos": "名词",
+      "meaning": "公共财政；财务；财政状况",
+      "frequencyRank": 169,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 28,
+      "id": "vx-n1-uudqyh",
+      "word": "削減",
+      "reading": "さくげん",
+      "pos": "动词・他动词",
+      "meaning": "削减；缩减；裁减",
+      "frequencyRank": 172,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 29,
+      "id": "vx-n1-8ykbl4",
+      "word": "支持",
+      "reading": "しじ",
+      "pos": "动词・他动词",
+      "meaning": "支持；拥护；赞同；认可；支撑；撑起；托住",
+      "frequencyRank": 191,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 30,
+      "id": "vx-n1-1pblxld",
+      "word": "施設",
+      "reading": "しせつ",
+      "pos": "动词・他动词",
+      "meaning": "设施；机构；养老院；孤儿院等福利院所",
+      "frequencyRank": 192,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 31,
+      "id": "vx-n1-14cjry3",
+      "word": "死",
+      "reading": "し",
+      "pos": "名词",
+      "meaning": "死亡；（棒球等）出局；死刑（绞刑或斩首；律令五刑中最重之刑）",
+      "frequencyRank": 193,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 32,
+      "id": "vx-n1-cx8ld0",
+      "word": "資金",
+      "reading": "しきん",
+      "pos": "名词",
+      "meaning": "资金；资本",
+      "frequencyRank": 196,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 33,
+      "id": "vx-n1-gh9s7g",
+      "word": "事業",
+      "reading": "じぎょう",
+      "pos": "名词",
+      "meaning": "事业；业务",
+      "frequencyRank": 197,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 34,
+      "id": "vx-n1-1e9w3ju",
+      "word": "首脳",
+      "reading": "しゅのう",
+      "pos": "名词",
+      "meaning": "首脑；领导人；最高层；重要部分；要点",
+      "frequencyRank": 227,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 35,
+      "id": "vx-n1-13x6pmn",
+      "word": "従来",
+      "reading": "じゅうらい",
+      "pos": "副词",
+      "meaning": "以往；传统上",
+      "frequencyRank": 243,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 36,
+      "id": "vx-n1-1djiw0z",
+      "word": "初",
+      "reading": "はつ",
+      "pos": "の形容词",
+      "meaning": "初次；最初；新",
+      "frequencyRank": 247,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 37,
+      "id": "vx-n1-12jpwcw",
+      "word": "情勢",
+      "reading": "じょうせい",
+      "pos": "名词",
+      "meaning": "局面；情形；形势；状况；条件；环境",
+      "frequencyRank": 256,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 38,
+      "id": "vx-n1-1u22lk",
+      "word": "条約",
+      "reading": "じょうやく",
+      "pos": "名词",
+      "meaning": "条约；协议；协定；契约",
+      "frequencyRank": 259,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 39,
+      "id": "vx-n1-r9otkv",
+      "word": "職員",
+      "reading": "しょくいん",
+      "pos": "名词",
+      "meaning": "职员；员工；工作人员；人员",
+      "frequencyRank": 262,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 40,
+      "id": "vx-n1-mm8rg0",
+      "word": "審議",
+      "reading": "しんぎ",
+      "pos": "动词・他动词",
+      "meaning": "审议；讨论；考虑",
+      "frequencyRank": 263,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 41,
+      "id": "vx-n1-1orkud6",
+      "word": "推進",
+      "reading": "すいしん",
+      "pos": "动词・他动词",
+      "meaning": "推进；驱动；推行；促进；推进；推动",
+      "frequencyRank": 270,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 42,
+      "id": "vx-n1-159lpyf",
+      "word": "勢力",
+      "reading": "せいりょく",
+      "pos": "名词",
+      "meaning": "势力；影响力；权势；力量；能力；（围棋中棋子的）势力",
+      "frequencyRank": 274,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 43,
+      "id": "vx-n1-1jmvr48",
+      "word": "政権",
+      "reading": "せいけん",
+      "pos": "名词",
+      "meaning": "政权；执政权力",
+      "frequencyRank": 277,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 44,
+      "id": "vx-n1-14j9g2j",
+      "word": "政策",
+      "reading": "せいさく",
+      "pos": "名词",
+      "meaning": "政策；政治措施",
+      "frequencyRank": 278,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 45,
+      "id": "vx-n1-v1jvnb",
+      "word": "宣言",
+      "reading": "せんげん",
+      "pos": "动词・他动词",
+      "meaning": "宣言；声明",
+      "frequencyRank": 289,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 46,
+      "id": "vx-n1-dq29hw",
+      "word": "選挙",
+      "reading": "せんきょ",
+      "pos": "动词・他动词",
+      "meaning": "选举",
+      "frequencyRank": 291,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 47,
+      "id": "v-n1-005",
+      "word": "措置",
+      "reading": "そち",
+      "pos": "动词・他动词",
+      "meaning": "措施",
+      "frequencyRank": 296,
+      "hasReviewedExample": true
+    },
+    {
+      "order": 48,
+      "id": "vx-n1-160hwz6",
+      "word": "捜査",
+      "reading": "そうさ",
+      "pos": "动词・他动词",
+      "meaning": "搜查；侦查；调查",
+      "frequencyRank": 299,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 49,
+      "id": "vx-n1-1dodtts",
+      "word": "総会",
+      "reading": "そうかい",
+      "pos": "名词",
+      "meaning": "总会；大会",
+      "frequencyRank": 301,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 50,
+      "id": "vx-n1-2g9rgu",
+      "word": "対応",
+      "reading": "たいおう",
+      "pos": "动词・自动词",
+      "meaning": "对应；相当；对等；适配；协调；匹配；相适应；应对；处理；应付；反应；接待；兼容；支持；适配",
+      "frequencyRank": 307,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 51,
+      "id": "vx-n1-147cbkk",
+      "word": "大幅",
+      "reading": "おおはば",
+      "pos": "い形容词",
+      "meaning": "大幅；大规模；急剧；实质性的；全幅布料（传统和服用约72厘米宽；西式服装用约140厘米宽）",
+      "frequencyRank": 318,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 52,
+      "id": "vx-n1-7dh1h2",
+      "word": "地元",
+      "reading": "じもと",
+      "pos": "名词",
+      "meaning": "故乡；家乡；本地；当地的；本地的",
+      "frequencyRank": 328,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 53,
+      "id": "vx-n1-4mmcv2",
+      "word": "調べ",
+      "reading": "しらべ",
+      "pos": "名词",
+      "meaning": "调查；检查；审查；曲调；音调；旋律",
+      "frequencyRank": 333,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 54,
+      "id": "vx-n1-wkwspq",
+      "word": "長官",
+      "reading": "ちょうかん",
+      "pos": "名词",
+      "meaning": "（政府）秘书；局长；主任",
+      "frequencyRank": 336,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 55,
+      "id": "vx-n1-p0kc22",
+      "word": "投資",
+      "reading": "とうし",
+      "pos": "动词・他动词・自动词",
+      "meaning": "投资",
+      "frequencyRank": 345,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 56,
+      "id": "vx-n1-ug6f1q",
+      "word": "動き",
+      "reading": "うごき",
+      "pos": "名词",
+      "meaning": "动作；动静；移动；趋势；动向；变化；波动",
+      "frequencyRank": 354,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 57,
+      "id": "vx-n1-swxidb",
+      "word": "内閣",
+      "reading": "ないかく",
+      "pos": "名词",
+      "meaning": "内阁",
+      "frequencyRank": 361,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 58,
+      "id": "vx-n1-omquub",
+      "word": "派遣",
+      "reading": "はけん",
+      "pos": "动词・他动词",
+      "meaning": "派遣；派出；部署；临时员工；派遣员工；临时工",
+      "frequencyRank": 370,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 59,
+      "id": "vx-n1-no2ffe",
+      "word": "背景",
+      "reading": "はいけい",
+      "pos": "名词",
+      "meaning": "背景；场景；背景幕；舞台背景；背景；来龙去脉；环境；上下文；幕后支持；后台支持；背后势力",
+      "frequencyRank": 371,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 60,
+      "id": "vx-n1-19lt6wl",
+      "word": "発言",
+      "reading": "はつげん",
+      "pos": "动词・他动词・自动词",
+      "meaning": "发言；言论；意见；陈述；发表意见",
+      "frequencyRank": 373,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 61,
+      "id": "vx-n1-id8ola",
+      "word": "判決",
+      "reading": "はんけつ",
+      "pos": "动词・他动词",
+      "meaning": "司法裁决；判决；判决书；裁定",
+      "frequencyRank": 374,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 62,
+      "id": "vx-n1-yyjgfy",
+      "word": "不況",
+      "reading": "ふきょう",
+      "pos": "名词",
+      "meaning": "经济衰退；经济萧条；经济不景气",
+      "frequencyRank": 384,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 63,
+      "id": "vx-n1-1p6ghqw",
+      "word": "部門",
+      "reading": "ぶもん",
+      "pos": "の形容词",
+      "meaning": "部门；分部；分类；领域；类别；组别",
+      "frequencyRank": 390,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 64,
+      "id": "vx-n1-1ycahps",
+      "word": "保護",
+      "reading": "ほご",
+      "pos": "动词・他动词",
+      "meaning": "保护；保障；监护；照顾；赞助；保存；保留；维护",
+      "frequencyRank": 396,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 65,
+      "id": "vx-n1-1bfvht",
+      "word": "報道",
+      "reading": "ほうどう",
+      "pos": "动词・他动词",
+      "meaning": "报道；报导；新闻；信息；（媒体）报道",
+      "frequencyRank": 399,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 66,
+      "id": "vx-n1-1vpenvu",
+      "word": "法案",
+      "reading": "ほうあん",
+      "pos": "名词",
+      "meaning": "法案",
+      "frequencyRank": 404,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 67,
+      "id": "vx-n1-uloltg",
+      "word": "防衛",
+      "reading": "ぼうえい",
+      "pos": "动词・他动词",
+      "meaning": "防卫；防守；保护",
+      "frequencyRank": 407,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 68,
+      "id": "vx-n1-i46k4t",
+      "word": "民主",
+      "reading": "みんしゅ",
+      "pos": "名词",
+      "meaning": "民主；人民主权；日本民主党（1998-2016年）",
+      "frequencyRank": 417,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 69,
+      "id": "vx-n1-9w0rgj",
+      "word": "野党",
+      "reading": "やとう",
+      "pos": "名词",
+      "meaning": "反对党；在野党",
+      "frequencyRank": 424,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 70,
+      "id": "vx-n1-1dmgago",
+      "word": "融資",
+      "reading": "ゆうし",
+      "pos": "动词・他动词",
+      "meaning": "融资；贷款",
+      "frequencyRank": 429,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 71,
+      "id": "vx-n1-3ay3d3",
+      "word": "与党",
+      "reading": "よとう",
+      "pos": "名词",
+      "meaning": "执政党；政权党；在野党的对称",
+      "frequencyRank": 432,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 72,
+      "id": "vx-n1-1yluasi",
+      "word": "領土",
+      "reading": "りょうど",
+      "pos": "名词",
+      "meaning": "领土；领地；领域；领地",
+      "frequencyRank": 440,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 73,
+      "id": "vx-n1-suur5i",
+      "word": "連邦",
+      "reading": "れんぽう",
+      "pos": "名词",
+      "meaning": "联邦；邦联；联合体",
+      "frequencyRank": 444,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 74,
+      "id": "vx-n1-ige2m9",
+      "word": "論議",
+      "reading": "ろんぎ",
+      "pos": "动词・他动词",
+      "meaning": "讨论；议论；辩论",
+      "frequencyRank": 447,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 75,
+      "id": "vx-n1-1x9887c",
+      "word": "意向",
+      "reading": "いこう",
+      "pos": "名词",
+      "meaning": "意向；打算",
+      "frequencyRank": 468,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 76,
+      "id": "vx-n1-1x3cc00",
+      "word": "雄",
+      "reading": "おす",
+      "pos": "の形容词",
+      "meaning": "雄性；公（动物、植物）",
+      "frequencyRank": 470,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 77,
+      "id": "vx-n1-ynhpkv",
+      "word": "総合",
+      "reading": "そうごう",
+      "pos": "动词・他动词",
+      "meaning": "综合；结合；整合；汇总；总的；综合的；复合的；混合的；一体化的；综合性的；综合；总括",
+      "frequencyRank": 479,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 78,
+      "id": "vx-n1-8kzjd3",
+      "word": "取引",
+      "reading": "とりひき",
+      "pos": "动词・他动词",
+      "meaning": "交易；往来；生意",
+      "frequencyRank": 481,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 79,
+      "id": "vx-n1-1i44zxv",
+      "word": "見通し",
+      "reading": "みとおし",
+      "pos": "名词",
+      "meaning": "预测；前景；视野",
+      "frequencyRank": 483,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 80,
+      "id": "vx-n1-1xxj3he",
+      "word": "民族",
+      "reading": "みんぞく",
+      "pos": "名词",
+      "meaning": "民族；人民；种族；民族群体",
+      "frequencyRank": 484,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 81,
+      "id": "vx-n1-1g73cgr",
+      "word": "運営",
+      "reading": "うんえい",
+      "pos": "动词・他动词",
+      "meaning": "管理；经营；运营",
+      "frequencyRank": 512,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 82,
+      "id": "vx-n1-1lgp69k",
+      "word": "映像",
+      "reading": "えいぞう",
+      "pos": "名词",
+      "meaning": "屏幕上的图像；画面（如电视画面）；视频；影片；画面；倒影；映像；脑海中的图像；心象；意象",
+      "frequencyRank": 515,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 83,
+      "id": "vx-n1-olhs2o",
+      "word": "開催",
+      "reading": "かいさい",
+      "pos": "动词・他动词",
+      "meaning": "举办；举行；召开；主办",
+      "frequencyRank": 533,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 84,
+      "id": "vx-n1-19nqi3j",
+      "word": "核",
+      "reading": "かく",
+      "pos": "名词",
+      "meaning": "果核；果仁；核心；中枢；骨干；核武器；原子核；细胞核；凝结核；（行星的）核；（环状化合物的）环",
+      "frequencyRank": 537,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 85,
+      "id": "vx-n1-1ewppj7",
+      "word": "確保",
+      "reading": "かくほ",
+      "pos": "动词・他动词",
+      "meaning": "保证；确保；获得；维持；确保（攀岩用语）；保护攀登者",
+      "frequencyRank": 540,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 86,
+      "id": "vx-n1-tm9oli",
+      "word": "革命",
+      "reading": "かくめい",
+      "pos": "名词",
+      "meaning": "革命；六十干支第58年（阴阳道）",
+      "frequencyRank": 542,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 87,
+      "id": "vx-n1-1ruesu6",
+      "word": "官僚",
+      "reading": "かんりょう",
+      "pos": "名词",
+      "meaning": "官僚；政府官员；官僚制度",
+      "frequencyRank": 548,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 88,
+      "id": "vx-n1-1mdtcuf",
+      "word": "監視",
+      "reading": "かんし",
+      "pos": "动词・他动词",
+      "meaning": "监视",
+      "frequencyRank": 550,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 89,
+      "id": "vx-n1-19krjer",
+      "word": "緩和",
+      "reading": "かんわ",
+      "pos": "动词・他动词・自动词",
+      "meaning": "缓和",
+      "frequencyRank": 552,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 90,
+      "id": "vx-n1-1pv1h61",
+      "word": "関税",
+      "reading": "かんぜい",
+      "pos": "名词",
+      "meaning": "关税；进口税；关税税率",
+      "frequencyRank": 557,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 91,
+      "id": "vx-n1-rhasp4",
+      "word": "企画",
+      "reading": "きかく",
+      "pos": "动词・他动词",
+      "meaning": "策划；计划；企划；方案",
+      "frequencyRank": 558,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 92,
+      "id": "vx-n1-1jx5e1n",
+      "word": "基金",
+      "reading": "ききん",
+      "pos": "の形容词",
+      "meaning": "基金",
+      "frequencyRank": 560,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 93,
+      "id": "vx-n1-1e7d4v",
+      "word": "疑惑",
+      "reading": "ぎわく",
+      "pos": "の形容词",
+      "meaning": "怀疑；疑虑；不信任；猜疑",
+      "frequencyRank": 567,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 94,
+      "id": "vx-n1-1v0v9k2",
+      "word": "恐れ",
+      "reading": "おそれ",
+      "pos": "名词",
+      "meaning": "恐惧；惊恐；焦虑；担忧；不安；敬畏；风险；危险；可能性；忧虑；敬畏；崇敬",
+      "frequencyRank": 574,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 95,
+      "id": "vx-n1-ki46xs",
+      "word": "業務",
+      "reading": "ぎょうむ",
+      "pos": "名词",
+      "meaning": "业务；工作；操作；服务；职责",
+      "frequencyRank": 577,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 96,
+      "id": "vx-n1-klfitw",
+      "word": "緊急",
+      "reading": "きんきゅう",
+      "pos": "い形容词",
+      "meaning": "紧急；紧迫",
+      "frequencyRank": 580,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 97,
+      "id": "vx-n1-1i0dmoe",
+      "word": "決算",
+      "reading": "けっさん",
+      "pos": "动词・自动词",
+      "meaning": "结算；决算；财务结算；账目报告",
+      "frequencyRank": 587,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 98,
+      "id": "vx-n1-1ce8xj4",
+      "word": "決勝",
+      "reading": "けっしょう",
+      "pos": "名词",
+      "meaning": "比赛的胜负裁定；竞赛结果的判定；决赛；决赛阶段",
+      "frequencyRank": 588,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 99,
+      "id": "vx-n1-1eb1mgx",
+      "word": "権力",
+      "reading": "けんりょく",
+      "pos": "の形容词",
+      "meaning": "权力；政治权力；权威；影响力",
+      "frequencyRank": 598,
+      "hasReviewedExample": false
+    },
+    {
+      "order": 100,
+      "id": "vx-n1-1px3n4v",
+      "word": "現行",
+      "reading": "げんこう",
+      "pos": "の形容词",
+      "meaning": "现行；现行制度；现役",
+      "frequencyRank": 603,
+      "hasReviewedExample": false
+    }
+  ]
+}
