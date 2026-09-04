@@ -325,6 +325,9 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
     position: -webkit-sticky;
     position: sticky;
     top: 0;
+    height: calc(var(--topbar-height) + env(safe-area-inset-top));
+    padding-top: calc(10px + env(safe-area-inset-top));
+    padding-bottom: 10px;
     -webkit-transform: none;
     transform: none;
     -webkit-backdrop-filter: none;
@@ -334,12 +337,11 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
 
   .floating-actions {
     --floating-actions-height: 150px;
-    --floating-safe-bottom: 12px;
-    --floating-safe-bottom: max(12px, env(safe-area-inset-bottom));
+    --floating-browser-bottom: calc(64px + env(safe-area-inset-bottom));
     position: -webkit-sticky;
     position: sticky;
-    top: calc(100vh - var(--floating-actions-height) - var(--floating-safe-bottom));
-    top: calc(100svh - var(--floating-actions-height) - var(--floating-safe-bottom));
+    top: calc(100vh - var(--floating-actions-height) - var(--floating-browser-bottom));
+    top: calc(100lvh - var(--floating-actions-height) - var(--floating-browser-bottom));
     right: auto;
     bottom: auto;
     width: max-content;

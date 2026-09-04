@@ -141,6 +141,12 @@ body.compact-header .card {
   scroll-margin-top: calc(var(--topbar-height, 69px) + 12px);
 }
 
+@supports (-webkit-touch-callout: none) {
+  body.compact-header .card {
+    scroll-margin-top: calc(var(--topbar-height, 69px) + env(safe-area-inset-top) + 12px);
+  }
+}
+
 @media (max-width: 700px) {
   .compact-nav { gap: 5px; }
   .compact-main-controls { gap: 5px; }
