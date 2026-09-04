@@ -49,13 +49,11 @@ def chinese_glosses(entry, zh_data):
         seen.add(text)
         out.append(text)
 
-    # Entry JSON already carries Chinese glosses in current Tomoshi releases.
     for sense in entry.get("senses") or []:
         for gloss in sense.get("glosses") or []:
             if gloss.get("lang") in ("zho", "zh", "zh-CN"):
                 add(gloss.get("text"))
 
-    # Prefer/complete with the dedicated Simplified-Chinese layer when present.
     if zh_data:
         try:
             obj = json.loads(zh_data)
@@ -67,49 +65,85 @@ def chinese_glosses(entry, zh_data):
         except Exception:
             pass
 
-    # Keep cards concise while retaining several common senses.
     return out[:8]
 
 
-def tag_to_pos(tag):
-    text = str(tag or "").lower()
-    # Map each JMdict POS tag independently. This avoids a secondary sense such
-    # as an adverbial/particle use overriding the primary noun/verb sense.
-    if "pronoun" in text:
-        return "代词"
-    if "noun" in text:
-        return "名词"
-    if "verb" in text:
-        return "动词"
-    if "adjective" in text or "adjectival" in text:
-        return "形容词"
-    if "adverb" in text:
-        return "副词"
-    if "conjunction" in text:
-        return "接续词"
-    if "interjection" in text:
-        return "感叹词"
-    if "counter" in text:
-        return "助数词"
-    if "prefix" in text:
-        return "接头词"
-    if "suffix" in text:
-        return "接尾词"
-    if "expression" in text:
-        return "表达"
-    if text.strip().startswith("particle") or text.strip() == "particle":
-        return "助词"
-    return None
+def detailed_pos(tags):
+    texts = [str(tag or "").lower() for tag in tags]
+    joined = " | ".join(texts)
+
+    # Verb classes first: these are needed by the browser conjugator.
+    if "godan verb" in joined:
+        core = "五段动词"
+    elif "ichidan verb" in joined:
+        core = "一段动词"
+    elif "kuru verb" in joined or "irregular verb - kuru" in joined:
+        core = "カ变动词"
+    elif "suru verb" in joined or "takes the auxiliary verb suru" in joined:
+        core = "サ变动词"
+    elif "auxiliary verb" in joined:
+        core = "助动词"
+    elif "verb" in joined:
+        core = "动词"
+    elif "adjective (keiyoushi)" in joined or "i-adjective" in joined or "keiyoushi" in joined:
+        core = "い形容词"
+    elif "adjectival nouns or quasi-adjectives" in joined or "na-adjective" in joined or "keiyodoshi" in joined:
+        core = "な形容词"
+    elif "nouns which may take the genitive case particle" in joined or "no-adjective" in joined:
+        core = "の形容词"
+    elif "taru adjective" in joined:
+        core = "タルト形容词"
+    elif "pre-noun adjectival" in joined:
+        core = "连体词"
+    elif "auxiliary adjective" in joined:
+        core = "补助形容词"
+    elif "pronoun" in joined:
+        core = "代词"
+    elif "noun" in joined:
+        core = "名词"
+    elif "adverb" in joined:
+        core = "副词"
+    elif "conjunction" in joined:
+        core = "接续词"
+    elif "interjection" in joined:
+        core = "感叹词"
+    elif "counter" in joined:
+        core = "助数词"
+    elif "prefix" in joined:
+        core = "接头词"
+    elif "suffix" in joined:
+        core = "接尾词"
+    elif "expression" in joined:
+        core = "表达"
+    elif any(t.strip().startswith("particle") or t.strip() == "particle" for t in texts):
+        core = "助词"
+    else:
+        core = "词汇"
+
+    # A noun that can take suru is more useful to learners as 名词・サ变.
+    has_noun = "noun" in joined
+    has_suru = "suru verb" in joined or "takes the auxiliary verb suru" in joined
+    if has_noun and has_suru:
+        core = "名词・サ变"
+
+    qualifiers = []
+    if "transitive verb" in joined:
+        qualifiers.append("他动词")
+    if "intransitive verb" in joined:
+        qualifiers.append("自动词")
+
+    if qualifiers and ("动词" in core or core == "名词・サ变"):
+        return core + "・" + "・".join(qualifiers)
+    return core
 
 
 def pos_label(entry):
-    # JMdict senses are ordered. Prefer the first recognizable POS on the first
-    # sense that provides one, rather than concatenating every sense together.
+    # JMdict senses are ordered. Use the first sense with POS tags, but inspect
+    # all tags on that sense so class + transitivity can be preserved.
     for sense in entry.get("senses") or []:
-        for tag in sense.get("pos") or []:
-            label = tag_to_pos(tag)
-            if label:
-                return label
+        tags = sense.get("pos") or []
+        if tags:
+            return detailed_pos(tags)
     return "词汇"
 
 
