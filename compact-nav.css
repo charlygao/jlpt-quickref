@@ -1,7 +1,14 @@
-/* Compact controls shown inside the fixed header after the full filter panel scrolls away. */
+/* Compact controls shown inside the fixed header after the full filter panel reaches it. */
 .sticky-controls {
   position: static !important;
   top: auto !important;
+}
+
+/* Keep the original panel's layout space while it passes under the fixed header,
+   but avoid showing duplicate controls during the handoff. */
+body.compact-header .controls {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .compact-nav {
@@ -10,7 +17,6 @@
   min-width: 0;
   align-items: center;
   gap: 8px;
-  margin-left: 0;
 }
 
 body.compact-header .topbar .brand {
@@ -58,11 +64,12 @@ body.compact-header .compact-nav {
 }
 
 .compact-level-btn {
-  width: 30px;
+  width: 34px;
   height: 34px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 11px;
 }
+.compact-level-btn::before { content: 'N'; }
 
 .compact-type-btn.is-active,
 .compact-level-btn.is-active {
@@ -79,7 +86,7 @@ body.compact-header .compact-nav {
   height: 40px;
   border: 1px solid transparent;
   border-radius: 12px;
-  transition: flex .18s ease, width .18s ease, background .18s ease, border-color .18s ease;
+  transition: flex .18s ease, background .18s ease, border-color .18s ease;
 }
 
 .compact-search input {
@@ -129,9 +136,9 @@ body.compact-header .topbar > #themeToggle {
   flex: 0 0 auto;
 }
 
-/* Keep card anchor offsets correct now that the large controls no longer stick. */
+/* The only fixed chrome during reading is the one-line header. */
 body.compact-header .card {
-  scroll-margin-top: calc(var(--topbar-h, 69px) + 12px);
+  scroll-margin-top: calc(var(--topbar-height, 69px) + 12px);
 }
 
 @media (max-width: 700px) {
@@ -140,7 +147,7 @@ body.compact-header .card {
   .compact-type,
   .compact-levels { border-radius: 11px; padding: 2px; }
   .compact-type-btn { min-width: 31px; height: 32px; font-size: 12px; }
-  .compact-level-btn { width: 25px; height: 32px; font-size: 11px; }
+  .compact-level-btn { width: 29px; height: 32px; font-size: 10px; }
   .compact-search { height: 38px; min-width: 36px; }
   .compact-icon-btn { width: 36px; height: 36px; flex-basis: 36px; }
   body.compact-header .topbar > #themeToggle {
@@ -151,7 +158,7 @@ body.compact-header .card {
 }
 
 @media (max-width: 420px) {
-  .compact-level-btn { width: 23px; }
+  .compact-level-btn { width: 27px; }
   .compact-type-btn { min-width: 29px; }
   .compact-main-controls { gap: 4px; }
 }
