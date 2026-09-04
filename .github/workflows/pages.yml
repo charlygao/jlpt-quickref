@@ -116,26 +116,26 @@ jobs:
               }
             }
 
-            // The highest-priority 100 cards of every level must have explicit,
+            // The highest-priority 110 cards of every level must have explicit,
             // reviewed examples. No fallback generation is allowed.
-            if (vocab.length < 100) throw new Error(`${level} has fewer than 100 vocabulary entries`);
-            const top100 = vocab.slice(0, 100);
+            if (vocab.length < 110) throw new Error(`${level} has fewer than 110 vocabulary entries`);
+            const top110 = vocab.slice(0, 110);
             const topWords = new Set();
-            for (const item of top100) {
+            for (const item of top110) {
               if (!Number.isInteger(item.frequencyRank) || item.frequencyRank <= 0) {
-                throw new Error(`${level} top-100 item lacks entry frequency rank: ${item.word}`);
+                throw new Error(`${level} top-110 item lacks entry frequency rank: ${item.word}`);
               }
               if (!item.example?.jp || !item.example?.zh || !item.example.reviewed) {
-                throw new Error(`${level} top-100 item lacks reviewed example: ${item.word} (${item.id})`);
+                throw new Error(`${level} top-110 item lacks reviewed example: ${item.word} (${item.id})`);
               }
               if (item.example.source !== 'high-frequency-curated') {
-                throw new Error(`${level} top-100 example is not explicitly high-frequency curated: ${item.word}`);
+                throw new Error(`${level} top-110 example is not explicitly high-frequency curated: ${item.word}`);
               }
               if ([...item.example.jp].length < 9 || [...item.example.zh].length < 5) {
-                throw new Error(`${level} top-100 example is too short to be useful: ${item.word}`);
+                throw new Error(`${level} top-110 example is too short to be useful: ${item.word}`);
               }
               const key = `${item.word}\u0000${item.reading}`;
-              if (topWords.has(key)) throw new Error(`${level} duplicate top-100 vocabulary key: ${key}`);
+              if (topWords.has(key)) throw new Error(`${level} duplicate top-110 vocabulary key: ${key}`);
               topWords.add(key);
               highFrequencyExamples += 1;
             }
@@ -185,7 +185,7 @@ jobs:
               ids.add(item.id);
             }
 
-            console.log(`${level}: ${grammar.length} grammar, ${vocab.length} vocab, top100 examples OK`);
+            console.log(`${level}: ${grammar.length} grammar, ${vocab.length} vocab, top110 examples OK`);
           }
 
           const terms = window.JLPT_TERMS?.terms || {};
@@ -223,7 +223,7 @@ jobs:
           if (grammarTotal < 350) throw new Error(`Grammar coverage too small: ${grammarTotal}`);
           if (grammarExampleTotal < grammarTotal * 2) throw new Error(`Grammar example coverage too small: ${grammarExampleTotal}`);
           if (labeledGrammarExamples !== grammarExampleTotal) throw new Error(`Not every grammar example is labeled`);
-          if (highFrequencyExamples !== 500) throw new Error(`Top-frequency example coverage mismatch: ${highFrequencyExamples}/500`);
+          if (highFrequencyExamples !== 550) throw new Error(`Top-frequency example coverage mismatch: ${highFrequencyExamples}/550`);
           if (reviewedVocabExamples < 500) throw new Error(`Too few reviewed vocabulary examples: ${reviewedVocabExamples}`);
           if (vocabTotal < 7600) throw new Error(`Vocabulary coverage too small: ${vocabTotal}`);
           if (detailedPosCount < 1000) throw new Error(`Detailed POS coverage too small: ${detailedPosCount}`);
