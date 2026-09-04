@@ -79,10 +79,20 @@ def detailed_pos(tags):
     def contains(fragment):
         return any(fragment in t for t in texts)
 
+    def is_suru_tag(text):
+        # JMdict descriptions have used both "auxiliary verb" and the shorter
+        # "aux. verb" wording for サ変 nouns. Treat both as the same POS signal.
+        return (
+            "suru verb" in text
+            or "takes the auxiliary verb suru" in text
+            or "takes the aux. verb suru" in text
+            or "takes aux. verb suru" in text
+        )
+
     has_godan = starts("godan verb")
     has_ichidan = starts("ichidan verb")
     has_kuru = any("kuru verb" in t or t.startswith("irregular verb - kuru") for t in texts)
-    has_suru = any("suru verb" in t or "takes the auxiliary verb suru" in t for t in texts)
+    has_suru = any(is_suru_tag(t) for t in texts)
     has_aux_verb = starts("auxiliary verb")
     has_transitive = starts("transitive verb")
     has_intransitive = starts("intransitive verb")
@@ -92,6 +102,7 @@ def detailed_pos(tags):
         and not t.startswith("transitive verb")
         and not t.startswith("intransitive verb")
         and not t.startswith("auxiliary verb")
+        and not is_suru_tag(t)
         for t in texts
     )
 
