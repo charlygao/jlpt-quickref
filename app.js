@@ -191,8 +191,9 @@
   }
 
   function isInflectable(item) {
-    const type = detailedType(item);
-    return /五段动词|一段动词|サ变动词|カ变动词|名词・サ变|い形容词|な形容词/.test(type);
+    // Only show the control when the conjugator can really produce forms.
+    // This prevents a malformed POS from creating a dead button.
+    return conjugationRows(item).length > 0;
   }
 
   const godanMap = {
