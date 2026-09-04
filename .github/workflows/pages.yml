@@ -30,6 +30,7 @@ jobs:
           node --check compact-nav.js
           for file in data/*.js; do node --check "$file"; done
           test -s data/full-vocab.js
+          test -s data/vocab-examples-review.js
           test -s data/grammar-terms.js
           test -s data/conjugation.js
           test -s data/grammar-examples-base.js
@@ -45,7 +46,7 @@ jobs:
             './data/n5.js', './data/n4.js', './data/n3.js', './data/n2.js', './data/n1.js',
             './data/extra-base.js',
             './data/extra-n5.js', './data/extra-n4.js', './data/extra-n3.js', './data/extra-n2.js', './data/extra-n1.js',
-            './data/full-vocab.js',
+            './data/full-vocab.js', './data/vocab-examples-review.js',
             './data/grammar-terms.js',
             './data/conjugation.js',
             './data/grammar-examples-base.js',
@@ -62,7 +63,9 @@ jobs:
           let exampleTotal = 0;
           let labeledExamples = 0;
           let detailedPosCount = 0;
+          let reviewedVocabExamples = 0;
           const ids = new Set();
+          const vocabExampleSentences = new Set();
           const detailedPosPattern = /五段动词|一段动词|サ变动词|カ变动词|名词・サ变|い形容词|な形容词|の形容词|自动词|他动词/;
 
           for (const level of levels) {
@@ -106,13 +109,27 @@ jobs:
               exampleTotal += item.examples.length;
             }
 
+            let reviewedInLevel = 0;
+            for (const item of vocab) {
+              if (!/^v-n[1-5]-\d+$/.test(item.id)) continue;
+              if (!item.example?.jp || !item.example?.zh) throw new Error(`Missing curated vocabulary example: ${item.id} ${item.word}`);
+              if (!item.example.reviewed) throw new Error(`Vocabulary example was not reviewed: ${item.id} ${item.word}`);
+              if ([...item.example.jp].length < 15) throw new Error(`Vocabulary example is too short to be useful: ${item.id} ${item.example.jp}`);
+              if ([...item.example.zh].length < 6) throw new Error(`Vocabulary translation is too short: ${item.id} ${item.example.zh}`);
+              if (vocabExampleSentences.has(item.example.jp)) throw new Error(`Duplicate vocabulary example: ${item.example.jp}`);
+              vocabExampleSentences.add(item.example.jp);
+              reviewedVocabExamples += 1;
+              reviewedInLevel += 1;
+            }
+            if (reviewedInLevel !== 35) throw new Error(`${level} reviewed curated vocabulary examples: expected 35, got ${reviewedInLevel}`);
+
             for (const item of [...grammar, ...vocab]) {
               if (!item.id) throw new Error(`Missing id in ${level}`);
               if (ids.has(item.id)) throw new Error(`Duplicate id: ${item.id}`);
               ids.add(item.id);
             }
 
-            console.log(`${level}: ${grammar.length} grammar, ${vocab.length} vocab, ${grammar.reduce((n,x)=>n+x.examples.length,0)} examples`);
+            console.log(`${level}: ${grammar.length} grammar, ${vocab.length} vocab, ${grammar.reduce((n,x)=>n+x.examples.length,0)} grammar examples, ${reviewedInLevel} reviewed vocab examples`);
           }
 
           const terms = window.JLPT_TERMS?.terms || {};
@@ -157,10 +174,11 @@ jobs:
           expectForm({word:'静か',reading:'しずか',pos:'な形容词'}, '连体形', '静かな + N');
           if (asMap({word:'書く',reading:'かく',pos:'五段动词'}).size < 20) throw new Error('Comprehensive verb conjugation list is too small');
 
-          console.log(`TOTAL: ${grammarTotal} grammar, ${exampleTotal} grammar examples (${labeledExamples} labeled), ${vocabTotal} vocab, ${detailedPosCount} detailed POS`);
+          console.log(`TOTAL: ${grammarTotal} grammar, ${exampleTotal} grammar examples (${labeledExamples} labeled), ${vocabTotal} vocab, ${reviewedVocabExamples} reviewed vocab examples, ${detailedPosCount} detailed POS`);
           if (grammarTotal < 350) throw new Error(`Grammar coverage too small: ${grammarTotal}`);
           if (exampleTotal < grammarTotal * 2) throw new Error(`Grammar example coverage too small: ${exampleTotal}`);
           if (labeledExamples !== exampleTotal) throw new Error(`Not every grammar example is labeled: ${labeledExamples}/${exampleTotal}`);
+          if (reviewedVocabExamples !== 175) throw new Error(`Reviewed vocabulary example coverage mismatch: ${reviewedVocabExamples}/175`);
           if (vocabTotal < 7600) throw new Error(`Vocabulary coverage too small: ${vocabTotal}`);
           if (detailedPosCount < 1000) throw new Error(`Detailed POS coverage too small: ${detailedPosCount}`);
           NODE
