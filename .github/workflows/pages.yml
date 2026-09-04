@@ -57,13 +57,16 @@ jobs:
           let vocabTotal = 0;
           let exampleTotal = 0;
           let branchTaggedExamples = 0;
+          let detailedPosCount = 0;
           const ids = new Set();
+          const detailedPosPattern = /五段动词|一段动词|サ变动词|カ变动词|名词・サ变|い形容词|な形容词|の形容词|自动词|他动词/;
 
           for (const level of levels) {
             const grammar = data.grammar[level] || [];
             const vocab = data.vocab[level] || [];
             grammarTotal += grammar.length;
             vocabTotal += vocab.length;
+            detailedPosCount += vocab.filter(item => detailedPosPattern.test(item.pos || '')).length;
 
             if (vocab.length < minimumVocab[level]) {
               throw new Error(`${level} vocabulary coverage too small: ${vocab.length}`);
@@ -99,11 +102,28 @@ jobs:
             if (!terms[term]?.summary || !(terms[term]?.rules || []).length) throw new Error(`Missing grammar term reference: ${term}`);
           }
 
-          console.log(`TOTAL: ${grammarTotal} grammar, ${exampleTotal} grammar examples (${branchTaggedExamples} branch-tagged), ${vocabTotal} vocab`);
+          function vocab(level, word, reading) {
+            return (data.vocab[level] || []).find(x => x.word === word && (!reading || x.reading === reading));
+          }
+          function expectPos(level, word, reading, pattern) {
+            const item = vocab(level, word, reading);
+            if (!item || !pattern.test(item.pos || '')) {
+              throw new Error(`Unexpected POS for ${level} ${word}: ${item?.pos || 'missing'}`);
+            }
+          }
+          expectPos('N5', '会う', 'あう', /五段动词.*自动词/);
+          expectPos('N5', '開ける', 'あける', /一段动词.*他动词/);
+          expectPos('N5', '秋', 'あき', /名词|の形容词/);
+          if (/动词/.test(vocab('N5', '秋', 'あき')?.pos || '')) throw new Error('秋 must not be classified as a verb');
+          if (/动词/.test(vocab('N5', '朝', 'あさ')?.pos || '')) throw new Error('朝 must not be classified as a verb');
+          if (/动词/.test(vocab('N5', '明日', 'あした')?.pos || '')) throw new Error('明日 must not be classified as a verb');
+
+          console.log(`TOTAL: ${grammarTotal} grammar, ${exampleTotal} grammar examples (${branchTaggedExamples} branch-tagged), ${vocabTotal} vocab, ${detailedPosCount} detailed POS`);
           if (grammarTotal < 350) throw new Error(`Grammar coverage too small: ${grammarTotal}`);
           if (exampleTotal < grammarTotal * 2) throw new Error(`Grammar example coverage too small: ${exampleTotal}`);
           if (branchTaggedExamples < 100) throw new Error(`Connection-branch tagged examples too small: ${branchTaggedExamples}`);
           if (vocabTotal < 7600) throw new Error(`Vocabulary coverage too small: ${vocabTotal}`);
+          if (detailedPosCount < 1000) throw new Error(`Detailed POS coverage too small: ${detailedPosCount}`);
           NODE
 
       - name: Setup Pages
