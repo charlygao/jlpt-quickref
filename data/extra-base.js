@@ -21,16 +21,16 @@
     const list = DATA.vocab[level] || (DATA.vocab[level] = []);
     const byKey = new Map(list.map(x => [`${x.word}\u0000${x.reading}`, x]));
     for (const row of rows) {
-      const [word, reading, meaning, pos = '词汇', exampleJp = '', exampleZh = ''] = row;
+      // Vocabulary imports intentionally contain no example fields. Examples
+      // are maintained only in explicit human-reviewed example data files.
+      const [word, reading, meaning, pos = '词汇', frequency = null] = row;
       const key = `${word}\u0000${reading}`;
       if (!word) continue;
 
       const existing = byKey.get(key);
       if (existing) {
-        // Full dictionary data is loaded after the curated cards. Keep the
-        // curated meaning/example, but use the more specific dictionary POS
-        // (e.g. 动词 -> 五段动词・他动词) when it adds real information.
         if (posSpecificity(pos) > posSpecificity(existing.pos)) existing.pos = pos;
+        if (Number.isFinite(frequency)) existing.frequency = frequency;
         continue;
       }
 
@@ -41,7 +41,8 @@
         reading: reading || word,
         meaning,
         pos,
-        example: exampleJp ? { jp: exampleJp, zh: exampleZh } : null,
+        frequency: Number.isFinite(frequency) ? frequency : null,
+        example: null,
         extended: true,
       };
       list.push(item);
