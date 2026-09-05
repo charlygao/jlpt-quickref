@@ -82,7 +82,7 @@ jobs:
           const data = window.JLPT_DATA;
           const levels = ['N5', 'N4', 'N3', 'N2', 'N1'];
           const minimumVocab = { N5: 650, N4: 620, N3: 1600, N2: 1700, N1: 3000 };
-          const requiredHighFrequencyCoverage = { N5: 773, N4: 648, N3: 1177, N2: 1176, N1: 1176 };
+          const requiredHighFrequencyCoverage = { N5: 773, N4: 648, N3: 1260, N2: 1260, N1: 1259 };
           let grammarTotal = 0;
           let vocabTotal = 0;
           let grammarExampleTotal = 0;
@@ -276,7 +276,7 @@ jobs:
           if (highFrequencyExamples !== requiredHighFrequencyTotal) {
             throw new Error(`Top-frequency example coverage mismatch: ${highFrequencyExamples}/${requiredHighFrequencyTotal}`);
           }
-          if (reviewedVocabExamples < 5018) throw new Error(`Too few reviewed vocabulary examples: ${reviewedVocabExamples}`);
+          if (reviewedVocabExamples < 5266) throw new Error(`Too few reviewed vocabulary examples: ${reviewedVocabExamples}`);
           if (vocabTotal < 7600) throw new Error(`Vocabulary coverage too small: ${vocabTotal}`);
           if (detailedPosCount < 1000) throw new Error(`Detailed POS coverage too small: ${detailedPosCount}`);
           NODE
