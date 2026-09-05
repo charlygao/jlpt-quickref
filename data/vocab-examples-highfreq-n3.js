@@ -1637,11 +1637,3 @@
     if (item) item.example = { jp, zh, reviewed: true, source: 'high-frequency-curated' };
   }
 })();
-  ];
-  for (const row of rows) {
-    const [word,a,b,c] = row;
-    const [reading,jp,zh] = c === undefined ? [null,a,b] : [a,b,c];
-    const item = (DATA.vocab.N3 || []).find(x => x.word === word && (!reading || x.reading === reading));
-    if (item) item.example = { jp, zh, reviewed: true, source: 'high-frequency-curated' };
-  }
-})();
