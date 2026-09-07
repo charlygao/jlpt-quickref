@@ -168,7 +168,7 @@
     return html;
   }
 
-  function grammarCard(item, index) {
+  function grammarCard(item, index, total) {
     return `
       <article class="card track-card" id="${item.id}" data-id="${item.id}">
         <div class="card-head">
@@ -182,13 +182,13 @@
           <div class="meta-box connection-box"><label>接续</label><span>${decorateConnection(item.connection)}</span></div>
         </div>
         <div class="examples">
-          ${(item.examples || []).map(ex => `<div class="example">
-            ${ex.covers ? `<div class="example-cover">${escapeHtml(ex.covers)}</div>` : ''}
-            <div class="example-jp">${escapeHtml(ex.jp)}</div>
-            <div class="example-zh">${escapeHtml(ex.zh)}</div>
-          </div>`).join('')}
+          ${(item.examples || []).map(ex => `<button type="button" class="example grammar-example-trigger" data-grammar-detail-id="${escapeHtml(item.id)}" aria-label="${escapeHtml(`${ex.jp} — 查看${item.title}的详细解说`)}" aria-haspopup="dialog">
+            ${ex.covers ? `<span class="example-cover">${escapeHtml(ex.covers)}</span>` : ''}
+            <span class="example-jp">${escapeHtml(ex.jp)}</span>
+            <span class="example-zh">${escapeHtml(ex.zh)}</span>
+          </button>`).join('')}
         </div>
-        <div class="card-internal-meta"><span>${item.level}</span><span aria-hidden="true">·</span><span>语法 ${String(index + 1).padStart(2, '0')}</span></div>
+        <div class="card-internal-meta"><span>${item.level}</span><span aria-hidden="true">·</span><span>语法 ${String(index + 1).padStart(2, '0')}/${total}</span></div>
       </article>`;
   }
 
@@ -349,7 +349,7 @@
     return [];
   }
 
-  function vocabCard(item, index) {
+  function vocabCard(item, index, total) {
     const type = detailedType(item);
     const inflectable = isInflectable(item);
     const exampleHtml = item.example?.jp ? `
@@ -369,7 +369,7 @@
         </div>
         <p class="meaning">${escapeHtml(item.meaning || '—')}</p>
         ${exampleHtml}
-        <div class="card-internal-meta"><span>${item.level}</span><span aria-hidden="true">·</span><span>词汇 ${String(index + 1).padStart(2, '0')}</span></div>
+        <div class="card-internal-meta"><span>${item.level}</span><span aria-hidden="true">·</span><span>词汇 ${String(index + 1).padStart(2, '0')}/${total}</span></div>
       </article>`;
   }
 
@@ -613,6 +613,7 @@
   }
 
   function render({ reset = false } = {}) {
+    cardGestures?.cancel();
     if (reset) resetWindow();
     updateControls();
     updateFilterControls();
@@ -620,7 +621,10 @@
     const start = state.type === 'vocab' ? Math.min(state.startIndex, allItems.length) : 0;
     const end = state.type === 'vocab' ? Math.min(allItems.length, start + state.visibleCount) : allItems.length;
     const visibleItems = allItems.slice(start, end);
-    els.contentList.innerHTML = visibleItems.map((item, i) => state.type === 'grammar' ? grammarCard(item, start + i) : vocabCard(item, start + i)).join('');
+    const categoryItems = DATA[state.type][state.level] || [];
+    const categoryPositions = new Map(categoryItems.map((item, index) => [item.id, index]));
+    const cardRenderer = state.type === 'grammar' ? grammarCard : vocabCard;
+    els.contentList.innerHTML = visibleItems.map(item => cardRenderer(item, categoryPositions.get(item.id), categoryItems.length)).join('');
     els.emptyState.hidden = allItems.length !== 0;
     updateLoadMore(allItems.length, end);
     updateStats();
@@ -712,8 +716,11 @@
     if (conj) { const item = findVocab(conj.dataset.conjugateId); if (item) openConjugationModal(item); return; }
     const btn = e.target.closest('[data-status][data-item-id]');
     if (!btn) return;
-    const id = btn.dataset.itemId;
-    const collection = btn.dataset.status === 'mastered' ? state.mastered : state.followed;
+    toggleStudyStatus(btn.dataset.itemId, btn.dataset.status);
+  });
+
+  function toggleStudyStatus(id, status) {
+    const collection = status === 'mastered' ? state.mastered : state.followed;
     collection.has(id) ? collection.delete(id) : collection.add(id);
     saveState();
     window.JLPT_PROGRESS_SYNC?.saveItem(id, {
@@ -721,6 +728,12 @@
       followed: state.followed.has(id),
     });
     render();
+  }
+
+  const cardGestures = window.JLPT_INSTALL_CARD_GESTURES({
+    content: els.contentList,
+    getStatus: id => ({ mastered: state.mastered.has(id), followed: state.followed.has(id) }),
+    toggle: toggleStudyStatus,
   });
 
   els.filterToggle.addEventListener('click', () => {
@@ -766,3 +779,4 @@
   scheduleAutoLoadCheck();
   requestAnimationFrame(() => requestAnimationFrame(() => jumpToSaved({ auto: true })));
 })();
+

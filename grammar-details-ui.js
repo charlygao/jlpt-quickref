@@ -34,10 +34,10 @@
     return modal;
   }
 
-  function open(item) {
+  function open(item, trigger) {
     const d = item.detail;
     const el = ensureModal();
-    returnFocus = document.activeElement;
+    returnFocus = trigger || document.activeElement;
     lockedY = scrollTop();
     el.querySelector('#grammarDetailEyebrow').textContent = `${item.level} · ${d.category}`;
     el.querySelector('#grammarDetailTitle').textContent = item.title;
@@ -61,34 +61,25 @@
     returnFocus = null;
   }
 
-  function install(root = document) {
-    root.querySelectorAll('.track-card').forEach(card => {
-      const item = byId.get(card.dataset.id);
-      if (!item) return;
-      const actions = card.querySelector('.card-actions');
-      if (!actions || actions.querySelector('[data-grammar-detail-id]')) return;
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'status-btn grammar-detail-btn';
-      button.dataset.grammarDetailId = item.id;
-      button.setAttribute('aria-label', `查看${item.title}的详细解说`);
-      button.title = `查看${item.title}的详细解说`;
-      button.innerHTML = '<span aria-hidden="true">ⓘ</span> 详情';
-      actions.prepend(button);
-    });
-  }
-
   const content = document.getElementById('contentList');
   if (!content) return;
-  install(content);
-  new MutationObserver(() => install(content)).observe(content, { childList: true });
   content.addEventListener('click', event => {
     const button = event.target.closest('[data-grammar-detail-id]');
     if (!button) return;
     const item = byId.get(button.dataset.grammarDetailId);
-    if (item) open(item);
+    if (item) open(item, button);
   });
   document.addEventListener('keydown', event => {
+    if (event.key === 'Tab' && modal && !modal.hidden) {
+      const focusable = [...modal.querySelectorAll('button, a[href], [tabindex="0"]')];
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault(); last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault(); first.focus();
+      }
+    }
     if (event.key === 'Escape' && modal && !modal.hidden) close();
   });
 })();

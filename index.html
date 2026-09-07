@@ -8,7 +8,8 @@
   <title>日语语法・词汇速查 | JLPT N5-N1</title>
   <link rel="stylesheet" href="styles.css?v=20260904-safari-shell-2" />
   <link rel="stylesheet" href="compact-nav.css?v=20260904-safari-shell-1" />
-  <link rel="stylesheet" href="grammar-details.css?v=20260907-grammar-lessons-2" />
+  <link rel="stylesheet" href="card-gestures.css?v=20260907-interactions-1" />
+  <link rel="stylesheet" href="grammar-details.css?v=20260907-interactions-1" />
 </head>
 <body>
   <header class="topbar">
@@ -103,31 +104,7 @@
         <button class="level-chip" data-level="N4">N4</button>
         <button class="level-chip" data-level="N3">N3</button>
         <button class="level-chip" data-level="N2">N2</button>
-        <button class="level-chip" data-level="N1">N1</button>
-      </div>
-
-      <label class="search-box">
-        <span>⌕</span>
-        <input id="searchInput" type="search" autocomplete="off" placeholder="搜索语法、日文、中文或例句…" />
-      </label>
-    </section>
-
-    <section class="progress-panel panel">
-      <div class="progress-head">
-        <div>
-          <span class="muted">掌握进度</span>
-          <strong id="progressLabel">N5 · 语法</strong>
-        </div>
-        <span id="progressPercent">0%</span>
-      </div>
-      <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
-    </section>
-
-    <section id="contentList" class="content-list" aria-live="polite"></section>
-
-    <section id="loadMoreWrap" class="load-more-wrap panel" role="status" aria-live="polite" hidden>
-      <span class="auto-load-indicator" aria-hidden="true"></span>
-      <span id="loadMoreText" class="muted"></span>
+        <button class="level-chip"…240 tokens truncated…    <span id="loadMoreText" class="muted"></span>
     </section>
 
     <section id="emptyState" class="empty-state panel" hidden>
@@ -224,9 +201,11 @@
   <script src="data/grammar-lessons.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-progress.js?v=20260904-supabase-2"></script>
-  <script src="app.js?v=20260904-supabase-2"></script>
+  <script src="card-gestures.js?v=20260907-interactions-1"></script>
+  <script src="app.js?v=20260907-interactions-1"></script>
   <script src="grammar-details-renderer.js?v=20260907-grammar-lessons-2"></script>
-  <script src="grammar-details-ui.js?v=20260907-grammar-lessons-2"></script>
+  <script src="grammar-details-ui.js?v=20260907-interactions-1"></script>
   <script src="compact-nav.js?v=20260904-safari-shell-1"></script>
 </body>
 </html>
+

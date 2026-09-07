@@ -27,6 +27,8 @@ jobs:
       - name: Validate static data policy and JavaScript
         run: |
           node --check app.js
+          node --check card-gestures.js
+          node scripts/test-card-interactions.cjs
           node --check compact-nav.js
           node --check supabase-progress.js
           node --check grammar-details-renderer.js
@@ -293,3 +295,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+

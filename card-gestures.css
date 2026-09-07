@@ -1,0 +1,35 @@
+/* Suppress native selection/callouts while retaining native pan and pinch zoom. */
+.track-card, .track-card * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.track-card.is-quick-action { outline: 2px solid var(--accent); outline-offset: 2px; }
+.card-action-wheel {
+  position: fixed;
+  z-index: 150;
+  pointer-events: none;
+  color: var(--text);
+  font-size: 14px;
+  filter: drop-shadow(0 8px 22px rgba(0, 0, 0, .22));
+}
+.card-action-wheel[hidden] { display: none; }
+.card-wheel-options {
+  display: grid;
+  grid-template-columns: 1fr 58px 1fr;
+  align-items: stretch;
+  min-height: 106px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 60px;
+  background: var(--panel-solid);
+}
+.card-wheel-action { display: grid; justify-items: center; align-content: center; gap: 2px; padding: 12px 0; }
+.card-wheel-action > span { font-size: 24px; line-height: 1.2; }
+.card-wheel-action strong { font-size: 14px; }
+.card-wheel-action small { font-size: 12px; color: var(--muted); }
+.card-wheel-action.is-selected { background: var(--accent); color: #fff; }
+.card-wheel-action.is-selected small { color: #fff; }
+.card-wheel-center { align-self: center; text-align: center; color: var(--muted); font-size: 12px; padding: 6px; }
+.card-wheel-hint { width: max-content; max-width: 100%; margin: 7px auto 0; padding: 5px 12px; border-radius: 20px; background: var(--panel-solid); font-size: 12px; }
+.card-action-announcement { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
