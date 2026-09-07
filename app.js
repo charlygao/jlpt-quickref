@@ -8,7 +8,6 @@
   const state = {
     type: 'grammar',
     level: 'N5',
-    query: '',
     filter: 'all',
     mastered: new Set(),
     followed: new Set(),
@@ -21,10 +20,7 @@
   const els = {
     contentList: document.getElementById('contentList'),
     emptyState: document.getElementById('emptyState'),
-    searchInput: document.getElementById('searchInput'),
-    searchToggle: document.getElementById('searchToggle'),
-    searchPanel: document.getElementById('searchPanel'),
-    searchClose: document.getElementById('searchClose'),
+    tocToggle: document.getElementById('tocToggle'),
     grammarCount: document.getElementById('grammarCount'),
     vocabCount: document.getElementById('vocabCount'),
     masteredCount: document.getElementById('masteredCount'),
@@ -39,7 +35,6 @@
     filterIcon: document.getElementById('filterIcon'),
     filterLabel: document.getElementById('filterLabel'),
     filterMenu: document.getElementById('filterMenu'),
-    resumeBookmark: document.getElementById('resumeBookmark'),
   };
 
   const pageShell = document.querySelector('.page-shell');
@@ -112,20 +107,9 @@
     state.visibleCount = VOCAB_BATCH_SIZE;
   }
 
-  function itemSearchText(item) {
-    if (state.type === 'grammar') {
-      return [item.title, item.meaning, item.connection, ...(item.examples || []).flatMap(ex => [ex.jp, ex.zh, ex.covers])]
-        .join('\n').toLowerCase();
-    }
-    return [item.word, item.reading, item.meaning, item.pos, detailedType(item), item.example?.jp, item.example?.zh]
-      .join('\n').toLowerCase();
-  }
-
   function getCurrentItems() {
     const items = DATA[state.type][state.level] || [];
-    const q = state.query.trim().toLowerCase();
     return items.filter(item => {
-      if (q && !itemSearchText(item).includes(q)) return false;
       if (state.filter === 'mastered') return state.mastered.has(item.id);
       if (state.filter === 'unmastered') return !state.mastered.has(item.id);
       if (state.filter === 'followed') return state.followed.has(item.id);
@@ -393,17 +377,22 @@
       </section>`;
     document.body.appendChild(modal);
     modal.querySelector('.modal-close').addEventListener('click', closeModal);
-    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    modal.addEventListener('click', e => {
+      if (e.target === modal) { closeModal(); return; }
+      const row = e.target.closest('[data-toc-id]');
+      if (row && modal.classList.contains('is-toc')) selectDirectoryItem(row.dataset.tocId);
+    });
     modal.addEventListener('touchmove', e => { if (e.target === modal) e.preventDefault(); }, { passive: false });
     return modal;
   }
 
-  function openModal(title, html) {
+  function openModal(title, html, { directory = false } = {}) {
     const el = ensureModal();
     const wasClosed = el.hidden;
     el.querySelector('#infoModalTitle').textContent = title;
     el.querySelector('.modal-body').innerHTML = html;
-    el.querySelector('.info-modal').scrollTop = 0;
+    el.classList.toggle('is-toc', directory);
+    els.tocToggle.setAttribute('aria-expanded', String(directory));
     el.hidden = false;
     if (wasClosed) {
       modalReturnFocus = document.activeElement;
@@ -413,17 +402,71 @@
       if (!pageScrollRoot) document.body.style.top = `-${lockedScrollY}px`;
     }
     el.querySelector('.modal-close').focus({ preventScroll: true });
+    el.querySelector('.info-modal').scrollTop = 0;
   }
 
   function closeModal() {
     if (!modal || modal.hidden) return;
     modal.hidden = true;
+    els.tocToggle.setAttribute('aria-expanded', 'false');
     document.documentElement.classList.remove('modal-open');
     document.body.classList.remove('modal-open');
     document.body.style.top = '';
     withoutSmoothScroll(() => scrollPageTo({ top: lockedScrollY, left: 0, behavior: 'auto' }));
     modalReturnFocus?.focus?.({ preventScroll: true });
     modalReturnFocus = null;
+  }
+
+  function directoryHtml() {
+    const items = DATA[state.type][state.level] || [];
+    // Keep the prior visit/category marker stable while browsing this category.
+    const resumeId = sessionResume[currentKey()] || state.lastSeen[currentKey()];
+    return `<nav class="toc-list" aria-label="当前分类目录">${items.map((item, index) => {
+      const title = state.type === 'grammar' ? item.title : item.word;
+      const mastered = state.mastered.has(item.id);
+      const followed = state.followed.has(item.id);
+      const bookmarked = item.id === resumeId;
+      const label = `${index + 1} ${title}，${mastered ? '已掌握' : '未掌握'}，${followed ? '已关注' : '未关注'}${bookmarked ? '，上次阅读位置' : ''}`;
+      return `<button type="button" class="toc-row" data-toc-id="${escapeHtml(item.id)}" aria-label="${escapeHtml(label)}">
+        <span class="toc-number">${String(index + 1).padStart(2, '0')}</span>
+        <span class="toc-title">${escapeHtml(title)}</span>
+        <span class="toc-status" aria-hidden="true">${mastered ? '<span class="toc-mastered">✓</span>' : ''}${followed ? '<span class="toc-followed">★</span>' : ''}</span>
+        ${bookmarked ? '<svg class="toc-bookmark" viewBox="0 0 12 16" aria-hidden="true"><path d="M1 0h10v16l-5-3-5 3Z" /></svg>' : ''}
+      </button>`;
+    }).join('')}</nav>`;
+  }
+
+  function refreshDirectory() {
+    const scroller = modal.querySelector('.info-modal');
+    const top = scroller.scrollTop;
+    modal.querySelector('.modal-body').innerHTML = directoryHtml();
+    scroller.scrollTop = top;
+  }
+
+  function openDirectory() {
+    setFilterMenuOpen(false);
+    openModal(`${state.level} · ${state.type === 'grammar' ? '语法' : '词汇'}目录`, directoryHtml(), { directory: true });
+    modalReturnFocus = els.tocToggle;
+  }
+
+  function selectDirectoryItem(id) {
+    if (!(DATA[state.type][state.level] || []).some(item => item.id === id)) return;
+    closeModal();
+    // The directory always contains the whole category, including filtered-out
+    // cards. Reveal a hidden destination before resolving its lazy-loaded card.
+    if (!getCurrentItems().some(item => item.id === id)) {
+      state.filter = 'all';
+      resetWindow();
+      render();
+    }
+    jumpToItem(id, { auto: true, highlight: false });
+    const target = document.getElementById(id);
+    if (target) {
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      state.lastSeen[currentKey()] = id;
+      saveState();
+    }
   }
 
   function openTermModal(term) {
@@ -517,10 +560,6 @@
   }
 
   function updateControls() {
-    els.searchToggle.classList.toggle('has-query', Boolean(state.query.trim()));
-    const searchLabel = state.query.trim() ? `搜索：${state.query.trim()}` : '搜索';
-    els.searchToggle.setAttribute('aria-label', searchLabel);
-    els.searchToggle.title = searchLabel;
     document.querySelectorAll('.segment').forEach(x => x.classList.toggle('is-active', x.dataset.type === state.type));
     document.querySelectorAll('.level-chip').forEach(x => x.classList.toggle('is-active', x.dataset.level === state.level));
   }
@@ -537,23 +576,6 @@
     scheduleAutoLoadCheck();
   }
 
-  function itemDisplayLabel(item) {
-    return state.type === 'grammar' ? item.title : `${item.word}（${item.reading}）`;
-  }
-
-  function updateBookmarkControl() {
-    const resumeId = sessionResume[currentKey()];
-    const item = resumeId
-      ? (DATA[state.type][state.level] || []).find(candidate => candidate.id === resumeId)
-      : null;
-    const label = item
-      ? `跳转到上次阅读位置：${itemDisplayLabel(item)}`
-      : '暂无上次阅读位置';
-    els.resumeBookmark.disabled = !item;
-    els.resumeBookmark.setAttribute('aria-label', label);
-    els.resumeBookmark.title = label;
-  }
-
   let observer;
   function attachObserver() {
     observer?.disconnect();
@@ -561,7 +583,7 @@
     if (!cards.length) return;
     observer = new IntersectionObserver(entries => {
       const seen = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-      if (!seen) return;
+      if (!seen || document.body.classList.contains('modal-open')) return;
       state.lastSeen[currentKey()] = seen.target.dataset.id;
       saveState();
     }, { root: pageScrollRoot, rootMargin: '-18% 0px -68% 0px', threshold: 0 });
@@ -572,7 +594,7 @@
   let autoLoading = false;
 
   function maybeAutoLoadMore() {
-    if (autoLoading || els.loadMoreWrap.hidden || state.type !== 'vocab') return;
+    if (autoLoading || els.loadMoreWrap.hidden || state.type !== 'vocab' || document.body.classList.contains('modal-open')) return;
 
     const rect = els.loadMoreWrap.getBoundingClientRect();
     const viewport = window.visualViewport;
@@ -635,7 +657,7 @@
     els.emptyState.hidden = allItems.length !== 0;
     updateLoadMore(allItems.length, end);
     updateStats();
-    updateBookmarkControl();
+    if (modal && !modal.hidden && modal.classList.contains('is-toc')) refreshDirectory();
     attachObserver();
   }
 
@@ -649,7 +671,7 @@
     render();
   }
 
-  function jumpToItem(id, { auto = false } = {}) {
+  function jumpToItem(id, { auto = false, highlight = auto } = {}) {
     if (!id) return;
     ensureItemRendered(id);
     const target = document.getElementById(id);
@@ -659,7 +681,7 @@
     } else {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    if (auto) {
+    if (highlight) {
       setTimeout(() => target.animate([
         { boxShadow: '0 0 0 0 rgba(91,91,214,0)' },
         { boxShadow: '0 0 0 5px rgba(91,91,214,.20)' },
@@ -671,10 +693,8 @@
   function jumpToSaved({ auto = false } = {}) {
     const id = sessionResume[currentKey()] || state.lastSeen[currentKey()];
     if (!id) return;
-    if (state.query || state.filter !== 'all') {
-      state.query = '';
+    if (state.filter !== 'all') {
       state.filter = 'all';
-      els.searchInput.value = '';
       resetWindow();
       render();
     }
@@ -689,8 +709,6 @@
   document.querySelectorAll('.segment').forEach(btn => btn.addEventListener('click', () => {
     captureCurrentResumeMarker();
     state.type = btn.dataset.type;
-    state.query = '';
-    els.searchInput.value = '';
     resetWindow(); saveState(); render();
     if (!document.body.classList.contains('compact-header')) {
       scrollPageTo({ top: 0, behavior: 'smooth' });
@@ -700,47 +718,11 @@
   document.querySelectorAll('.level-chip').forEach(btn => btn.addEventListener('click', () => {
     captureCurrentResumeMarker();
     state.level = btn.dataset.level;
-    state.query = '';
-    els.searchInput.value = '';
     resetWindow(); saveState(); render();
     if (!document.body.classList.contains('compact-header')) {
       scrollPageTo({ top: 0, behavior: 'smooth' });
     }
   }));
-
-  let searchTimer;
-  function applySearch() {
-    clearTimeout(searchTimer);
-    state.query = els.searchInput.value;
-    render({ reset: true });
-  }
-  els.searchInput.addEventListener('input', (e) => {
-    clearTimeout(searchTimer);
-    if (!e.isComposing) searchTimer = setTimeout(applySearch, 120);
-  });
-  els.searchInput.addEventListener('compositionend', applySearch);
-
-  function setSearchOpen(open, { returnFocus = false } = {}) {
-    els.searchPanel.hidden = !open;
-    els.searchToggle.setAttribute('aria-expanded', String(open));
-    if (open) {
-      setFilterMenuOpen(false);
-      // Keep focus synchronous with the tap so iOS opens the keyboard.
-      els.searchInput.focus({ preventScroll: true });
-      updateFloatingPosition();
-    } else {
-      if (document.activeElement === els.searchInput) els.searchInput.blur();
-      if (returnFocus) els.searchToggle.focus({ preventScroll: true });
-    }
-  }
-
-  els.searchToggle.addEventListener('click', () => setSearchOpen(els.searchPanel.hidden));
-  els.searchClose.addEventListener('click', () => setSearchOpen(false, { returnFocus: true }));
-  els.searchPanel.addEventListener('submit', event => {
-    event.preventDefault();
-    applySearch();
-    setSearchOpen(false, { returnFocus: true });
-  });
 
   function updateFloatingPosition() {
     const viewport = window.visualViewport;
@@ -750,7 +732,6 @@
     // browser-toolbar height; the visual viewport also follows the keyboard.
     const railBottom = pageScrollRoot ? document.body.getBoundingClientRect().bottom : window.innerHeight;
     document.documentElement.style.setProperty('--action-bottom-offset', `${Math.max(0, railBottom - visibleBottom)}px`);
-    document.documentElement.style.setProperty('--search-bottom-offset', `${Math.max(0, window.innerHeight - visibleBottom)}px`);
   }
   window.visualViewport?.addEventListener('resize', updateFloatingPosition, { passive: true });
   window.visualViewport?.addEventListener('scroll', updateFloatingPosition, { passive: true });
@@ -786,7 +767,6 @@
   });
 
   els.filterToggle.addEventListener('click', () => {
-    setSearchOpen(false);
     const open = els.filterToggle.getAttribute('aria-expanded') !== 'true';
     setFilterMenuOpen(open, { focus: open });
   });
@@ -801,19 +781,20 @@
   });
   document.addEventListener('click', e => {
     if (!e.target.closest('.floating-actions')) setFilterMenuOpen(false);
-    if (!e.target.closest('#searchPanel, #searchToggle')) setSearchOpen(false);
   });
   document.addEventListener('keydown', e => {
-    if (e.key !== 'Escape' || e.isComposing) return;
-    if (!els.searchPanel.hidden) {
-      e.preventDefault();
-      setSearchOpen(false, { returnFocus: true });
-      return;
+    if (e.key === 'Tab' && modal && !modal.hidden) {
+      const controls = [...modal.querySelectorAll('button, a[href], [tabindex="0"]')];
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
+    if (e.key !== 'Escape' || e.isComposing) return;
     if (modal && !modal.hidden) closeModal();
     else setFilterMenuOpen(false);
   });
-  els.resumeBookmark.addEventListener('click', () => jumpToSaved());
+  els.tocToggle.addEventListener('click', openDirectory);
   function updateThemeControl() {
     const dark = document.body.classList.contains('dark');
     els.themeToggle.setAttribute('aria-pressed', String(dark));

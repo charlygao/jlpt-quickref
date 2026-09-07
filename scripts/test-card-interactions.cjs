@@ -15,6 +15,8 @@ class Node {
   emit(name, event = {}) { event.cancelable ??= true; event.preventDefault ||= () => { event.prevented = true; }; event.stopImmediatePropagation ||= () => { event.stopped = true; }; for (const fn of this.listeners[name] || []) { fn(event); if (event.stopped) break; } return event; }
   setAttribute(name, value) { this[name] = value; }
   getAttribute(name) { return this[name]; }
+  hasAttribute(name) { return this[name] !== undefined; }
+  scrollIntoView(options) { this.lastScrollOptions = options; }
   querySelector(key) { if (!this.children.has(key)) this.children.set(key, new Node()); return this.children.get(key); }
   querySelectorAll(key) { if (key === '[data-action]') return ['mastered', 'followed'].map(action => { const node = this.querySelector(action); node.dataset.action = action; return node; }); return []; }
   appendChild(node) { (this.appended ||= []).push(node); }
@@ -29,7 +31,11 @@ class Node {
 }
 const document = new Node(); document.body = new Node(); document.documentElement = new Node();
 document.createElement = () => new Node();
-document.getElementById = id => htmlIds.has(id) ? document.querySelector(id) : null;
+document.getElementById = id => {
+  const rendered = document.children.get('contentList')?.innerHTML || '';
+  const cardIds = [...rendered.matchAll(/<article[^>]*\bid="([^"]+)"/g)].map(match => match[1]);
+  return htmlIds.has(id) || cardIds.includes(id) ? document.querySelector(id) : null;
+};
 for (const tag of html.matchAll(/<[^>]+\bid="([^"]+)"[^>]*>/g)) {
   if (/\bhidden(?:\s|>)/.test(tag[0])) document.getElementById(tag[1]).hidden = true;
 }
@@ -71,18 +77,16 @@ window.JLPT_DATA = { grammar: { N5: grammar }, vocab: { N5: vocab } };
 let sync;
 window.JLPT_PROGRESS_SYNC = { init() {}, saveItem: (id, data) => { sync = { id, ...data }; } };
 // Expose closure references in this test context only; execute the real app startup.
-const app = appSource.replace(/\}\)\(\);\s*$/, 'window.testApp = { state, render, toggleStudyStatus }; })();');
+const app = appSource.replace(/\}\)\(\);\s*$/, 'window.testApp = { state, render, toggleStudyStatus, sessionResume, directoryHtml, selectDirectoryItem }; })();');
 vm.runInContext(app, context);
 const api = window.testApp;
 assert.equal((content.innerHTML.match(/data-grammar-detail-id=/g) || []).length, 3);
 assert.doesNotMatch(content.innerHTML, /grammar-example-trigger/);
 assert.equal((content.innerHTML.match(/<div class="example">/g) || []).length, 6);
 assert.match(content.innerHTML, /语法 03\/3/);
-api.state.query = 'meaning2'; api.render(); assert.match(content.innerHTML, /语法 03\/3/); assert.doesNotMatch(content.innerHTML, /语法 01\/3/);
-api.state.query = ''; api.state.filter = 'followed'; api.state.followed.add('g2'); api.render(); assert.match(content.innerHTML, /语法 02\/3/);
+api.state.filter = 'followed'; api.state.followed.add('g2'); api.render(); assert.match(content.innerHTML, /语法 02\/3/);
 api.toggleStudyStatus('g2', 'followed'); assert.equal(content.innerHTML, ''); assert.equal(sync.id, 'g2'); assert.equal(sync.followed, false);
 api.state.type = 'vocab'; api.state.filter = 'all'; api.state.startIndex = 80; api.render(); assert.match(content.innerHTML, /词汇 81\/100/); assert.match(content.innerHTML, /词汇 100\/100/);
-api.state.query = 'word99'; api.state.startIndex = 0; api.render(); assert.match(content.innerHTML, /词汇 100\/100/);
 console.log('PASS: hold/swipe/toggle/cancel, scrolling, multitouch, click suppression, edge placement, mouse, category totals, filtering, pagination and progress sync');
 // Exercise delegated details, backdrop dismissal, focus return, and Escape.
 Node.prototype.focus = function () { document.activeElement = this; };
@@ -139,52 +143,60 @@ content.emit('keydown', { target: bodyText, key: ' ' });
 assert.equal(modal.hidden, true, 'nested keyboard interactions do not open the card');
 console.log('PASS: whole-card activation, nested-control exclusions, keyboard access and scroll reset on every open');
 
-// Search exists only in the nonmodal floating form, and follows visible bounds.
-tick(801); // Let the earlier synthetic long-press click suppression expire.
-assert.doesNotMatch(html, /compactSearch|class="search-box"/);
-assert.equal((html.match(/type="search"/g) || []).length, 1);
-assert.match(html, /<form[^>]+id="searchPanel"[^>]+hidden>/);
+// The directory replaces search and the standalone bookmark.
+tick(801);
+assert.doesNotMatch(html, /searchToggle|searchPanel|searchInput|resumeBookmark|type="search"/);
 const rail = html.match(/<aside class="floating-actions"[\s\S]*?<\/aside>/)[0];
-const order = [...rail.matchAll(/<button id="([^"]+)"/g)].map(match => match[1]);
-assert.deepEqual(order, ['searchToggle', 'filterToggle', 'resumeBookmark', 'backToTop']);
-const searchInput = document.getElementById('searchInput');
-const searchPanel = document.getElementById('searchPanel');
-const searchToggle = document.getElementById('searchToggle');
-const searchClose = document.getElementById('searchClose');
-api.state.type = 'grammar'; api.state.query = ''; api.render();
-const beforeSearch = content.innerHTML;
-searchToggle.emit('click');
-assert.equal(searchPanel.hidden, false);
-assert.equal(document.activeElement, searchInput, 'focus occurs in the click handler');
-assert.equal(searchToggle.getAttribute('aria-expanded'), 'true');
-assert.equal(content.innerHTML, beforeSearch, 'opening search does not rerender content');
-assert.equal(document.body.classList.contains('modal-open'), false, 'search does not lock or dim the page');
-searchInput.value = 'meaning2'; searchInput.emit('input'); tick(120);
-assert.match(content.innerHTML, /语法 03\/3/);
-assert.doesNotMatch(content.innerHTML, /语法 01\/3/);
-searchClose.emit('click'); assert.equal(searchPanel.hidden, true);
-assert.equal(api.state.query, 'meaning2', 'closing preserves the active query');
-searchToggle.emit('click');
-assert.equal(searchInput.value, 'meaning2');
-searchInput.value = ''; searchInput.emit('input'); tick(120);
-assert.match(content.innerHTML, /语法 01\/3/);
-searchInput.value = 'meaning1'; searchPanel.emit('submit');
-assert.equal(api.state.query, 'meaning1'); assert.equal(searchPanel.hidden, true);
-searchToggle.emit('click'); document.emit('keydown', { key: 'Escape' });
-assert.equal(searchPanel.hidden, true); assert.equal(document.activeElement, searchToggle);
-searchToggle.emit('click'); document.emit('click', { target: new Node() });
-assert.equal(searchPanel.hidden, true, 'outside clicks dismiss without swallowing the click');
-searchToggle.emit('click'); document.getElementById('filterToggle').emit('click');
-assert.equal(searchPanel.hidden, true, 'filter and search panels do not overlap');
-window.visualViewport.height = 510; window.visualViewport.offsetTop = 20;
-window.visualViewport.emit('resize');
+assert.deepEqual([...rail.matchAll(/<button id="([^"]+)"/g)].map(match => match[1]), ['tocToggle', 'filterToggle', 'backToTop']);
+api.state.type = 'grammar'; api.state.filter = 'followed';
+api.state.followed.add('g2'); api.state.mastered.add('g1');
+api.sessionResume['grammar:N5'] = 'g2'; api.state.lastSeen['grammar:N5'] = 'g3';
+api.render();
+const tocToggle = document.getElementById('tocToggle');
+tocToggle.emit('click');
+const tocModal = document.body.appended.at(-1);
+assert.equal(tocModal.hidden, false);
+assert.equal(tocModal.querySelector('#infoModalTitle').textContent, 'N5 · 语法目录');
+let directory = tocModal.querySelector('.modal-body').innerHTML;
+assert.equal((directory.match(/data-toc-id=/g) || []).length, 3, 'directory ignores card status filters');
+assert.match(directory, /toc-mastered/); assert.match(directory, /toc-followed/);
+assert.equal((directory.match(/class="toc-bookmark"/g) || []).length, 1);
+assert.match(directory, /data-toc-id="g2"[^]*?class="toc-bookmark"/);
+assert.doesNotMatch(directory.replace(/<[^>]*>/g, ''), /掌握|关注|上次|meaning/);
+const row = new Node(); row.dataset.tocId = 'g1'; row.closest = selector => selector === '[data-toc-id]' ? row : null;
+tocModal.emit('click', { target: row });
+assert.equal(tocModal.hidden, true); assert.equal(api.state.filter, 'all');
+assert.equal(document.getElementById('g1').lastScrollOptions.block, 'start');
+assert.equal(document.activeElement, document.getElementById('g1'));
+assert.equal(api.state.lastSeen['grammar:N5'], 'g1');
+// Selecting a destination in the current filter preserves that filter.
+api.state.filter = 'followed'; api.render(); tocToggle.emit('click');
+api.selectDirectoryItem('g2'); assert.equal(api.state.filter, 'followed');
+// A late vocabulary card must be materialized before scrolling to it.
+api.state.type = 'vocab'; api.state.filter = 'unmastered'; api.state.mastered.add('v99');
+api.state.startIndex = 0; api.state.visibleCount = 80; api.render();
+assert.equal(document.getElementById('v99'), null);
+tocToggle.emit('click');
+directory = tocModal.querySelector('.modal-body').innerHTML;
+assert.equal((directory.match(/data-toc-id=/g) || []).length, 100);
+assert.equal(tocModal.querySelector('#infoModalTitle').textContent, 'N5 · 词汇目录');
+api.selectDirectoryItem('v99');
+assert.equal(tocModal.hidden, true); assert.equal(api.state.filter, 'all');
+assert.ok(document.getElementById('v99')); assert.equal(api.state.startIndex, 91);
+assert.equal(document.getElementById('v99').lastScrollOptions.behavior, 'auto');
+assert.match(content.innerHTML, /词汇 100\/100/);
+window.JLPT_DATA.grammar.N4 = [{ ...grammar[0], id: 'n4g1', level: 'N4' }];
+api.state.type = 'grammar'; api.state.level = 'N4'; api.render(); tocToggle.emit('click');
+assert.equal((tocModal.querySelector('.modal-body').innerHTML.match(/data-toc-id=/g) || []).length, 1);
+assert.doesNotMatch(tocModal.querySelector('.modal-body').innerHTML, /class="toc-bookmark"/);
+api.selectDirectoryItem('v99'); assert.equal(tocModal.hidden, false, 'reject destinations from other categories');
+document.emit('keydown', { key: 'Escape' }); assert.equal(tocModal.hidden, true);
+assert.equal(document.activeElement, tocToggle);
+window.visualViewport.height = 510; window.visualViewport.offsetTop = 20; window.visualViewport.emit('resize');
 assert.equal(document.documentElement.style['--action-bottom-offset'], '314px');
-assert.equal(document.documentElement.style['--search-bottom-offset'], '314px');
-window.visualViewport.height = 844; window.visualViewport.offsetTop = 0;
-window.visualViewport.emit('resize');
+window.visualViewport.height = 844; window.visualViewport.offsetTop = 0; window.visualViewport.emit('resize');
 assert.equal(document.documentElement.style['--action-bottom-offset'], '0px');
-assert.equal(document.documentElement.style['--search-bottom-offset'], '0px');
-console.log('PASS: single floating search, action order, autofocus, query/reset/submit, dismissal and keyboard viewport offsets');
+console.log('PASS: complete category directory, icon-only states, prior-read marker, filtered/lazy destinations and focus restoration');
 // Compact navigation must initialize after its old search nodes are removed.
 context.MutationObserver = class { observe() {} disconnect() {} };
 context.queueMicrotask = fn => fn();
@@ -201,5 +213,4 @@ iosWindow.JLPT_INSTALL_CARD_GESTURES = () => ({ cancel() {} });
 const iosContext = vm.createContext({ ...context, window: iosWindow, document: iosDocument, getComputedStyle: () => ({ overflowY: 'auto' }) });
 vm.runInContext(appSource, iosContext);
 assert.equal(iosDocument.documentElement.style['--action-bottom-offset'], '290px');
-assert.equal(iosDocument.documentElement.style['--search-bottom-offset'], '90px');
 console.log('PASS: compact navigation startup and iOS absolute-rail positioning');
