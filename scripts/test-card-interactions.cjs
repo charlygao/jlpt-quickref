@@ -69,7 +69,9 @@ window.JLPT_PROGRESS_SYNC = { init() {}, saveItem: (id, data) => { sync = { id, 
 const app = appSource.replace(/\}\)\(\);\s*$/, 'window.testApp = { state, render, toggleStudyStatus }; })();');
 vm.runInContext(app, context);
 const api = window.testApp;
-assert.equal((content.innerHTML.match(/data-grammar-detail-id=/g) || []).length, 6);
+assert.equal((content.innerHTML.match(/data-grammar-detail-id=/g) || []).length, 3);
+assert.doesNotMatch(content.innerHTML, /grammar-example-trigger/);
+assert.equal((content.innerHTML.match(/<div class="example">/g) || []).length, 6);
 assert.match(content.innerHTML, /语法 03\/3/);
 api.state.query = 'meaning2'; api.render(); assert.match(content.innerHTML, /语法 03\/3/); assert.doesNotMatch(content.innerHTML, /语法 01\/3/);
 api.state.query = ''; api.state.filter = 'followed'; api.state.followed.add('g2'); api.render(); assert.match(content.innerHTML, /语法 02\/3/);
@@ -84,7 +86,7 @@ window.JLPT_RENDER_GRAMMAR_DETAIL = item => `<p>${item.title}</p>`;
 grammar.forEach(item => { item.detail = { category: '基础' }; });
 vm.runInContext(fs.readFileSync('grammar-details-ui.js', 'utf8'), context);
 const trigger = new Node(); trigger.dataset.grammarDetailId = 'g3';
-trigger.closest = selector => selector === '[data-grammar-detail-id]' ? trigger : null;
+trigger.closest = selector => selector === '.grammar-card[data-grammar-detail-id]' ? trigger : null;
 content.emit('click', { target: trigger });
 const modal = document.body.appended.at(-1);
 assert.equal(modal.hidden, false);
@@ -95,3 +97,39 @@ assert.equal(modal.hidden, false, 'inside clicks keep details open');
 modal.emit('click', { target: modal }); assert.equal(modal.hidden, true); assert.equal(document.activeElement, trigger);
 content.emit('click', { target: trigger }); document.emit('keydown', { key: 'Escape' }); assert.equal(modal.hidden, true);
 console.log('PASS: example details, inside/outside dismissal, focus restoration and Escape');
+
+// Hidden scroll containers ignore scrollTop writes, as in real browser layout.
+const scroller = modal.querySelector('.grammar-detail-modal');
+let detailScroll = 420;
+Object.defineProperty(scroller, 'scrollTop', {
+  get: () => detailScroll,
+  set: value => { if (!modal.hidden) detailScroll = value; },
+});
+content.emit('click', { target: trigger });
+assert.equal(detailScroll, 0, 'reopened details must reset after becoming visible');
+scroller.scrollTop = 650;
+modal.emit('click', { target: modal });
+const nextCard = new Node(); nextCard.dataset.grammarDetailId = 'g2';
+nextCard.closest = selector => selector === '.grammar-card[data-grammar-detail-id]' ? nextCard : null;
+const bodyText = new Node(); bodyText.closest = selector => nextCard.closest(selector);
+content.emit('click', { target: bodyText });
+assert.equal(detailScroll, 0, 'different cards also start at the top');
+assert.equal(modal.querySelector('#grammarDetailTitle').textContent, '文法1');
+modal.emit('click', { target: modal });
+// The delegated detail handler leaves nested controls to their own handlers.
+const detailClick = content.listeners.click.at(-1);
+for (const selector of ['button', 'a', 'input', 'summary', '[data-term]', '[data-conjugate-id]', '[data-status]', '[role="button"]']) {
+  const control = new Node();
+  control.closest = query => query === '.grammar-card[data-grammar-detail-id]' ? trigger : query.includes(selector) ? control : null;
+  detailClick({ target: control });
+  assert.equal(modal.hidden, true, `${selector} must not open grammar details`);
+}
+const vocabTarget = new Node();
+content.emit('click', { target: vocabTarget });
+assert.equal(modal.hidden, true, 'vocabulary cards have no grammar details');
+content.emit('keydown', { target: trigger, key: 'Enter' });
+assert.equal(modal.hidden, false, 'focused card opens with Enter');
+modal.emit('click', { target: modal });
+content.emit('keydown', { target: bodyText, key: ' ' });
+assert.equal(modal.hidden, true, 'nested keyboard interactions do not open the card');
+console.log('PASS: whole-card activation, nested-control exclusions, keyboard access and scroll reset on every open');

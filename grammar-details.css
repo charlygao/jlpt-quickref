@@ -1,19 +1,9 @@
-.grammar-example-trigger {
-  display: block;
-  width: 100%;
-  border: 0;
-  border-left: 3px solid var(--accent);
-  color: var(--text);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-.grammar-example-trigger .example-jp,
-.grammar-example-trigger .example-zh { display: block; }
-.grammar-example-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-@media (hover: hover) {
-  .grammar-example-trigger:hover { background: var(--accent-soft); }
-}
+.grammar-card { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.grammar-card:focus { outline: none; }
+.grammar-card:focus-visible { box-shadow: inset 0 0 0 2px var(--accent), var(--shadow); }
+.grammar-card .example-jp,
+.grammar-card .example-zh { display: block; }
+.grammar-detail-modal { scroll-behavior: auto; }
 .grammar-detail-backdrop {
   --detail-gap-top: max(40px, calc(env(safe-area-inset-top, 0px) + 24px));
   --detail-gap-bottom: max(40px, calc(env(safe-area-inset-bottom, 0px) + 24px));

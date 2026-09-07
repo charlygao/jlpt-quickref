@@ -42,12 +42,14 @@
     el.querySelector('#grammarDetailEyebrow').textContent = `${item.level} · ${d.category}`;
     el.querySelector('#grammarDetailTitle').textContent = item.title;
     el.querySelector('.grammar-detail-body').innerHTML = window.JLPT_RENDER_GRAMMAR_DETAIL(item);
-    el.querySelector('.grammar-detail-modal').scrollTop = 0;
     el.hidden = false;
     document.documentElement.classList.add('modal-open');
     document.body.classList.add('modal-open');
     if (!scrollRoot) document.body.style.top = `-${lockedY}px`;
     el.querySelector('.modal-close').focus({ preventScroll: true });
+    // A display:none scroller has no layout box; resetting it before showing
+    // the dialog can leave its previous scroll offset intact in the browser.
+    el.querySelector('.grammar-detail-modal').scrollTop = 0;
   }
 
   function close() {
@@ -63,11 +65,22 @@
 
   const content = document.getElementById('contentList');
   if (!content) return;
+  const interactiveSelector = 'button, a, input, select, textarea, label, summary, [role="button"], [role="link"], [contenteditable]:not([contenteditable="false"]), [data-term], [data-conjugate-id], [data-status]';
   content.addEventListener('click', event => {
-    const button = event.target.closest('[data-grammar-detail-id]');
-    if (!button) return;
-    const item = byId.get(button.dataset.grammarDetailId);
-    if (item) open(item, button);
+    if (event.defaultPrevented || event.target.closest(interactiveSelector)) return;
+    const card = event.target.closest('.grammar-card[data-grammar-detail-id]');
+    if (!card || !content.contains(card)) return;
+    const item = byId.get(card.dataset.grammarDetailId);
+    if (item) open(item, card);
+  });
+  content.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const card = event.target.closest('.grammar-card[data-grammar-detail-id]');
+    if (!card || event.target !== card || !content.contains(card)) return;
+    event.preventDefault();
+    if (event.repeat) return;
+    const item = byId.get(card.dataset.grammarDetailId);
+    if (item) open(item, card);
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Tab' && modal && !modal.hidden) {

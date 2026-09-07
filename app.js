@@ -170,7 +170,7 @@
 
   function grammarCard(item, index, total) {
     return `
-      <article class="card track-card" id="${item.id}" data-id="${item.id}">
+      <article class="card track-card grammar-card" id="${item.id}" data-id="${item.id}" data-grammar-detail-id="${escapeHtml(item.id)}" tabindex="0" aria-label="${escapeHtml(`${item.title} — 查看详细解说`)}" aria-haspopup="dialog">
         <div class="card-head">
           <div class="card-title-wrap">
             <h3>${escapeHtml(item.title)}</h3>
@@ -182,11 +182,11 @@
           <div class="meta-box connection-box"><label>接续</label><span>${decorateConnection(item.connection)}</span></div>
         </div>
         <div class="examples">
-          ${(item.examples || []).map(ex => `<button type="button" class="example grammar-example-trigger" data-grammar-detail-id="${escapeHtml(item.id)}" aria-label="${escapeHtml(`${ex.jp} — 查看${item.title}的详细解说`)}" aria-haspopup="dialog">
+          ${(item.examples || []).map(ex => `<div class="example">
             ${ex.covers ? `<span class="example-cover">${escapeHtml(ex.covers)}</span>` : ''}
             <span class="example-jp">${escapeHtml(ex.jp)}</span>
             <span class="example-zh">${escapeHtml(ex.zh)}</span>
-          </button>`).join('')}
+          </div>`).join('')}
         </div>
         <div class="card-internal-meta"><span>${item.level}</span><span aria-hidden="true">·</span><span>语法 ${String(index + 1).padStart(2, '0')}/${total}</span></div>
       </article>`;
