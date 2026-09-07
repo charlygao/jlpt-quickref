@@ -32,7 +32,7 @@
 | N1 | 97 | 3,159 |
 | **合计** | **388** | **8,235** |
 
-列表卡片共 **826 条日中例句**，所有 388 个语法点至少有 2 条例句，且每条例句都明确标注所展示的接续用法。五条语法已改写为“说明与场景例句相邻”的详情样板，另含详情专用的对比、易错点与例外讲解，不增加列表卡片长度。
+列表卡片共 **794 条日中例句**，全部 388 张语法卡片各有 2～3 条例句，每句标注实际使用的接续。所有详情均已改写为“说明与场景例句相邻”的格式：**336 份讲解、1,078 条详情例句**（按讲解统计，变体共享内容），覆盖常见用法、易错点、比较及必要的特殊情况，列表保持简短。
 
 词汇按常用度参考排序。N5 的 **773 个词**、N4 的 **648 个词**、N3 的 **1,693 个词**、N2 的 **1,962 个词**与 N1 的 **3,159 个词已全部覆盖**，全站 **8,235 个词**均有独立、人工审核的例句。
 
@@ -40,10 +40,10 @@ JLPT 官方没有公布逐条固定的完整词汇/语法清单，因此等级�
 
 ## 内容原则
 
-**本项目不自动生成例句。** 错误或机械的例句比没有例句更有害，因此词典导入、词频处理和页面运行时都没有造句 fallback：
+**本项目在数据导入和页面运行时不自动生成例句。** 错误或机械的例句比没有例句更有害，因此词典导入、词频处理和页面运行时都没有造句 fallback：
 
 - 完整词库导入只处理词形、读音、中文释义、词性和频率元数据；
-- 语法补充例句按语法 ID 显式保存；
+- 语法说明与例句按语法 ID 显式保存，每个用法、易错点和特殊情况都配日中例句与解析；
 - 词汇例句按明确词条人工整理并标记为 reviewed；
 - 如果某个词没有经过审核的例句，页面就只显示词义和词性；
 - CI 会拒绝 `examples-auto` 文件、运行时例句替换逻辑，以及高频词例句覆盖缺失。
@@ -80,21 +80,19 @@ JLPT 官方没有公布逐条固定的完整词汇/语法清单，因此等级�
 
 ## 语法例句与接续参考
 
-语法例句数据位于：
+页面语法内容的编辑入口：
 
 ```text
-data/grammar-examples-base.js
-data/grammar-examples-n5.js ... grammar-examples-n1.js
-data/grammar-examples-curated.js
-data/grammar-examples-review.js
+data/grammar-lessons-n5.js ... grammar-lessons-n1.js
+data/grammar-lessons.js
 data/grammar-terms.js
 ```
 
-所有补充例句都是显式静态数据。`grammar-examples-curated.js` 只按语法 ID 添加已经人工审核的例句，不存在按标题匹配、替词、模板包裹或运行时造句逻辑。
+各等级讲解文件保存释义、接续、列表例句及结构化详情，都是显式静态数据；`grammar-lessons.js` 检查覆盖后按 ID 应用。基础数据定义原有目录，早期 `grammar-examples-*` 文件仍保留，最终显示内容统一由讲解文件提供，不存在按标题匹配、替词或运行时造句逻辑。
 
 `grammar-terms.js` 提供接续术语的统一定义和活用说明。
 
-`grammar-lessons.js` 保存首批五条语法的改写内容，并同步普通体／礼貌体、汉字／假名变体卡片。新详情格式兼容其他尚未改写的语法，保留原有卡片 ID 与学习进度。后续编写与验收要求见 [`docs/grammar-authoring.md`](docs/grammar-authoring.md)。
+全部 388 张卡片共用 336 份讲解，普通体／礼貌体、汉字／假名变体保持内容一致，原有卡片 ID、等级、顺序与学习进度保持兼容。旧版通用详情已移除。编写与验收要求见 [`docs/grammar-authoring.md`](docs/grammar-authoring.md)。
 
 ## 词汇例句
 
@@ -141,6 +139,7 @@ Pages 部署前会验证：
 - 按页面渲染顺序，N5 全部 773 词、N4 全部 648 词、N3 全部 1,693 词、N2 全部 1,962 词和 N1 全部 3,159 词均具有人工审核例句（共 8,235 条）
 - 所有运行时可见词汇例句均带 reviewed 标记且不重复
 - 所有语法点至少 2 条完整日中例句且全部有接续标签；首例标签必须对应例句实际形式，不能直接复用多分支接续说明
+- 全部语法详情使用结构化讲解；每个说明块都有例句、译文、目标片段和解析，变体内容一致，空栏目隐藏，文本正确转义
 - 接续术语、详细词性和变形数据完整性
 - 各级最低词汇量与总内容量
 
@@ -161,6 +160,9 @@ python3 -m http.server 8000
 ├── compact-nav.css
 ├── app.js
 ├── compact-nav.js
+├── grammar-details-renderer.js
+├── grammar-details-ui.js
+├── grammar-details.css
 ├── FULL_VOCAB_NOTICE.md
 ├── FREQUENCY_NOTICE.md
 ├── data/
@@ -176,9 +178,14 @@ python3 -m http.server 8000
 │   ├── grammar-examples-base.js
 │   ├── grammar-examples-n5.js ... grammar-examples-n1.js
 │   ├── grammar-examples-curated.js
-│   └── grammar-examples-review.js
+│   ├── grammar-examples-review.js
+│   ├── grammar-lessons-n5.js ... grammar-lessons-n1.js
+│   └── grammar-lessons.js
+├── docs/
+│   └── grammar-authoring.md
 ├── scripts/
-│   └── build_full_vocab.py
+│   ├── build_full_vocab.py
+│   └── check-grammar-lessons.cjs
 └── .github/workflows/
     ├── pages.yml
     └── import-full-vocab.yml
