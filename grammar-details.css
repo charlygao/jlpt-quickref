@@ -119,6 +119,46 @@
   line-height: 1.65;
 }
 
+/* Reviewed lessons keep each explanation beside its own examples. */
+.grammar-lesson { overflow-wrap: anywhere; }
+.grammar-lesson .grammar-detail-chip { font-size: .875rem; }
+.grammar-lesson .grammar-detail-lead { font-size: 1rem; }
+.grammar-lesson .grammar-detail-section h4 { font-size: 1rem; }
+.grammar-register-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: .875rem;
+  line-height: 1.7;
+}
+.grammar-formation-rows { margin: 0; }
+.grammar-formation-row {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.grammar-formation-row:first-child { padding-top: 0; }
+.grammar-formation-row dt { color: var(--text); font-size: .875rem; font-weight: 750; }
+.grammar-formation-row dd { margin: 5px 0 0; }
+.grammar-formation-form { margin: 0; color: var(--accent); font-size: 1rem; line-height: 1.7; }
+.grammar-formation-derivation { margin: 5px 0 0; color: var(--muted); font-size: .875rem; line-height: 1.8; }
+.grammar-lesson-block + .grammar-lesson-block { margin-top: 22px; }
+.grammar-lesson-block h5 { margin: 0 0 6px; color: var(--text); font-size: 1rem; line-height: 1.6; }
+.grammar-lesson-explanation { margin: 0 0 10px; color: var(--text); font-size: 1rem; line-height: 1.8; }
+.grammar-lesson .grammar-detail-example-jp { font-size: 1.0625rem; }
+.grammar-lesson .grammar-detail-example-zh { font-size: .875rem; }
+.grammar-detail-example-jp mark {
+  padding: 0 2px;
+  border-radius: 3px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 750;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.grammar-example-note { margin: 9px 0 0; color: var(--text); font-size: .875rem; line-height: 1.75; }
+.grammar-example-incorrect { border-left-style: dashed; background: var(--code-bg); }
+.grammar-example-verdict { color: var(--text); font-size: .875rem; font-weight: 750; }
+.grammar-lesson .grammar-detail-example-head { font-size: .875rem; }
+
 @media (max-width: 700px) {
   .grammar-detail-btn { padding: 7px 8px; }
   .grammar-detail-body { padding-top: 16px; }

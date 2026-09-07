@@ -29,6 +29,9 @@ jobs:
           node --check app.js
           node --check compact-nav.js
           node --check supabase-progress.js
+          node --check grammar-details-renderer.js
+          node --check grammar-details-ui.js
+          node scripts/check-grammar-lessons.cjs
           for file in data/*.js; do node --check "$file"; done
 
           test -s data/full-vocab.js

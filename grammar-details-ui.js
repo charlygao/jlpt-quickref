@@ -4,23 +4,10 @@
 
   const items = Object.values(DATA.grammar).flat();
   const byId = new Map(items.map(item => [item.id, item]));
-  const escapeHtml = value => String(value ?? '')
-    .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
   const pageShell = document.querySelector('.page-shell');
   const scrollRoot = pageShell && /^(auto|scroll)$/.test(getComputedStyle(pageShell).overflowY) ? pageShell : null;
   const scrollTop = () => scrollRoot ? scrollRoot.scrollTop : window.scrollY || document.documentElement.scrollTop || 0;
   const scrollTo = top => (scrollRoot || window).scrollTo({ top, left: 0, behavior: 'auto' });
-  const list = values => `<ul>${values.map(value => `<li>${escapeHtml(value)}</li>`).join('')}</ul>`;
-
-  function examples(item) {
-    return (item.examples || []).map((example, index) => `
-      <article class="grammar-detail-example">
-        <div class="grammar-detail-example-head"><span>例 ${index + 1}</span>${example.covers ? `<code>${escapeHtml(example.covers)}</code>` : ''}</div>
-        <p class="grammar-detail-example-jp">${escapeHtml(example.jp)}</p>
-        <p class="grammar-detail-example-zh">${escapeHtml(example.zh)}</p>
-      </article>`).join('');
-  }
 
   let modal;
   let lockedY = 0;
@@ -54,14 +41,7 @@
     lockedY = scrollTop();
     el.querySelector('#grammarDetailEyebrow').textContent = `${item.level} · ${d.category}`;
     el.querySelector('#grammarDetailTitle').textContent = item.title;
-    el.querySelector('.grammar-detail-body').innerHTML = `
-      <div class="grammar-detail-meta"><span class="grammar-detail-chip">${escapeHtml(item.level)}</span><span class="grammar-detail-chip">${escapeHtml(d.category)}</span><span class="grammar-detail-chip">${escapeHtml(d.register.label)}</span></div>
-      <p class="grammar-detail-lead">${escapeHtml(d.overview)}</p>
-      <section class="modal-section grammar-detail-section"><h4>接续与构成</h4><div class="grammar-detail-connection">${escapeHtml(d.formation)}</div>${list(d.formationNotes)}</section>
-      <section class="modal-section grammar-detail-section"><h4>常见用法</h4>${list(d.usages)}</section>
-      <section class="modal-section grammar-detail-section"><h4>易错点</h4>${list(d.cautions)}</section>
-      <section class="modal-section grammar-detail-section"><h4>特殊情况</h4>${list(d.specialCases)}</section>
-      <section class="modal-section grammar-detail-section"><h4>例句</h4><div class="grammar-detail-examples">${examples(item)}</div></section>`;
+    el.querySelector('.grammar-detail-body').innerHTML = window.JLPT_RENDER_GRAMMAR_DETAIL(item);
     el.querySelector('.grammar-detail-modal').scrollTop = 0;
     el.hidden = false;
     document.documentElement.classList.add('modal-open');
