@@ -2,6 +2,13 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
+const html = fs.readFileSync('index.html', 'utf8');
+const htmlIds = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]));
+const appSource = fs.readFileSync('app.js', 'utf8');
+for (const [, id] of appSource.matchAll(/document\.getElementById\('([^']+)'\)/g)) {
+  assert.ok(htmlIds.has(id), `index.html is missing required app element #${id}`);
+}
+assert.doesNotMatch(html, /…\d+ tokens truncated…/, 'HTML must not contain truncated tool output');
 class Node {
   constructor() { this.listeners = {}; this.dataset = {}; this.style = {}; this.children = new Map(); this.isConnected = true; this.hidden = false; this.classes = new Set(); this.classList = { add: x => this.classes.add(x), remove: x => this.classes.delete(x), contains: x => this.classes.has(x), toggle: (x, on) => on ? this.classes.add(x) : this.classes.delete(x) }; }
   addEventListener(name, fn) { (this.listeners[name] ||= []).push(fn); }
@@ -19,7 +26,9 @@ class Node {
   focus() {}
 }
 const document = new Node(); document.body = new Node(); document.documentElement = new Node();
-document.createElement = () => new Node(); document.getElementById = id => document.querySelector(id);
+document.createElement = () => new Node();
+document.getElementById = id => htmlIds.has(id) ? document.querySelector(id) : null;
+assert.equal(document.getElementById('nonexistent-element'), null);
 const window = new Node(); window.innerWidth = 390; window.innerHeight = 844;
 let now = 0; let nextTimer = 0; const timers = new Map();
 const context = vm.createContext({ window, document, console, Date: { now: () => now }, setTimeout: (fn, ms) => { const id = ++nextTimer; timers.set(id, { fn, at: now + ms }); return id; }, clearTimeout: id => timers.delete(id), getComputedStyle: () => ({ overflowY: 'visible' }), localStorage: { getItem: () => null, setItem() {} }, matchMedia: () => ({ matches: false }), requestAnimationFrame() {}, IntersectionObserver: class { observe() {} disconnect() {} } });
@@ -57,7 +66,7 @@ window.JLPT_DATA = { grammar: { N5: grammar }, vocab: { N5: vocab } };
 let sync;
 window.JLPT_PROGRESS_SYNC = { init() {}, saveItem: (id, data) => { sync = { id, ...data }; } };
 // Expose closure references in this test context only; execute the real app startup.
-const app = fs.readFileSync('app.js', 'utf8').replace(/\}\)\(\);\s*$/, 'window.testApp = { state, render, toggleStudyStatus }; })();');
+const app = appSource.replace(/\}\)\(\);\s*$/, 'window.testApp = { state, render, toggleStudyStatus }; })();');
 vm.runInContext(app, context);
 const api = window.testApp;
 assert.equal((content.innerHTML.match(/data-grammar-detail-id=/g) || []).length, 6);
