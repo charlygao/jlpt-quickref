@@ -10,7 +10,7 @@ for (const [, id] of appSource.matchAll(/document\.getElementById\('([^']+)'\)/g
 }
 assert.doesNotMatch(html, /…\d+ tokens truncated…/, 'HTML must not contain truncated tool output');
 class Node {
-  constructor() { this.listeners = {}; this.dataset = {}; this.style = {}; this.children = new Map(); this.isConnected = true; this.hidden = false; this.classes = new Set(); this.classList = { add: x => this.classes.add(x), remove: x => this.classes.delete(x), contains: x => this.classes.has(x), toggle: (x, on) => on ? this.classes.add(x) : this.classes.delete(x) }; }
+  constructor() { this.listeners = {}; this.dataset = {}; this.style = { setProperty(name, value) { this[name] = value; } }; this.value = ''; this.children = new Map(); this.isConnected = true; this.hidden = false; this.classes = new Set(); this.classList = { add: x => this.classes.add(x), remove: x => this.classes.delete(x), contains: x => this.classes.has(x), toggle: (x, on) => on ? this.classes.add(x) : this.classes.delete(x) }; }
   addEventListener(name, fn) { (this.listeners[name] ||= []).push(fn); }
   emit(name, event = {}) { event.cancelable ??= true; event.preventDefault ||= () => { event.prevented = true; }; event.stopImmediatePropagation ||= () => { event.stopped = true; }; for (const fn of this.listeners[name] || []) { fn(event); if (event.stopped) break; } return event; }
   setAttribute(name, value) { this[name] = value; }
@@ -23,13 +23,18 @@ class Node {
   setPointerCapture(id) { this.capture = id; }
   hasPointerCapture(id) { return this.capture === id; }
   releasePointerCapture() { this.capture = null; }
-  focus() {}
+  focus() { document.activeElement = this; }
+  blur() { if (document.activeElement === this) document.activeElement = document.body; }
+  getBoundingClientRect() { return { bottom: 844, top: 0 }; }
 }
 const document = new Node(); document.body = new Node(); document.documentElement = new Node();
 document.createElement = () => new Node();
 document.getElementById = id => htmlIds.has(id) ? document.querySelector(id) : null;
+for (const tag of html.matchAll(/<[^>]+\bid="([^"]+)"[^>]*>/g)) {
+  if (/\bhidden(?:\s|>)/.test(tag[0])) document.getElementById(tag[1]).hidden = true;
+}
 assert.equal(document.getElementById('nonexistent-element'), null);
-const window = new Node(); window.innerWidth = 390; window.innerHeight = 844;
+const window = new Node(); window.innerWidth = 390; window.innerHeight = 844; window.visualViewport = new Node(); window.visualViewport.height = 844; window.visualViewport.offsetTop = 0;
 let now = 0; let nextTimer = 0; const timers = new Map();
 const context = vm.createContext({ window, document, console, Date: { now: () => now }, setTimeout: (fn, ms) => { const id = ++nextTimer; timers.set(id, { fn, at: now + ms }); return id; }, clearTimeout: id => timers.delete(id), getComputedStyle: () => ({ overflowY: 'visible' }), localStorage: { getItem: () => null, setItem() {} }, matchMedia: () => ({ matches: false }), requestAnimationFrame() {}, IntersectionObserver: class { observe() {} disconnect() {} } });
 function tick(ms) { now += ms; for (const [id, timer] of [...timers]) if (timer.at <= now) { timers.delete(id); timer.fn(); } }
@@ -133,3 +138,68 @@ modal.emit('click', { target: modal });
 content.emit('keydown', { target: bodyText, key: ' ' });
 assert.equal(modal.hidden, true, 'nested keyboard interactions do not open the card');
 console.log('PASS: whole-card activation, nested-control exclusions, keyboard access and scroll reset on every open');
+
+// Search exists only in the nonmodal floating form, and follows visible bounds.
+tick(801); // Let the earlier synthetic long-press click suppression expire.
+assert.doesNotMatch(html, /compactSearch|class="search-box"/);
+assert.equal((html.match(/type="search"/g) || []).length, 1);
+assert.match(html, /<form[^>]+id="searchPanel"[^>]+hidden>/);
+const rail = html.match(/<aside class="floating-actions"[\s\S]*?<\/aside>/)[0];
+const order = [...rail.matchAll(/<button id="([^"]+)"/g)].map(match => match[1]);
+assert.deepEqual(order, ['searchToggle', 'filterToggle', 'resumeBookmark', 'backToTop']);
+const searchInput = document.getElementById('searchInput');
+const searchPanel = document.getElementById('searchPanel');
+const searchToggle = document.getElementById('searchToggle');
+const searchClose = document.getElementById('searchClose');
+api.state.type = 'grammar'; api.state.query = ''; api.render();
+const beforeSearch = content.innerHTML;
+searchToggle.emit('click');
+assert.equal(searchPanel.hidden, false);
+assert.equal(document.activeElement, searchInput, 'focus occurs in the click handler');
+assert.equal(searchToggle.getAttribute('aria-expanded'), 'true');
+assert.equal(content.innerHTML, beforeSearch, 'opening search does not rerender content');
+assert.equal(document.body.classList.contains('modal-open'), false, 'search does not lock or dim the page');
+searchInput.value = 'meaning2'; searchInput.emit('input'); tick(120);
+assert.match(content.innerHTML, /语法 03\/3/);
+assert.doesNotMatch(content.innerHTML, /语法 01\/3/);
+searchClose.emit('click'); assert.equal(searchPanel.hidden, true);
+assert.equal(api.state.query, 'meaning2', 'closing preserves the active query');
+searchToggle.emit('click');
+assert.equal(searchInput.value, 'meaning2');
+searchInput.value = ''; searchInput.emit('input'); tick(120);
+assert.match(content.innerHTML, /语法 01\/3/);
+searchInput.value = 'meaning1'; searchPanel.emit('submit');
+assert.equal(api.state.query, 'meaning1'); assert.equal(searchPanel.hidden, true);
+searchToggle.emit('click'); document.emit('keydown', { key: 'Escape' });
+assert.equal(searchPanel.hidden, true); assert.equal(document.activeElement, searchToggle);
+searchToggle.emit('click'); document.emit('click', { target: new Node() });
+assert.equal(searchPanel.hidden, true, 'outside clicks dismiss without swallowing the click');
+searchToggle.emit('click'); document.getElementById('filterToggle').emit('click');
+assert.equal(searchPanel.hidden, true, 'filter and search panels do not overlap');
+window.visualViewport.height = 510; window.visualViewport.offsetTop = 20;
+window.visualViewport.emit('resize');
+assert.equal(document.documentElement.style['--action-bottom-offset'], '314px');
+assert.equal(document.documentElement.style['--search-bottom-offset'], '314px');
+window.visualViewport.height = 844; window.visualViewport.offsetTop = 0;
+window.visualViewport.emit('resize');
+assert.equal(document.documentElement.style['--action-bottom-offset'], '0px');
+assert.equal(document.documentElement.style['--search-bottom-offset'], '0px');
+console.log('PASS: single floating search, action order, autofocus, query/reset/submit, dismissal and keyboard viewport offsets');
+// Compact navigation must initialize after its old search nodes are removed.
+context.MutationObserver = class { observe() {} disconnect() {} };
+context.queueMicrotask = fn => fn();
+vm.runInContext(fs.readFileSync('compact-nav.js', 'utf8'), context);
+// iOS's absolute rail measures the app-shell bottom, not the fixed viewport.
+const iosDocument = new Node(); iosDocument.body = new Node(); iosDocument.documentElement = new Node();
+iosDocument.createElement = () => new Node();
+iosDocument.getElementById = id => htmlIds.has(id) ? iosDocument.querySelector(id) : null;
+iosDocument.body.getBoundingClientRect = () => ({ bottom: 1000, top: 0 });
+const iosWindow = new Node(); iosWindow.JLPT_DATA = window.JLPT_DATA;
+iosWindow.innerHeight = 800; iosWindow.innerWidth = 390;
+iosWindow.visualViewport = new Node(); iosWindow.visualViewport.height = 700; iosWindow.visualViewport.offsetTop = 10;
+iosWindow.JLPT_INSTALL_CARD_GESTURES = () => ({ cancel() {} });
+const iosContext = vm.createContext({ ...context, window: iosWindow, document: iosDocument, getComputedStyle: () => ({ overflowY: 'auto' }) });
+vm.runInContext(appSource, iosContext);
+assert.equal(iosDocument.documentElement.style['--action-bottom-offset'], '290px');
+assert.equal(iosDocument.documentElement.style['--search-bottom-offset'], '90px');
+console.log('PASS: compact navigation startup and iOS absolute-rail positioning');

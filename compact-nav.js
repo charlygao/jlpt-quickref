@@ -2,14 +2,11 @@
   const body = document.body;
   const topbar = document.querySelector('.topbar');
   const controls = document.querySelector('.controls');
-  const fullSearch = document.getElementById('searchInput');
-  const compactInput = document.getElementById('compactSearchInput');
-  const compactSearchButton = document.getElementById('compactSearchButton');
   const compactTypeButtons = [...document.querySelectorAll('[data-compact-type]')];
   const compactLevelButtons = [...document.querySelectorAll('[data-compact-level]')];
   const pageShell = document.querySelector('.page-shell');
 
-  if (!topbar || !controls || !fullSearch || !compactInput || !compactSearchButton) return;
+  if (!topbar || !controls) return;
 
   const pageScrollRoot = pageShell && /^(auto|scroll)$/.test(getComputedStyle(pageShell).overflowY)
     ? pageShell
@@ -18,7 +15,6 @@
 
   let ticking = false;
   let compact = false;
-  let searchOpen = false;
   let compactThreshold = 0;
   let measuredWidth = window.innerWidth;
 
@@ -35,22 +31,6 @@
     const level = activeFullLevel();
     compactTypeButtons.forEach(btn => btn.classList.toggle('is-active', btn.dataset.compactType === type));
     compactLevelButtons.forEach(btn => btn.classList.toggle('is-active', btn.dataset.compactLevel === level));
-    if (document.activeElement !== compactInput && compactInput.value !== fullSearch.value) {
-      compactInput.value = fullSearch.value;
-    }
-  }
-
-  function setSearchOpen(open, { focus = true } = {}) {
-    searchOpen = Boolean(open && compact);
-    body.classList.toggle('compact-search-open', searchOpen);
-    compactSearchButton.textContent = searchOpen ? '×' : '⌕';
-    compactSearchButton.setAttribute('aria-label', searchOpen ? '收起搜索' : '搜索');
-    if (searchOpen) {
-      compactInput.value = fullSearch.value;
-      if (focus) requestAnimationFrame(() => compactInput.focus({ preventScroll: true }));
-    } else if (document.activeElement === compactInput) {
-      compactInput.blur();
-    }
   }
 
   function updateCompactMode() {
@@ -62,7 +42,6 @@
     if (shouldCompact === compact) return;
     compact = shouldCompact;
     body.classList.toggle('compact-header', compact);
-    if (!compact) setSearchOpen(false, { focus: false });
     syncCompactState();
   }
 
@@ -116,24 +95,6 @@
     });
   });
 
-  compactSearchButton.addEventListener('click', () => setSearchOpen(!searchOpen));
-
-  compactInput.addEventListener('input', () => {
-    fullSearch.value = compactInput.value;
-    fullSearch.dispatchEvent(new Event('input', { bubbles: true }));
-  });
-
-  fullSearch.addEventListener('input', () => {
-    if (compactInput.value !== fullSearch.value) compactInput.value = fullSearch.value;
-  });
-
-  compactInput.addEventListener('keydown', event => {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      setSearchOpen(false, { focus: false });
-    }
-  });
-
   // app.js changes active classes after every render. Observe those class changes so
   // full and compact controls stay synchronized after navigation and resume actions.
   const stateObserver = new MutationObserver(() => queueMicrotask(syncCompactState));
@@ -148,3 +109,4 @@
   syncCompactState();
   requestAnimationFrame(updateCompactMode);
 })();
+

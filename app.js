@@ -22,6 +22,9 @@
     contentList: document.getElementById('contentList'),
     emptyState: document.getElementById('emptyState'),
     searchInput: document.getElementById('searchInput'),
+    searchToggle: document.getElementById('searchToggle'),
+    searchPanel: document.getElementById('searchPanel'),
+    searchClose: document.getElementById('searchClose'),
     grammarCount: document.getElementById('grammarCount'),
     vocabCount: document.getElementById('vocabCount'),
     masteredCount: document.getElementById('masteredCount'),
@@ -514,6 +517,10 @@
   }
 
   function updateControls() {
+    els.searchToggle.classList.toggle('has-query', Boolean(state.query.trim()));
+    const searchLabel = state.query.trim() ? `搜索：${state.query.trim()}` : '搜索';
+    els.searchToggle.setAttribute('aria-label', searchLabel);
+    els.searchToggle.title = searchLabel;
     document.querySelectorAll('.segment').forEach(x => x.classList.toggle('is-active', x.dataset.type === state.type));
     document.querySelectorAll('.level-chip').forEach(x => x.classList.toggle('is-active', x.dataset.level === state.level));
   }
@@ -668,8 +675,6 @@
       state.query = '';
       state.filter = 'all';
       els.searchInput.value = '';
-      const compactSearchInput = document.getElementById('compactSearchInput');
-      if (compactSearchInput) compactSearchInput.value = '';
       resetWindow();
       render();
     }
@@ -704,10 +709,54 @@
   }));
 
   let searchTimer;
+  function applySearch() {
+    clearTimeout(searchTimer);
+    state.query = els.searchInput.value;
+    render({ reset: true });
+  }
   els.searchInput.addEventListener('input', (e) => {
     clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => { state.query = e.target.value; render({ reset: true }); }, 120);
+    if (!e.isComposing) searchTimer = setTimeout(applySearch, 120);
   });
+  els.searchInput.addEventListener('compositionend', applySearch);
+
+  function setSearchOpen(open, { returnFocus = false } = {}) {
+    els.searchPanel.hidden = !open;
+    els.searchToggle.setAttribute('aria-expanded', String(open));
+    if (open) {
+      setFilterMenuOpen(false);
+      // Keep focus synchronous with the tap so iOS opens the keyboard.
+      els.searchInput.focus({ preventScroll: true });
+      updateFloatingPosition();
+    } else {
+      if (document.activeElement === els.searchInput) els.searchInput.blur();
+      if (returnFocus) els.searchToggle.focus({ preventScroll: true });
+    }
+  }
+
+  els.searchToggle.addEventListener('click', () => setSearchOpen(els.searchPanel.hidden));
+  els.searchClose.addEventListener('click', () => setSearchOpen(false, { returnFocus: true }));
+  els.searchPanel.addEventListener('submit', event => {
+    event.preventDefault();
+    applySearch();
+    setSearchOpen(false, { returnFocus: true });
+  });
+
+  function updateFloatingPosition() {
+    const viewport = window.visualViewport;
+    const visibleBottom = viewport ? viewport.offsetTop + viewport.height : window.innerHeight;
+    // iOS uses an absolute rail inside its stable app shell. Other browsers
+    // use a fixed rail. Measure each containing block instead of guessing a
+    // browser-toolbar height; the visual viewport also follows the keyboard.
+    const railBottom = pageScrollRoot ? document.body.getBoundingClientRect().bottom : window.innerHeight;
+    document.documentElement.style.setProperty('--action-bottom-offset', `${Math.max(0, railBottom - visibleBottom)}px`);
+    document.documentElement.style.setProperty('--search-bottom-offset', `${Math.max(0, window.innerHeight - visibleBottom)}px`);
+  }
+  window.visualViewport?.addEventListener('resize', updateFloatingPosition, { passive: true });
+  window.visualViewport?.addEventListener('scroll', updateFloatingPosition, { passive: true });
+  window.addEventListener('resize', updateFloatingPosition, { passive: true });
+  window.addEventListener('pageshow', updateFloatingPosition, { passive: true });
+  updateFloatingPosition();
 
   els.contentList.addEventListener('click', (e) => {
     const term = e.target.closest('[data-term]');
@@ -737,6 +786,7 @@
   });
 
   els.filterToggle.addEventListener('click', () => {
+    setSearchOpen(false);
     const open = els.filterToggle.getAttribute('aria-expanded') !== 'true';
     setFilterMenuOpen(open, { focus: open });
   });
@@ -751,9 +801,15 @@
   });
   document.addEventListener('click', e => {
     if (!e.target.closest('.floating-actions')) setFilterMenuOpen(false);
+    if (!e.target.closest('#searchPanel, #searchToggle')) setSearchOpen(false);
   });
   document.addEventListener('keydown', e => {
-    if (e.key !== 'Escape') return;
+    if (e.key !== 'Escape' || e.isComposing) return;
+    if (!els.searchPanel.hidden) {
+      e.preventDefault();
+      setSearchOpen(false, { returnFocus: true });
+      return;
+    }
     if (modal && !modal.hidden) closeModal();
     else setFilterMenuOpen(false);
   });
@@ -779,4 +835,3 @@
   scheduleAutoLoadCheck();
   requestAnimationFrame(() => requestAnimationFrame(() => jumpToSaved({ auto: true })));
 })();
-
