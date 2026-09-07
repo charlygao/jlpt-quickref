@@ -217,7 +217,9 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
   display: grid; justify-items: end; gap: 9px;
 }
 .floating-icon-btn { display: grid; place-items: center; width: 46px; height: 46px; padding: 0; font-size: 18px; }
-.filter-toggle-btn { color: var(--accent); font-size: 21px; line-height: 1; }
+.filter-toggle-btn { color: var(--muted); line-height: 1; }
+.filter-icon { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.filter-toggle-btn.has-filter { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); }
 .filter-menu {
   position: absolute; right: calc(100% + 8px); bottom: 53px;
   max-width: calc(100vw - 84px);

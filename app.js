@@ -32,7 +32,6 @@
     themeToggle: document.getElementById('themeToggle'),
     backToTop: document.getElementById('backToTop'),
     filterToggle: document.getElementById('filterToggle'),
-    filterIcon: document.getElementById('filterIcon'),
     filterLabel: document.getElementById('filterLabel'),
     filterMenu: document.getElementById('filterMenu'),
   };
@@ -521,13 +520,6 @@
     unmastered: '未掌握',
     followed: '关注',
   };
-  const FILTER_ICONS = {
-    all: '☷',
-    mastered: '✓',
-    unmastered: '○',
-    followed: '★',
-  };
-
   function updateFilterControls() {
     const label = FILTER_LABELS[state.filter];
     const items = DATA[state.type][state.level] || [];
@@ -538,7 +530,7 @@
       unmastered: items.length - masteredCount,
       followed: items.filter(item => state.followed.has(item.id)).length,
     };
-    els.filterIcon.textContent = FILTER_ICONS[state.filter];
+    els.filterToggle.classList.toggle('has-filter', state.filter !== 'all');
     els.filterLabel.textContent = label;
     els.filterToggle.setAttribute('aria-label', `筛选：${label}`);
     els.filterToggle.title = `筛选：${label}`;
