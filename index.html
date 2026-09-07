@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f6f7fb" />
   <meta name="description" content="面向中文母语者的 JLPT N5-N1 日语语法与词汇快速参考。" />
   <title>日语语法・词汇速查 | JLPT N5-N1</title>
-  <link rel="stylesheet" href="styles.css?v=20260907-action-style-1" />
+  <link rel="stylesheet" href="styles.css?v=20260908-category-stats-1" />
   <link rel="stylesheet" href="compact-nav.css?v=20260907-account-theme-1" />
   <link rel="stylesheet" href="card-gestures.css?v=20260907-interactions-3" />
   <link rel="stylesheet" href="grammar-details.css?v=20260907-interactions-3" />
@@ -86,9 +86,20 @@
         <p>按 JLPT 等级浏览核心语法、接续、中文解释、例句与分级词汇。未登录时进度保存在本机；登录后，掌握与关注状态会同步到云端。</p>
       </div>
       <div class="hero-stats">
-        <div><strong id="grammarCount">0</strong><span>语法点</span></div>
-        <div><strong id="vocabCount">0</strong><span>词汇</span></div>
-        <div><strong id="masteredCount">0</strong><span>已掌握</span></div>
+        <div>
+          <strong id="grammarCount">0</strong><span>语法点</span>
+          <dl class="hero-stat-progress">
+            <div><dt>掌握</dt><dd id="grammarMasteredCount">0</dd></div>
+            <div><dt>关注</dt><dd id="grammarFollowedCount">0</dd></div>
+          </dl>
+        </div>
+        <div>
+          <strong id="vocabCount">0</strong><span>词汇</span>
+          <dl class="hero-stat-progress">
+            <div><dt>掌握</dt><dd id="vocabMasteredCount">0</dd></div>
+            <div><dt>关注</dt><dd id="vocabFollowedCount">0</dd></div>
+          </dl>
+        </div>
       </div>
     </section>
 
@@ -224,7 +235,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-progress.js?v=20260904-supabase-2"></script>
   <script src="card-gestures.js?v=20260907-interactions-1"></script>
-  <script src="app.js?v=20260907-default-dark-1"></script>
+  <script src="app.js?v=20260908-category-stats-1"></script>
   <script src="grammar-details-renderer.js?v=20260907-grammar-lessons-2"></script>
   <script src="grammar-details-ui.js?v=20260907-interactions-3"></script>
   <script src="compact-nav.js?v=20260907-floating-search-1"></script>

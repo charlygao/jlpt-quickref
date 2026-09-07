@@ -23,7 +23,10 @@
     tocToggle: document.getElementById('tocToggle'),
     grammarCount: document.getElementById('grammarCount'),
     vocabCount: document.getElementById('vocabCount'),
-    masteredCount: document.getElementById('masteredCount'),
+    grammarMasteredCount: document.getElementById('grammarMasteredCount'),
+    grammarFollowedCount: document.getElementById('grammarFollowedCount'),
+    vocabMasteredCount: document.getElementById('vocabMasteredCount'),
+    vocabFollowedCount: document.getElementById('vocabFollowedCount'),
     progressLabel: document.getElementById('progressLabel'),
     progressPercent: document.getElementById('progressPercent'),
     progressBar: document.getElementById('progressBar'),
@@ -502,7 +505,11 @@
   function updateStats() {
     els.grammarCount.textContent = flatCount(DATA.grammar).toLocaleString();
     els.vocabCount.textContent = flatCount(DATA.vocab).toLocaleString();
-    els.masteredCount.textContent = state.mastered.size.toLocaleString();
+    for (const type of ['grammar', 'vocab']) {
+      const categoryItems = Object.values(DATA[type]).flat();
+      els[`${type}MasteredCount`].textContent = categoryItems.filter(item => state.mastered.has(item.id)).length.toLocaleString();
+      els[`${type}FollowedCount`].textContent = categoryItems.filter(item => state.followed.has(item.id)).length.toLocaleString();
+    }
 
     const items = DATA[state.type][state.level] || [];
     const mastered = items.filter(x => state.mastered.has(x.id)).length;
