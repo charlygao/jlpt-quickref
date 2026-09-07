@@ -11,7 +11,13 @@
   <link rel="stylesheet" href="card-gestures.css?v=20260907-interactions-3" />
   <link rel="stylesheet" href="grammar-details.css?v=20260907-interactions-3" />
 </head>
-<body>
+<body class="dark">
+  <script>
+    // Apply the saved choice before the first paint; new visitors start dark.
+    try {
+      document.body.classList.toggle('dark', localStorage.getItem('jlptQuickRef.theme') !== 'light');
+    } catch (_) {}
+  </script>
   <header class="topbar">
     <div class="brand">
       <div class="brand-mark">日</div>
@@ -218,7 +224,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-progress.js?v=20260904-supabase-2"></script>
   <script src="card-gestures.js?v=20260907-interactions-1"></script>
-  <script src="app.js?v=20260907-filter-icon-1"></script>
+  <script src="app.js?v=20260907-default-dark-1"></script>
   <script src="grammar-details-renderer.js?v=20260907-grammar-lessons-2"></script>
   <script src="grammar-details-ui.js?v=20260907-interactions-3"></script>
   <script src="compact-nav.js?v=20260907-floating-search-1"></script>

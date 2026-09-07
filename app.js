@@ -71,9 +71,7 @@
     Object.assign(sessionResume, state.lastSeen);
 
     const theme = localStorage.getItem(THEME_KEY);
-    if (theme === 'dark' || (!theme && matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.body.classList.add('dark');
-    }
+    document.body.classList.toggle('dark', theme !== 'light');
   }
 
   function saveState() {
