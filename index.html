@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#f6f7fb" />
   <meta name="description" content="面向中文母语者的 JLPT N5-N1 日语语法与词汇快速参考。" />
   <title>日语语法・词汇速查 | JLPT N5-N1</title>
-  <link rel="stylesheet" href="styles.css?v=20260907-floating-search-1" />
-  <link rel="stylesheet" href="compact-nav.css?v=20260907-floating-search-1" />
+  <link rel="stylesheet" href="styles.css?v=20260907-account-theme-1" />
+  <link rel="stylesheet" href="compact-nav.css?v=20260907-account-theme-1" />
   <link rel="stylesheet" href="card-gestures.css?v=20260907-interactions-3" />
   <link rel="stylesheet" href="grammar-details.css?v=20260907-interactions-3" />
 </head>
@@ -45,7 +45,6 @@
         </svg>
         <span class="account-status-dot" aria-hidden="true"></span>
       </button>
-      <button id="themeToggle" class="icon-btn" aria-label="切换深浅色">◐</button>
     </div>
   </header>
 
@@ -154,6 +153,10 @@
         <button id="authModalClose" type="button" class="modal-close" aria-label="关闭">×</button>
       </header>
       <div class="modal-body auth-modal-body">
+        <button id="themeToggle" class="auth-theme-toggle" type="button" aria-pressed="false">
+          <span><span aria-hidden="true">◐</span> 深色模式</span>
+          <span class="theme-state" aria-hidden="true">已关闭</span>
+        </button>
         <div id="authSignedOut">
           <p class="modal-summary">登录后，掌握与关注进度会安全地保存到云端，并可在其他设备上继续使用。</p>
           <form id="authForm" class="auth-form">
@@ -225,7 +228,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-progress.js?v=20260904-supabase-2"></script>
   <script src="card-gestures.js?v=20260907-interactions-1"></script>
-  <script src="app.js?v=20260907-floating-search-1"></script>
+  <script src="app.js?v=20260907-account-theme-1"></script>
   <script src="grammar-details-renderer.js?v=20260907-grammar-lessons-2"></script>
   <script src="grammar-details-ui.js?v=20260907-interactions-3"></script>
   <script src="compact-nav.js?v=20260907-floating-search-1"></script>

@@ -296,6 +296,16 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
 /* Account and Supabase progress sync */
 .auth-modal-card { width: min(460px, 100%); }
 .auth-modal-body { display: grid; gap: 14px; }
+.auth-theme-toggle {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; min-height: 48px; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--code-bg); color: var(--text); font-size: 14px; cursor: pointer;
+}
+.auth-theme-toggle .theme-state { color: var(--muted); }
+.auth-theme-toggle[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.auth-theme-toggle[aria-pressed="true"] .theme-state { color: var(--accent); }
+.auth-theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .auth-form { display: grid; gap: 12px; margin-top: 18px; }
 .auth-form label { display: grid; gap: 6px; }
 .auth-form label > span { color: var(--muted); font-size: 12px; font-weight: 750; }

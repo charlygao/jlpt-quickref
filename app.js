@@ -814,13 +814,20 @@
     else setFilterMenuOpen(false);
   });
   els.resumeBookmark.addEventListener('click', () => jumpToSaved());
+  function updateThemeControl() {
+    const dark = document.body.classList.contains('dark');
+    els.themeToggle.setAttribute('aria-pressed', String(dark));
+    els.themeToggle.querySelector('.theme-state').textContent = dark ? '已开启' : '已关闭';
+  }
   els.themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark');
     localStorage.setItem(THEME_KEY, document.body.classList.contains('dark') ? 'dark' : 'light');
+    updateThemeControl();
   });
   els.backToTop.addEventListener('click', () => scrollPageTo({ top: 0, behavior: 'smooth' }));
 
   loadState();
+  updateThemeControl();
   render();
   window.JLPT_PROGRESS_SYNC?.init({
     getProgress: () => ({ mastered: [...state.mastered], followed: [...state.followed] }),

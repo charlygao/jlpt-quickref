@@ -111,8 +111,3 @@ body.compact-header .card {
   body.compact-header .topbar > .topbar-actions { gap: 3px; margin-left: 3px; }
   body.compact-header .topbar > .topbar-actions .icon-btn { width: 34px; height: 34px; }
 }
-
-@media (max-width: 390px) {
-  body.compact-header .topbar > .topbar-actions #themeToggle { display: none; }
-}
-
