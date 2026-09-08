@@ -12,7 +12,7 @@ assert.doesNotMatch(html, /…\d+ tokens truncated…/, 'HTML must not contain t
 class Node {
   constructor() { this.listeners = {}; this.dataset = {}; this.style = { setProperty(name, value) { this[name] = value; } }; this.value = ''; this.children = new Map(); this.isConnected = true; this.hidden = false; this.classes = new Set(); this.classList = { add: x => this.classes.add(x), remove: x => this.classes.delete(x), contains: x => this.classes.has(x), toggle: (x, on) => on ? this.classes.add(x) : this.classes.delete(x) }; }
   addEventListener(name, fn) { (this.listeners[name] ||= []).push(fn); }
-  emit(name, event = {}) { event.cancelable ??= true; event.preventDefault ||= () => { event.prevented = true; }; event.stopImmediatePropagation ||= () => { event.stopped = true; }; for (const fn of this.listeners[name] || []) { fn(event); if (event.stopped) break; } return event; }
+  emit(name, event = {}) { event.cancelable ??= true; event.preventDefault ||= () => { event.prevented = true; }; event.stopPropagation ||= () => {}; event.stopImmediatePropagation ||= () => { event.stopped = true; }; for (const fn of this.listeners[name] || []) { fn(event); if (event.stopped) break; } return event; }
   setAttribute(name, value) { this[name] = value; }
   getAttribute(name) { return this[name]; }
   hasAttribute(name) { return this[name] !== undefined; }
@@ -44,6 +44,7 @@ const window = new Node(); window.innerWidth = 390; window.innerHeight = 844; wi
 let now = 0; let nextTimer = 0; const timers = new Map();
 const context = vm.createContext({ window, document, console, Date: { now: () => now }, setTimeout: (fn, ms) => { const id = ++nextTimer; timers.set(id, { fn, at: now + ms }); return id; }, clearTimeout: id => timers.delete(id), getComputedStyle: () => ({ overflowY: 'visible' }), localStorage: { getItem: () => null, setItem() {} }, matchMedia: () => ({ matches: false }), requestAnimationFrame() {}, IntersectionObserver: class { observe() {} disconnect() {} } });
 function tick(ms) { now += ms; for (const [id, timer] of [...timers]) if (timer.at <= now) { timers.delete(id); timer.fn(); } }
+vm.runInContext(fs.readFileSync('tap-dismiss.js', 'utf8'), context);
 vm.runInContext(fs.readFileSync('card-gestures.js', 'utf8'), context);
 const content = document.getElementById('contentList'); const card = new Node(); card.dataset.id = 'g1';
 const status = { mastered: false, followed: false }; const calls = [];
@@ -102,7 +103,8 @@ assert.equal(modal.hidden, false);
 assert.equal(modal.querySelector('#grammarDetailTitle').textContent, '文法2');
 assert.match(modal.querySelector('.grammar-detail-body').innerHTML, /文法2/);
 modal.emit('click', { target: modal.querySelector('.grammar-detail-body') });
-assert.equal(modal.hidden, false, 'inside clicks keep details open');
+assert.equal(modal.hidden, true, 'inside taps close details');
+content.emit('click', { target: trigger });
 modal.emit('click', { target: modal }); assert.equal(modal.hidden, true); assert.equal(document.activeElement, trigger);
 content.emit('click', { target: trigger }); document.emit('keydown', { key: 'Escape' }); assert.equal(modal.hidden, true);
 console.log('PASS: example details, inside/outside dismissal, focus restoration and Escape');
@@ -265,3 +267,24 @@ assert.equal(iosDocument.body.classList.contains('compact-progress-visible'), tr
 iosRoot.scrollTop = 0; iosWindow.testCompact.updateCompactMode();
 assert.equal(iosDocument.body.classList.contains('compact-progress-visible'), false);
 console.log('PASS: header identity, live compact progress and desktop/iOS scroll handoff in both directions');
+// Tap dismissal must leave native scrolling untouched and reject drag clicks.
+const surface = new Node(); let dismissals = 0;
+window.JLPT_INSTALL_TAP_DISMISS(surface, () => { dismissals += 1; });
+const touch = (x = 100, y = 200) => ({ clientX: x, clientY: y });
+const down = () => surface.emit('touchstart', { touches: [touch()] });
+const up = (x, y) => surface.emit('touchend', { changedTouches: [touch(x, y)] });
+const click = () => surface.emit('click', { target: surface, detail: 1 });
+down(); up(); click(); assert.equal(dismissals, 1);
+down(); const scrolling = surface.emit('touchmove', { touches: [touch(100, 140)] });
+assert.equal(scrolling.prevented, undefined, 'native scrolling is never canceled');
+up(100, 140); click(); assert.equal(dismissals, 1);
+down(); surface.emit('touchmove', { touches: [touch(100, 240)] }); up(); click();
+assert.equal(dismissals, 1, 'dragging back to the origin is not a tap');
+down(); surface.emit('scroll'); up(); click(); assert.equal(dismissals, 1);
+down(); surface.emit('touchcancel'); up(); click(); assert.equal(dismissals, 1);
+down(); surface.emit('touchstart', { touches: [touch(), touch(120)] }); up(); click(); assert.equal(dismissals, 1);
+down(); tick(600); up(); click(); assert.equal(dismissals, 1, 'long press does not dismiss');
+down(); up(102, 202); click(); assert.equal(dismissals, 2, 'a fresh tap works after a canceled gesture');
+surface.emit('pointerdown', { pointerType: 'mouse', button: 0, ...touch() });
+surface.emit('pointerup', { pointerType: 'mouse', ...touch() }); click(); assert.equal(dismissals, 3);
+console.log('PASS: tap dismissal, untouched scrolling, drag return, scroll/cancel/pinch/long-press rejection and subsequent taps');

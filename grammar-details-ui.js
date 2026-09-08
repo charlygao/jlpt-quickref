@@ -28,8 +28,7 @@
         <div class="modal-body grammar-detail-body"></div>
       </section>`;
     document.body.appendChild(modal);
-    modal.querySelector('.modal-close').addEventListener('click', close);
-    modal.addEventListener('click', event => { if (event.target === modal) close(); });
+    window.JLPT_INSTALL_TAP_DISMISS(modal, close);
     modal.addEventListener('touchmove', event => { if (event.target === modal) event.preventDefault(); }, { passive: false });
     return modal;
   }

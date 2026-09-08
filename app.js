@@ -375,8 +375,10 @@
         <div class="modal-body"></div>
       </section>`;
     document.body.appendChild(modal);
-    modal.querySelector('.modal-close').addEventListener('click', closeModal);
+    window.JLPT_INSTALL_TAP_DISMISS(modal, closeModal, () => !modal.classList.contains('is-toc'));
+    modal.querySelector('.modal-close').addEventListener('click', () => { if (modal.classList.contains('is-toc')) closeModal(); });
     modal.addEventListener('click', e => {
+      if (!modal.classList.contains('is-toc')) return;
       if (e.target === modal) { closeModal(); return; }
       const row = e.target.closest('[data-toc-id]');
       if (row && modal.classList.contains('is-toc')) selectDirectoryItem(row.dataset.tocId);
