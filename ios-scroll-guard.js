@@ -14,6 +14,11 @@
     let attempts = 0;
     let restoring = false;
 
+    window.JLPT_VIEWPORT_DEBUG?.setGuard(() => ({
+      touching, interactionRemaining: Math.max(0, interactionUntil - Date.now()),
+      pending, nativeTop, suppressed, attempts, restoring,
+    }));
+
     const displaced = () => Math.abs(window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0) > 1;
     const blocked = () => touching || document.hidden ||
       document.body.classList.contains('modal-open') ||
@@ -43,10 +48,12 @@
       // a second animation competing with Safari's native scroll animation.
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       restoring = false;
+      window.JLPT_VIEWPORT_DEBUG?.record('guard.restore');
       onRestore?.();
     }
 
     function recover() {
+      window.JLPT_VIEWPORT_DEBUG?.record('guard.recover');
       if (!pending) return;
       if (blocked()) { suppressed = true; return; }
       if (Date.now() < interactionUntil) { suppressed = true; schedule(); return; }

@@ -303,3 +303,5 @@ assert.equal(iosRoot.scrollTop, 0);
 iosWindow.testCompact.updateCompactMode();
 assert.equal(iosDocument.body.classList.contains('compact-header'), false);
 require('./test-ios-scroll-guard.cjs');
+
+require('./test-viewport-debug.cjs');
