@@ -16,7 +16,7 @@ function setup(nested = true, refusesScroll = false) {
   let modal = false;
   let editable = false;
   document.body = { classList: { contains: () => modal } };
-  document.documentElement = { scrollTop: 0, classList: { contains: () => modal } };
+  document.documentElement = { scrollTop: 0, classList: { contains: () => modal }, style: { setProperty(name, value) { this[name] = value; } } };
   document.activeElement = { closest: () => editable };
   window.visualViewport = { ...target(), scale: 1, offsetTop: 0 };
   window.scrollY = 0;
@@ -53,7 +53,13 @@ function setup(nested = true, refusesScroll = false) {
     scrollRoot: nested ? root : null,
     onBackToTop() { topCalls++; root.scrollTop = 0; },
   });
-  tick(500);
+  tick(1000);
+  if (nested && !refusesScroll) {
+    assert.equal(window.scrollY, 1, 'arm the outer scroll marker after startup');
+    assert.equal(root.scrollTop, 1500, 'arming must preserve the reading position');
+    assert.equal(document.documentElement.style['--ios-scroll-origin'], '1px');
+    corrections.length = 0;
+  }
   return {
     window, document, root, guard, tick, corrections,
     get topCalls() { return topCalls; },
@@ -63,12 +69,12 @@ function setup(nested = true, refusesScroll = false) {
   };
 }
 
-// Both directions of unexpected outer scrolling recover once, after settling.
-for (const y of [-64, 80]) {
+// A native 1 -> 0 transition works even without the old 40px displacement.
+for (const y of [-64, 0]) {
   const t = setup();
   t.drift(y); t.tick(100); assert.equal(t.corrections.length, 0);
   t.drift(y / 2); t.tick(180);
-  assert.equal(t.window.scrollY, 0);
+  assert.equal(t.window.scrollY, 1);
   assert.equal(t.root.scrollTop, 0);
   assert.equal(t.topCalls, 1);
   t.tick(1000); assert.equal(t.corrections.length, 1);
@@ -77,7 +83,24 @@ for (const y of [-64, 80]) {
 // A native animation may normalize the outer position before the timer runs.
 {
   const t = setup(); t.drift(-50); t.drift(0); t.tick(200);
-  assert.equal(t.topCalls, 1); assert.equal(t.corrections.length, 0);
+  assert.equal(t.topCalls, 1); assert.equal(t.corrections.length, 1);
+  t.root.scrollTop = 4296;
+  t.drift(0); t.tick(200);
+  assert.equal(t.topCalls, 2, 'repeated native taps rearm and continue to work');
+  assert.equal(t.root.scrollTop, 0);
+}
+
+// The supplied diagnostic trace: positive drift during restore is not a tap.
+{
+  const t = setup();
+  t.window.emit('pageshow');
+  t.root.scrollTop = 2788;
+  for (const y of [6, 24, 38, 40]) { t.drift(y); t.tick(90); }
+  t.tick(1000);
+  assert.equal(t.window.scrollY, 1);
+  assert.equal(t.topCalls, 0); assert.equal(t.root.scrollTop, 2788);
+  t.root.scrollTop = 4296; t.drift(0); t.tick(200);
+  assert.equal(t.topCalls, 1); assert.equal(t.root.scrollTop, 0);
 }
 
 // Viewport chrome changes at a stationary document must not jump the reading.
@@ -97,7 +120,7 @@ for (const y of [-64, 80]) {
   t.document.emit('touchend', { touches: [{}] }); t.tick(1000);
   assert.equal(t.corrections.length, 0);
   t.document.emit('touchend', { touches: [] }); t.tick(1000);
-  assert.equal(t.window.scrollY, 0); assert.equal(t.topCalls, 0);
+  assert.equal(t.window.scrollY, 1); assert.equal(t.topCalls, 0);
   assert.equal(t.root.scrollTop, 1500);
   t.drift(-30); t.tick(200); assert.equal(t.topCalls, 1, 'fresh native action is still handled');
 }
@@ -112,20 +135,20 @@ for (const mode of ['editable', 'modal', 'zoom']) {
   if (mode === 'zoom') { t.window.visualViewport.scale = 1; t.window.visualViewport.emit('resize'); }
   else t[mode](false);
   t.tick(1000);
-  assert.equal(t.window.scrollY, 0);
+  assert.equal(t.window.scrollY, 1);
   assert.equal(t.topCalls, 0); assert.equal(t.root.scrollTop, 1500);
 }
 
 // History restore and rotation normalize only the shell, preserving position.
 for (const event of ['pageshow', 'resize']) {
   const t = setup(); t.window.emit(event); t.drift(70); t.tick(1000);
-  assert.equal(t.window.scrollY, 0); assert.equal(t.topCalls, 0);
+  assert.equal(t.window.scrollY, 1); assert.equal(t.topCalls, 0);
 }
 
 // Explicit button recovery cancels any delayed native back-to-top request.
 {
   const t = setup(); t.drift(-70); t.guard.reset(); t.tick(1000);
-  assert.equal(t.window.scrollY, 0); assert.equal(t.topCalls, 0);
+  assert.equal(t.window.scrollY, 1); assert.equal(t.topCalls, 0);
 }
 
 // No recurring correction loop if WebKit cannot apply the requested scroll.
@@ -139,4 +162,4 @@ for (const event of ['pageshow', 'resize']) {
   const t = setup(false); assert.equal(t.guard, null); t.drift(500); t.tick(1000);
   assert.equal(t.corrections.length, 0); assert.equal(t.window.scrollY, 500);
 }
-console.log('PASS: iOS outer-scroll recovery, debounce, bounded retries, gesture/keyboard/modal/zoom exclusions and history preservation');
+console.log('PASS: iOS native top marker, repeated taps, recorded reading-restore sequence, outer-scroll recovery, debounce, bounded retries, gesture/keyboard/modal/zoom exclusions and history preservation');

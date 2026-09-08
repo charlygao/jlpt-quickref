@@ -369,9 +369,9 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
   .conj-row { grid-template-columns: 94px 1fr; }
 }
 
-/* Keep Safari's persistent chrome outside the scrolling layer. The document
-   itself never scrolls on iOS; only .page-shell does, so neither the header nor
-   the action rail can be re-parented by WebKit's sticky/fixed compositor. */
+/* Keep iOS chrome outside the content scroller. The shell fits the document's
+   actual viewport (100lvh leaves a toolbar-sized outer scroll range). JS parks
+   the document at a compensated 1px origin to observe native status-bar taps. */
 @supports (-webkit-touch-callout: none) {
   :root {
     --ios-top-buffer: 24px;
@@ -381,14 +381,15 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
     height: 100%;
     overflow: hidden;
     overscroll-behavior: none;
+    scroll-behavior: auto;
   }
 
   body {
     position: relative;
+    top: var(--ios-scroll-origin, 0px);
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    height: 100lvh;
+    height: 100%;
     min-height: 0;
     overflow: hidden;
     overscroll-behavior: none;
@@ -423,7 +424,7 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
 
   body.modal-open {
     position: relative;
-    top: 0 !important;
+    top: var(--ios-scroll-origin, 0px) !important;
   }
 
   body.modal-open .page-shell {
