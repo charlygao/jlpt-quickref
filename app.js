@@ -804,7 +804,16 @@
     localStorage.setItem(THEME_KEY, document.body.classList.contains('dark') ? 'dark' : 'light');
     updateThemeControl();
   });
-  els.backToTop.addEventListener('click', () => scrollPageTo({ top: 0, behavior: 'smooth' }));
+  const backToTop = () => scrollPageTo({ top: 0, behavior: 'smooth' });
+  const iosScrollGuard = window.JLPT_INSTALL_IOS_SCROLL_GUARD({
+    scrollRoot: pageScrollRoot,
+    onBackToTop: backToTop,
+    onRestore: updateFloatingPosition,
+  });
+  els.backToTop.addEventListener('click', () => {
+    iosScrollGuard?.reset();
+    backToTop();
+  });
 
   loadState();
   updateThemeControl();

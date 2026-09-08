@@ -44,6 +44,7 @@ const window = new Node(); window.innerWidth = 390; window.innerHeight = 844; wi
 let now = 0; let nextTimer = 0; const timers = new Map();
 const context = vm.createContext({ window, document, console, Date: { now: () => now }, setTimeout: (fn, ms) => { const id = ++nextTimer; timers.set(id, { fn, at: now + ms }); return id; }, clearTimeout: id => timers.delete(id), getComputedStyle: () => ({ overflowY: 'visible' }), localStorage: { getItem: () => null, setItem() {} }, matchMedia: () => ({ matches: false }), requestAnimationFrame() {}, IntersectionObserver: class { observe() {} disconnect() {} } });
 function tick(ms) { now += ms; for (const [id, timer] of [...timers]) if (timer.at <= now) { timers.delete(id); timer.fn(); } }
+vm.runInContext(fs.readFileSync('ios-scroll-guard.js', 'utf8'), context);
 vm.runInContext(fs.readFileSync('tap-dismiss.js', 'utf8'), context);
 vm.runInContext(fs.readFileSync('card-gestures.js', 'utf8'), context);
 const content = document.getElementById('contentList'); const card = new Node(); card.dataset.id = 'g1';
@@ -214,6 +215,7 @@ iosWindow.innerHeight = 800; iosWindow.innerWidth = 390;
 iosWindow.visualViewport = new Node(); iosWindow.visualViewport.height = 700; iosWindow.visualViewport.offsetTop = 10;
 iosWindow.JLPT_INSTALL_CARD_GESTURES = () => ({ cancel() {} });
 const iosContext = vm.createContext({ ...context, window: iosWindow, document: iosDocument, getComputedStyle: () => ({ overflowY: 'auto' }) });
+vm.runInContext(fs.readFileSync('ios-scroll-guard.js', 'utf8'), iosContext);
 vm.runInContext(appSource, iosContext);
 assert.equal(iosDocument.documentElement.style['--action-bottom-offset'], '290px');
 console.log('PASS: compact navigation startup and iOS absolute-rail positioning');
@@ -288,3 +290,16 @@ down(); up(102, 202); click(); assert.equal(dismissals, 2, 'a fresh tap works af
 surface.emit('pointerdown', { pointerType: 'mouse', button: 0, ...touch() });
 surface.emit('pointerup', { pointerType: 'mouse', ...touch() }); click(); assert.equal(dismissals, 3);
 console.log('PASS: tap dismissal, untouched scrolling, drag return, scroll/cancel/pinch/long-press rejection and subsequent taps');
+
+// The existing button repairs the outer document and scrolls the same inner
+// root used by the guard's native back-to-top callback.
+iosWindow.scrollY = -60;
+iosRoot.scrollTop = 900;
+iosWindow.scrollTo = options => { iosWindow.scrollY = options.top; };
+iosRoot.scrollTo = options => { iosRoot.scrollTop = options.top; };
+iosDocument.getElementById('backToTop').emit('click');
+assert.equal(iosWindow.scrollY, 0);
+assert.equal(iosRoot.scrollTop, 0);
+iosWindow.testCompact.updateCompactMode();
+assert.equal(iosDocument.body.classList.contains('compact-header'), false);
+require('./test-ios-scroll-guard.cjs');
