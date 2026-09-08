@@ -1,6 +1,7 @@
 (() => {
   // Explicit, local-only diagnostics. Never enabled for normal visitors.
-  if (new URLSearchParams(window.location.search).get('viewport-debug') !== '1') return;
+  if (document.body?.dataset.viewportDebug !== '1' &&
+      new URLSearchParams(window.location.search).get('viewport-debug') !== '1') return;
   const started = Date.now();
   const rows = [];
   let guardState = () => null;
@@ -9,7 +10,8 @@
   let previousSample;
   const panel = document.createElement('aside');
   panel.setAttribute('aria-label', '屏幕位置诊断');
-  panel.style.cssText = 'position:absolute;z-index:200;left:12px;bottom:calc(max(env(safe-area-inset-bottom,0px),var(--action-bottom-offset,0px)) + 12px);width:calc(100% - 84px);max-width:360px;box-sizing:border-box;padding:10px;border:1px solid #64748b;border-radius:10px;background:#0f172a;color:#f8fafc;font:12px/1.5 monospace;';
+  const panelHost = document.querySelector('.topbar') || document.body;
+  panel.style.cssText = `position:absolute;z-index:200;left:12px;top:${panelHost === document.body ? '12px' : 'calc(100% + 8px)'};width:calc(100% - 84px);max-width:360px;box-sizing:border-box;padding:10px;border:1px solid #64748b;border-radius:10px;background:#0f172a;color:#f8fafc;font:12px/1.5 monospace;`;
   const readout = document.createElement('div');
   readout.style.whiteSpace = 'pre-wrap';
   const copy = document.createElement('button');
@@ -17,7 +19,7 @@
   copy.textContent = '空区出现后，复制诊断';
   copy.style.cssText = 'margin-top:6px;min-height:36px;width:100%;border:0;border-radius:6px;background:#334155;color:#fff;font:inherit;';
   panel.append(readout, copy);
-  document.body.appendChild(panel);
+  panelHost.appendChild(panel);
 
   const number = value => Number.isFinite(value) ? Math.round(value * 100) / 100 : null;
   const rect = node => {
@@ -94,7 +96,7 @@
     frozen = true;
     clearInterval(interval);
     const report = JSON.stringify({
-      version: 'viewport-debug-1', userAgent: navigator.userAgent,
+      version: 'viewport-debug-2', userAgent: navigator.userAgent,
       screen: { width: window.screen.width, height: window.screen.height, pixelRatio: window.devicePixelRatio },
       rows,
     });
@@ -105,4 +107,6 @@
     }).catch(() => showFallback(report));
   });
   record('initial');
+  const status = document.getElementById('viewportDebugStatus');
+  if (status) status.textContent = '诊断 v2 · 已开启';
 })();

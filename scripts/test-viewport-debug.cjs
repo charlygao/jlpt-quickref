@@ -3,10 +3,10 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const source = fs.readFileSync('viewport-debug.js', 'utf8');
 // Normal visits must exit before reading DOM geometry or starting timers.
-vm.runInNewContext(source, { URLSearchParams, window: { location: { search: '' } } });
+vm.runInNewContext(source, { URLSearchParams, window: { location: { search: '' } }, document: { body: { dataset: {} } } });
 
 class Node {
-  constructor() { this.style = {}; this.listeners = {}; this.children = []; this.classList = { contains: () => false }; }
+  constructor() { this.style = {}; this.dataset = {}; this.listeners = {}; this.children = []; this.classList = { contains: () => false }; }
   setAttribute() {}
   addEventListener(name, fn) { this.listeners[name] = fn; }
   append(...nodes) { this.children.push(...nodes); }
@@ -17,8 +17,11 @@ class Node {
   for (const clipboardWorks of [true, false]) {
     const document = new Node();
     document.body = new Node(); document.documentElement = new Node();
-    document.createElement = () => new Node(); document.querySelector = () => new Node();
-    const window = new Node(); window.location = { search: '?viewport-debug=1' };
+    const header = new Node();
+    document.createElement = () => new Node(); document.querySelector = () => header;
+    document.getElementById = () => null;
+    const window = new Node(); window.location = { search: clipboardWorks ? '?viewport-debug=1' : '' };
+    if (!clipboardWorks) document.body.dataset.viewportDebug = '1';
     window.visualViewport = new Node(); window.visualViewport.offsetTop = 0;
     window.scrollY = 0; window.innerHeight = 800; window.screen = { width: 390, height: 844 };
     let report;
@@ -33,7 +36,7 @@ class Node {
       setTimeout(fn) { fn(); },
     };
     vm.runInNewContext(source, context);
-    const panel = document.body.children[0]; const button = panel.children[1];
+    const panel = header.children[0]; const button = panel.children[1];
     window.JLPT_VIEWPORT_DEBUG.setGuard(() => ({ attempts: 2 }));
     for (let i = 0; i < 60; i++) window.JLPT_VIEWPORT_DEBUG.record('test');
     interval();
@@ -53,5 +56,5 @@ class Node {
       assert.equal(panel.children[2].value, report);
     }
   }
-  console.log('PASS: opt-in viewport diagnostics, zero-scroll geometry, bounded history, clipboard and manual-copy fallback');
+  console.log('PASS: opt-in viewport diagnostics, zero-scroll geometry, dedicated route, header mounting, bounded history, clipboard and manual-copy fallback');
 })().catch(error => { console.error(error); process.exitCode = 1; });

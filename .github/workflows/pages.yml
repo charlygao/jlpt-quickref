@@ -26,6 +26,7 @@ jobs:
 
       - name: Validate static data policy and JavaScript
         run: |
+          node scripts/build-viewport-diagnostics.cjs
           node --check app.js
           node --check card-gestures.js
           node scripts/test-card-interactions.cjs
