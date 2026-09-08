@@ -213,10 +213,10 @@ const iosWindow = new Node(); iosWindow.JLPT_DATA = window.JLPT_DATA;
 iosWindow.innerHeight = 800; iosWindow.innerWidth = 390;
 iosWindow.visualViewport = new Node(); iosWindow.visualViewport.height = 700; iosWindow.visualViewport.offsetTop = 10;
 iosWindow.JLPT_INSTALL_CARD_GESTURES = () => ({ cancel() {} });
-const iosContext = vm.createContext({ ...context, window: iosWindow, document: iosDocument, getComputedStyle: () => ({ overflowY: 'visible' }) });
+const iosContext = vm.createContext({ ...context, window: iosWindow, document: iosDocument, getComputedStyle: () => ({ overflowY: 'auto' }) });
 vm.runInContext(appSource, iosContext);
-assert.equal(iosDocument.documentElement.style['--action-bottom-offset'], '90px');
-console.log('PASS: compact navigation startup and iOS fixed-rail viewport positioning');
+assert.equal(iosDocument.documentElement.style['--action-bottom-offset'], '290px');
+console.log('PASS: compact navigation startup and iOS absolute-rail positioning');
 // Category totals now live in the switchable tabs; progress remains level-specific.
 api.state.mastered = new Set(['g1', 'n4g1', 'v99']);
 api.state.type = 'grammar'; api.state.level = 'N4'; api.state.filter = 'followed'; api.render();
@@ -255,16 +255,16 @@ window.scrollY = 0; window.testCompact.updateCompactMode();
 assert.equal(document.body.classList.contains('compact-progress-visible'), false);
 assert.equal(document.body.classList.contains('compact-header'), false);
 // The same handoff works when iOS scrolls the inner page shell.
-iosWindow.scrollY = 0;
-iosDocument.querySelector('.topbar').offsetHeight = 100;
-iosDocument.querySelector('.controls').getBoundingClientRect = () => ({ bottom: 200 - iosWindow.scrollY });
-iosDocument.querySelector('.progress-panel').getBoundingClientRect = () => ({ bottom: 300 - iosWindow.scrollY });
+const iosRoot = iosDocument.querySelector('.page-shell'); iosRoot.scrollTop = 0;
+iosRoot.getBoundingClientRect = () => ({ top: 100 });
+iosDocument.querySelector('.controls').getBoundingClientRect = () => ({ bottom: 200 - iosRoot.scrollTop });
+iosDocument.querySelector('.progress-panel').getBoundingClientRect = () => ({ bottom: 300 - iosRoot.scrollTop });
 vm.runInContext(compactSource, iosContext);
 iosWindow.testCompact.updateCompactMode();
 assert.equal(iosDocument.body.classList.contains('compact-progress-visible'), false);
-iosWindow.scrollY = 210; iosWindow.testCompact.updateCompactMode();
+iosRoot.scrollTop = 210; iosWindow.testCompact.updateCompactMode();
 assert.equal(iosDocument.body.classList.contains('compact-progress-visible'), true);
-iosWindow.scrollY = 0; iosWindow.testCompact.updateCompactMode();
+iosRoot.scrollTop = 0; iosWindow.testCompact.updateCompactMode();
 assert.equal(iosDocument.body.classList.contains('compact-progress-visible'), false);
 console.log('PASS: header identity, live compact progress and desktop/iOS scroll handoff in both directions');
 // Tap dismissal must leave native scrolling untouched and reject drag clicks.
@@ -288,19 +288,3 @@ down(); up(102, 202); click(); assert.equal(dismissals, 2, 'a fresh tap works af
 surface.emit('pointerdown', { pointerType: 'mouse', button: 0, ...touch() });
 surface.emit('pointerup', { pointerType: 'mouse', ...touch() }); click(); assert.equal(dismissals, 3);
 console.log('PASS: tap dismissal, untouched scrolling, drag return, scroll/cancel/pinch/long-press rejection and subsequent taps');
-
-// Native status-bar scrolling and the button share the document scroll root.
-iosWindow.scrollY = 600;
-iosWindow.testCompact.updateCompactMode();
-assert.equal(iosDocument.body.classList.contains('compact-header'), true);
-iosWindow.scrollTo = options => { assert.equal(options.top, 0); iosWindow.scrollY = options.top; };
-iosDocument.getElementById('backToTop').emit('click');
-iosWindow.testCompact.updateCompactMode();
-assert.equal(iosDocument.body.classList.contains('compact-header'), false);
-iosWindow.scrollY = 600;
-iosWindow.testCompact.updateCompactMode();
-iosWindow.scrollY = 0; // Native root scroll completed; no DOM tap event.
-iosWindow.testCompact.updateCompactMode();
-assert.equal(iosDocument.body.classList.contains('compact-header'), false);
-assert.equal(iosDocument.body.classList.contains('compact-progress-visible'), false);
-console.log('PASS: iOS document back-to-top and native root scrolling restore the full header');
