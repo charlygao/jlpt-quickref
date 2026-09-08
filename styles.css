@@ -369,35 +369,15 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
   .conj-row { grid-template-columns: 94px 1fr; }
 }
 
-/* Keep Safari's persistent chrome outside the scrolling layer. The document
-   itself never scrolls on iOS; only .page-shell does, so neither the header nor
-   the action rail can be re-parented by WebKit's sticky/fixed compositor. */
+/* Use the document as the single iOS page scroller. Safari's status-bar
+   shortcut scrolls this same root as the in-page back-to-top button. A hidden
+   document around a 100lvh nested scroller can leave the viewport displaced. */
 @supports (-webkit-touch-callout: none) {
   :root {
     --ios-top-buffer: 24px;
   }
 
-  html {
-    height: 100%;
-    overflow: hidden;
-    overscroll-behavior: none;
-  }
-
-  body {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    height: 100lvh;
-    min-height: 0;
-    overflow: hidden;
-    overscroll-behavior: none;
-  }
-
   .topbar {
-    position: relative;
-    top: auto;
-    flex: 0 0 auto;
     height: calc(var(--topbar-height) + env(safe-area-inset-top) + var(--ios-top-buffer));
     padding-top: calc(10px + env(safe-area-inset-top) + var(--ios-top-buffer));
     padding-bottom: 10px;
@@ -409,41 +389,20 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
   }
 
   .page-shell {
-    flex: 1 1 auto;
-    min-height: 0;
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 10px;
     padding-bottom: calc(var(--action-bottom-offset, 0px) + env(safe-area-inset-bottom) + 64px);
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior-y: contain;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  body.modal-open {
-    position: relative;
-    top: 0 !important;
-  }
-
-  body.modal-open .page-shell {
-    overflow: hidden;
   }
 
   .page-shell .card {
-    scroll-margin-top: 12px;
+    scroll-margin-top: calc(var(--topbar-height) + env(safe-area-inset-top) + var(--ios-top-buffer) + 12px);
   }
 
   .floating-actions {
-    position: absolute;
-    top: auto;
     right: max(12px, env(safe-area-inset-right));
-    width: auto;
-    height: auto;
-    margin: 0;
     -webkit-transform: none;
     transform: none;
-    contain: layout style;
   }
 }
 
