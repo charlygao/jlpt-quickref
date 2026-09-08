@@ -114,14 +114,30 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .eyebrow { color: var(--accent); text-transform: uppercase; font-size: 11px; font-weight: 800; letter-spacing: .12em; }
 .hero h2 { margin: 8px 0 10px; font-size: clamp(26px, 5vw, 42px); line-height: 1.14; letter-spacing: -.03em; }
 .hero p { margin: 0; color: var(--muted); line-height: 1.75; }
-.hero-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: end; gap: 8px; }
-.hero-stats > div { padding: 13px 8px; background: var(--code-bg); border-radius: 16px; text-align: center; }
-.hero-stats strong { display: block; font-size: 21px; }
-.hero-stats > div > span { color: var(--muted); font-size: 13px; }
-.hero-stat-progress { display: grid; gap: 5px; margin: 10px 0 0; font-size: 13px; }
-.hero-stat-progress > div { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; }
-.hero-stat-progress dt { color: var(--muted); }
-.hero-stat-progress dd { margin: 0; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.hero-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: end; gap: 12px; }
+.hero-stat-card {
+  min-width: 0; padding: 16px 14px 14px;
+  border: 1px solid var(--line); border-radius: 18px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 35%, var(--panel-solid)), var(--panel-solid));
+}
+.hero-stat-label { color: var(--muted); font-size: 14px; font-weight: 600; }
+.hero-stat-total {
+  display: block; margin: 6px 0 14px; color: var(--text);
+  font-size: clamp(26px, 4vw, 34px); line-height: 1.15;
+  font-weight: 750; letter-spacing: -.04em; font-variant-numeric: tabular-nums;
+}
+.hero-stat-progress {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
+  margin: 0; padding-top: 12px; border-top: 1px solid var(--line);
+}
+.hero-stat-progress > div { min-width: 0; }
+.hero-stat-progress dt { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.hero-stat-progress dt span { color: var(--accent); }
+.hero-stat-progress > div:last-child dt span { color: var(--accent-2); }
+.hero-stat-progress dd { margin: 4px 0 0; color: var(--text); font-size: 15px; font-weight: 650; line-height: 1.3; font-variant-numeric: tabular-nums; }
+@media (min-width: 701px) {
+  .hero { grid-template-columns: minmax(0, 1.3fr) minmax(300px, 1fr); }
+}
 
 .controls { margin-top: 14px; padding: 16px; display: grid; gap: 13px; }
 .sticky-controls { position: sticky; top: calc(var(--topbar-height) + 10px); z-index: 30; }
@@ -464,7 +480,6 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
 }
 
 @media (max-width: 390px) {
-  .hero-stats strong { font-size: 18px; }
   .level-row { gap: 5px; }
   .level-chip { padding-inline: 4px; }
   .vocab-line { gap: 8px; }

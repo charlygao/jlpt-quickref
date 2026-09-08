@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f6f7fb" />
   <meta name="description" content="面向中文母语者的 JLPT N5-N1 日语语法与词汇快速参考。" />
   <title>日语语法・词汇速查 | JLPT N5-N1</title>
-  <link rel="stylesheet" href="styles.css?v=20260908-category-stats-1" />
+  <link rel="stylesheet" href="styles.css?v=20260908-stats-design-2" />
   <link rel="stylesheet" href="compact-nav.css?v=20260907-account-theme-1" />
   <link rel="stylesheet" href="card-gestures.css?v=20260907-interactions-3" />
   <link rel="stylesheet" href="grammar-details.css?v=20260907-interactions-3" />
@@ -86,18 +86,20 @@
         <p>按 JLPT 等级浏览核心语法、接续、中文解释、例句与分级词汇。未登录时进度保存在本机；登录后，掌握与关注状态会同步到云端。</p>
       </div>
       <div class="hero-stats">
-        <div>
-          <strong id="grammarCount">0</strong><span>语法点</span>
+        <div class="hero-stat-card">
+          <span class="hero-stat-label">语法</span>
+          <strong class="hero-stat-total" id="grammarCount">0</strong>
           <dl class="hero-stat-progress">
-            <div><dt>掌握</dt><dd id="grammarMasteredCount">0</dd></div>
-            <div><dt>关注</dt><dd id="grammarFollowedCount">0</dd></div>
+            <div><dt><span aria-hidden="true">✓</span> 掌握</dt><dd id="grammarMasteredCount">0</dd></div>
+            <div><dt><span aria-hidden="true">★</span> 关注</dt><dd id="grammarFollowedCount">0</dd></div>
           </dl>
         </div>
-        <div>
-          <strong id="vocabCount">0</strong><span>词汇</span>
+        <div class="hero-stat-card">
+          <span class="hero-stat-label">词汇</span>
+          <strong class="hero-stat-total" id="vocabCount">0</strong>
           <dl class="hero-stat-progress">
-            <div><dt>掌握</dt><dd id="vocabMasteredCount">0</dd></div>
-            <div><dt>关注</dt><dd id="vocabFollowedCount">0</dd></div>
+            <div><dt><span aria-hidden="true">✓</span> 掌握</dt><dd id="vocabMasteredCount">0</dd></div>
+            <div><dt><span aria-hidden="true">★</span> 关注</dt><dd id="vocabFollowedCount">0</dd></div>
           </dl>
         </div>
       </div>
