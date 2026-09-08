@@ -206,4 +206,6 @@ python3 -m http.server 8000
 
 “检查并更新”下载最新完整离线包，完成后刷新页面使用。下载失败可重试续传，旧包继续可用。构建脚本校验所有资源，按内容生成版本号；每个页面的资源固定到同一版本，避免更新时混用旧脚本与新数据。Service Worker 仅缓存本站静态资源，不缓存 Supabase API 或账号请求。
 
+数据、样式或脚本发布新版本后，页面会在启动、回到前台、恢复网络时检查更新；在前台停留时每 5 分钟检查一次。出现提示后可选“更新并刷新”或“稍后”。只有新包完整下载并校验成功才会刷新；已下载新包时可离线“立即刷新”。用户面板中也保留刷新入口。选择“稍后”会在当前页面内暂缓同一版本的提示，不强制刷新，不清除学习进度。
+
 发布前执行 `node scripts/build-viewport-diagnostics.cjs` 和 `node scripts/build-offline.cjs`，将 `dist/` 发布到 GitHub Pages；现有 Actions 已自动执行。离线功能需要 HTTPS，或本机 localhost。Supabase SDK 固定为本地 `vendor/supabase-2.116.0.js`，许可证见 `vendor/supabase-LICENSE`。

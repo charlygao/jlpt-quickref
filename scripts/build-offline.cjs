@@ -23,7 +23,7 @@ function build(root, output) {
   const release = hash([...files].sort().map(([name, bytes]) => `${name}:${hash(bytes)}`).join('\n') + template + fs.readFileSync(__filename)).slice(0, 20);
   const versionURL = url => `${url}${url.includes('?') ? '&' : '?'}offlinev=${release}`;
   for (const file of htmlFiles) {
-    const html = files.get(file).toString().replace(/((?:src|href)=")([^"]+)(")/g,
+    const html = files.get(file).toString().replace('</head>', `  <meta name="jlpt-release" content="${release}" />\n</head>`).replace(/((?:src|href)=")([^"]+)(")/g,
       (all, start, url, end) => references.has(url) ? `${start}${versionURL(url)}${end}` : all);
     files.set(file, Buffer.from(html));
   }

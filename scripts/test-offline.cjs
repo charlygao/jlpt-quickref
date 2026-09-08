@@ -66,6 +66,7 @@ function worker(bundle, caches, network) {
   try {
     const result = build(process.cwd(), directory);
     const html = fs.readFileSync(path.join(directory, 'index.html'), 'utf8');
+    assert.ok(html.includes(`<meta name="jlpt-release" content="${result.release}"`));
     assert.ok(result.assets.some(asset => asset.url.startsWith('data/full-vocab.js?offlinev=')));
     assert.ok(result.assets.some(asset => asset.url.startsWith('vendor/supabase-')));
     for (const [, url] of html.matchAll(/(?:src|href)="([^"]+)"/g)) {

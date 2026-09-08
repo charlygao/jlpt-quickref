@@ -36,6 +36,7 @@ jobs:
           node --check scripts/service-worker.template.js
           node scripts/test-offline.cjs
           node scripts/test-offline-progress.cjs
+          node scripts/test-offline-updates.cjs
           node --check grammar-details-renderer.js
           node --check grammar-details-ui.js
           node scripts/check-grammar-lessons.cjs
