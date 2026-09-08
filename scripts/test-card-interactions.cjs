@@ -214,18 +214,16 @@ const iosContext = vm.createContext({ ...context, window: iosWindow, document: i
 vm.runInContext(appSource, iosContext);
 assert.equal(iosDocument.documentElement.style['--action-bottom-offset'], '290px');
 console.log('PASS: compact navigation startup and iOS absolute-rail positioning');
-// Hero totals span every level and remain independent of the visible filter.
-api.state.mastered = new Set(['g1', 'n4g1', 'v99', 'unknown-id']);
-api.state.followed = new Set(['g2', 'v0', 'v99']);
+// Category totals now live in the switchable tabs; progress remains level-specific.
+api.state.mastered = new Set(['g1', 'n4g1', 'v99']);
 api.state.type = 'grammar'; api.state.level = 'N4'; api.state.filter = 'followed'; api.render();
 assert.equal(document.getElementById('grammarCount').textContent, '4');
-assert.equal(document.getElementById('grammarMasteredCount').textContent, '2');
-assert.equal(document.getElementById('grammarFollowedCount').textContent, '1');
 assert.equal(document.getElementById('vocabCount').textContent, '100');
-assert.equal(document.getElementById('vocabMasteredCount').textContent, '1');
-assert.equal(document.getElementById('vocabFollowedCount').textContent, '2');
-api.toggleStudyStatus('v99', 'followed');
-assert.equal(document.getElementById('vocabFollowedCount').textContent, '1');
-assert.equal(document.getElementById('grammarFollowedCount').textContent, '1');
-assert.equal(document.getElementById('masteredCount'), null);
-console.log('PASS: separate grammar/vocabulary progress totals across levels, filters and status changes');
+assert.equal(document.getElementById('progressPercent').textContent, '100% · 1/1');
+assert.doesNotMatch(html, /hero-stat|碎片时间|class="hero/);
+for (const id of ['masteredCount', 'grammarMasteredCount', 'grammarFollowedCount', 'vocabMasteredCount', 'vocabFollowedCount']) {
+  assert.equal(document.getElementById(id), null);
+}
+assert.match(html, /data-type="grammar"[^>]*>语法 <span id="grammarCount"/);
+assert.match(html, /data-type="vocab"[^>]*>词汇 <span id="vocabCount"/);
+console.log('PASS: tab totals across levels and filters, existing mastery progress, removed hero and extra progress counts');
