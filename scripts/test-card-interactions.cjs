@@ -200,7 +200,8 @@ console.log('PASS: complete category directory, icon-only states, prior-read mar
 // Compact navigation must initialize after its old search nodes are removed.
 context.MutationObserver = class { observe() {} disconnect() {} };
 context.queueMicrotask = fn => fn();
-vm.runInContext(fs.readFileSync('compact-nav.js', 'utf8'), context);
+const compactSource = fs.readFileSync('compact-nav.js', 'utf8').replace(/\}\)\(\);\s*$/, 'window.testCompact = { measureCompactThreshold, updateCompactMode }; })();');
+vm.runInContext(compactSource, context);
 // iOS's absolute rail measures the app-shell bottom, not the fixed viewport.
 const iosDocument = new Node(); iosDocument.body = new Node(); iosDocument.documentElement = new Node();
 iosDocument.createElement = () => new Node();
@@ -227,3 +228,40 @@ for (const id of ['masteredCount', 'grammarMasteredCount', 'grammarFollowedCount
 assert.match(html, /data-type="grammar"[^>]*>语法 <span id="grammarCount"/);
 assert.match(html, /data-type="vocab"[^>]*>词汇 <span id="vocabCount"/);
 console.log('PASS: tab totals across levels and filters, existing mastery progress, removed hero and extra progress counts');
+
+assert.match(html, /<h1>JLPT-QUICKREF<\/h1>/);
+assert.match(html, /class="brand-mark">文<\/div>/);
+assert.ok(html.indexOf('id="compactProgress"') < html.indexOf('id="accountButton"'));
+assert.equal(document.getElementById('compactProgressPercent').textContent, '100%');
+assert.equal(document.getElementById('compactProgress').getAttribute('aria-valuenow'), '100');
+api.toggleStudyStatus('n4g1', 'mastered');
+assert.equal(document.getElementById('compactProgressPercent').textContent, '0%');
+assert.equal(document.getElementById('compactProgressBar').style.width, '0%');
+window.scrollY = 0;
+document.querySelector('.topbar').offsetHeight = 60;
+document.querySelector('.controls').getBoundingClientRect = () => ({ bottom: 200 - window.scrollY });
+document.querySelector('.progress-panel').getBoundingClientRect = () => ({ bottom: 300 - window.scrollY });
+window.testCompact.measureCompactThreshold();
+window.testCompact.updateCompactMode();
+assert.equal(document.body.classList.contains('compact-header'), false);
+window.scrollY = 150; window.testCompact.updateCompactMode();
+assert.equal(document.body.classList.contains('compact-header'), true);
+assert.equal(document.body.classList.contains('compact-progress-visible'), false);
+window.scrollY = 250; window.testCompact.updateCompactMode();
+assert.equal(document.body.classList.contains('compact-progress-visible'), true);
+window.scrollY = 0; window.testCompact.updateCompactMode();
+assert.equal(document.body.classList.contains('compact-progress-visible'), false);
+assert.equal(document.body.classList.contains('compact-header'), false);
+// The same handoff works when iOS scrolls the inner page shell.
+const iosRoot = iosDocument.querySelector('.page-shell'); iosRoot.scrollTop = 0;
+iosRoot.getBoundingClientRect = () => ({ top: 100 });
+iosDocument.querySelector('.controls').getBoundingClientRect = () => ({ bottom: 200 - iosRoot.scrollTop });
+iosDocument.querySelector('.progress-panel').getBoundingClientRect = () => ({ bottom: 300 - iosRoot.scrollTop });
+vm.runInContext(compactSource, iosContext);
+iosWindow.testCompact.updateCompactMode();
+assert.equal(iosDocument.body.classList.contains('compact-progress-visible'), false);
+iosRoot.scrollTop = 210; iosWindow.testCompact.updateCompactMode();
+assert.equal(iosDocument.body.classList.contains('compact-progress-visible'), true);
+iosRoot.scrollTop = 0; iosWindow.testCompact.updateCompactMode();
+assert.equal(iosDocument.body.classList.contains('compact-progress-visible'), false);
+console.log('PASS: header identity, live compact progress and desktop/iOS scroll handoff in both directions');

@@ -26,6 +26,9 @@
     progressLabel: document.getElementById('progressLabel'),
     progressPercent: document.getElementById('progressPercent'),
     progressBar: document.getElementById('progressBar'),
+    compactProgress: document.getElementById('compactProgress'),
+    compactProgressPercent: document.getElementById('compactProgressPercent'),
+    compactProgressBar: document.getElementById('compactProgressBar'),
     loadMoreWrap: document.getElementById('loadMoreWrap'),
     loadMoreText: document.getElementById('loadMoreText'),
     themeToggle: document.getElementById('themeToggle'),
@@ -508,6 +511,12 @@
     els.progressLabel.textContent = `${state.level} · ${state.type === 'grammar' ? '语法' : '词汇'}`;
     els.progressPercent.textContent = `${percent}% · ${mastered}/${items.length}`;
     els.progressBar.style.width = `${percent}%`;
+    els.compactProgressPercent.textContent = `${percent}%`;
+    els.compactProgressBar.style.width = `${percent}%`;
+    els.compactProgress.setAttribute('aria-valuenow', String(percent));
+    const progressDescription = `${state.level} · ${state.type === 'grammar' ? '语法' : '词汇'}：已掌握 ${mastered}/${items.length}`;
+    els.compactProgress.setAttribute('aria-valuetext', progressDescription);
+    els.compactProgress.title = progressDescription;
   }
 
   const FILTER_LABELS = {

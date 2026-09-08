@@ -2,6 +2,7 @@
   const body = document.body;
   const topbar = document.querySelector('.topbar');
   const controls = document.querySelector('.controls');
+  const progressPanel = document.querySelector('.progress-panel');
   const compactTypeButtons = [...document.querySelectorAll('[data-compact-type]')];
   const compactLevelButtons = [...document.querySelectorAll('[data-compact-level]')];
   const pageShell = document.querySelector('.page-shell');
@@ -16,6 +17,7 @@
   let ticking = false;
   let compact = false;
   let compactThreshold = 0;
+  let progressThreshold = Infinity;
   let measuredWidth = window.innerWidth;
 
   function activeFullType() {
@@ -39,6 +41,7 @@
       ? pageScrollRoot.scrollTop
       : window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
     const shouldCompact = scrollTop >= compactThreshold - 1;
+    body.classList.toggle('compact-progress-visible', shouldCompact && scrollTop >= progressThreshold - 1);
     if (shouldCompact === compact) return;
     compact = shouldCompact;
     body.classList.toggle('compact-header', compact);
@@ -55,10 +58,12 @@
     if (pageScrollRoot) {
       const rootTop = pageScrollRoot.getBoundingClientRect().top;
       compactThreshold = controls.getBoundingClientRect().bottom - rootTop + pageScrollRoot.scrollTop;
+      progressThreshold = progressPanel ? progressPanel.getBoundingClientRect().bottom - rootTop + pageScrollRoot.scrollTop : Infinity;
       return;
     }
     const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
     compactThreshold = controls.getBoundingClientRect().bottom + scrollTop - topbar.offsetHeight;
+    progressThreshold = progressPanel ? progressPanel.getBoundingClientRect().bottom + scrollTop - topbar.offsetHeight : Infinity;
   }
 
   function handleViewportResize() {
@@ -105,6 +110,13 @@
   scrollEventTarget.addEventListener('scroll', scheduleCompactModeUpdate, { passive: true });
   window.addEventListener('resize', handleViewportResize, { passive: true });
 
+  if (window.ResizeObserver) {
+    const layoutObserver = new window.ResizeObserver(() => {
+      measureCompactThreshold();
+      scheduleCompactModeUpdate();
+    });
+    [topbar, controls, progressPanel].filter(Boolean).forEach(element => layoutObserver.observe(element));
+  }
   measureCompactThreshold();
   syncCompactState();
   requestAnimationFrame(updateCompactMode);

@@ -7,7 +7,7 @@
   <meta name="description" content="面向中文母语者的 JLPT N5-N1 日语语法与词汇快速参考。" />
   <title>日语语法・词汇速查 | JLPT N5-N1</title>
   <link rel="stylesheet" href="styles.css?v=20260908-tab-counts-1" />
-  <link rel="stylesheet" href="compact-nav.css?v=20260907-account-theme-1" />
+  <link rel="stylesheet" href="compact-nav.css?v=20260908-header-progress-1" />
   <link rel="stylesheet" href="card-gestures.css?v=20260907-interactions-3" />
   <link rel="stylesheet" href="grammar-details.css?v=20260907-interactions-3" />
 </head>
@@ -20,9 +20,9 @@
   </script>
   <header class="topbar">
     <div class="brand">
-      <div class="brand-mark">日</div>
+      <div class="brand-mark">文</div>
       <div>
-        <h1>日语速查</h1>
+        <h1>JLPT-QUICKREF</h1>
         <p>JLPT N5 → N1 · 中文母语者向</p>
       </div>
     </div>
@@ -44,6 +44,10 @@
     </nav>
 
     <div class="topbar-actions">
+      <div id="compactProgress" class="compact-progress" role="progressbar" aria-label="掌握进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <span id="compactProgressPercent" aria-hidden="true">0%</span>
+        <span class="compact-progress-track" aria-hidden="true"><span id="compactProgressBar"></span></span>
+      </div>
       <button id="accountButton" class="icon-btn account-btn" type="button" aria-label="登录并同步学习进度" title="登录并同步学习进度">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="8" r="3.25" />
@@ -211,10 +215,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-progress.js?v=20260904-supabase-2"></script>
   <script src="card-gestures.js?v=20260907-interactions-1"></script>
-  <script src="app.js?v=20260908-tab-counts-1"></script>
+  <script src="app.js?v=20260908-header-progress-1"></script>
   <script src="grammar-details-renderer.js?v=20260907-grammar-lessons-2"></script>
   <script src="grammar-details-ui.js?v=20260907-interactions-3"></script>
-  <script src="compact-nav.js?v=20260907-floating-search-1"></script>
+  <script src="compact-nav.js?v=20260908-header-progress-1"></script>
 </body>
 </html>
 

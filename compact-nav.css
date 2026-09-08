@@ -111,3 +111,16 @@ body.compact-header .card {
   body.compact-header .topbar > .topbar-actions { gap: 3px; margin-left: 3px; }
   body.compact-header .topbar > .topbar-actions .icon-btn { width: 34px; height: 34px; }
 }
+
+/* Progress joins the compact header only once its full panel scrolls out. */
+.compact-progress { display: none; width: 44px; flex: 0 0 44px; gap: 5px; color: var(--accent); text-align: center; }
+body.compact-header.compact-progress-visible .compact-progress { display: grid; }
+body.compact-progress-visible .progress-panel { visibility: hidden; pointer-events: none; }
+.compact-progress > span:first-child { font-size: 12px; line-height: 1.2; font-weight: 750; font-variant-numeric: tabular-nums; }
+.compact-progress-track { display: block; height: 3px; overflow: hidden; border-radius: 999px; background: var(--line); }
+.compact-progress-track > span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--accent); }
+@media (max-width: 360px) {
+  .compact-level-btn { width: 22px; }
+  .compact-type-btn { min-width: 26px; }
+  .compact-progress { width: 36px; flex-basis: 36px; }
+}
