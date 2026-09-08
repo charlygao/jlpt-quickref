@@ -32,6 +32,10 @@ jobs:
           node scripts/test-card-interactions.cjs
           node --check compact-nav.js
           node --check supabase-progress.js
+          node --check offline.js
+          node --check scripts/service-worker.template.js
+          node scripts/test-offline.cjs
+          node scripts/test-offline-progress.cjs
           node --check grammar-details-renderer.js
           node --check grammar-details-ui.js
           node scripts/check-grammar-lessons.cjs
@@ -287,13 +291,15 @@ jobs:
           if (detailedPosCount < 1000) throw new Error(`Detailed POS coverage too small: ${detailedPosCount}`);
           NODE
 
+      - name: Build versioned offline resources
+        run: node scripts/build-offline.cjs
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: dist
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

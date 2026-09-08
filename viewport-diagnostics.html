@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f6f7fb" />
   <meta name="description" content="面向中文母语者的 JLPT N5-N1 日语语法与词汇快速参考。" />
   <title>日语语法・词汇速查 | JLPT N5-N1</title>
-  <link rel="stylesheet" href="styles.css?v=20260908-header-spacing-1" />
+  <link rel="stylesheet" href="styles.css?v=20260908-offline-1" />
   <link rel="stylesheet" href="compact-nav.css?v=20260908-header-progress-1" />
   <link rel="stylesheet" href="card-gestures.css?v=20260907-interactions-3" />
   <link rel="stylesheet" href="grammar-details.css?v=20260907-interactions-3" />
@@ -144,6 +144,16 @@
           <span><span aria-hidden="true">◐</span> 深色模式</span>
           <span class="theme-state" aria-hidden="true">已关闭</span>
         </button>
+        <section class="offline-settings" aria-labelledby="offlineTitle">
+          <strong id="offlineTitle">离线浏览</strong>
+          <p id="offlineStatus" role="status" aria-live="polite">正在检查离线资源…</p>
+          <progress id="offlineProgress" max="100" value="0" aria-label="离线资源下载进度" hidden></progress>
+          <div class="offline-buttons">
+            <button id="offlineDownload" class="auth-secondary-btn" type="button" disabled>下载全部资源</button>
+            <button id="offlineClear" class="auth-secondary-btn" type="button" hidden>删除离线资源</button>
+          </div>
+          <p class="auth-note">包含 N5–N1 全部语法、词汇、例句和详情。出发前请保持页面打开，等待下载完成，再用飞行模式打开一次。清理浏览器数据可能移除离线内容。</p>
+        </section>
         <div id="authSignedOut">
           <p class="modal-summary">登录后，掌握与关注进度会安全地保存到云端，并可在其他设备上继续使用。</p>
           <form id="authForm" class="auth-form">
@@ -220,8 +230,8 @@
   <script src="data/grammar-lessons-n2.js"></script>
   <script src="data/grammar-lessons-n1.js"></script>
   <script src="data/grammar-lessons.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-progress.js?v=20260904-supabase-2"></script>
+  <script src="vendor/supabase-2.116.0.js"></script>
+  <script src="supabase-progress.js?v=20260908-offline-1"></script>
   <script src="tap-dismiss.js?v=20260908-tap-dismiss-1"></script>
   <script src="card-gestures.js?v=20260907-interactions-1"></script>
   <script src="ios-scroll-guard.js?v=20260908-native-top-1"></script>
@@ -229,5 +239,6 @@
   <script src="grammar-details-renderer.js?v=20260907-grammar-lessons-2"></script>
   <script src="grammar-details-ui.js?v=20260908-tap-dismiss-1"></script>
   <script src="compact-nav.js?v=20260908-header-progress-1"></script>
+  <script src="offline.js?v=20260908-offline-1"></script>
 </body>
 </html>

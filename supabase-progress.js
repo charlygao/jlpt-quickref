@@ -6,6 +6,9 @@
   const QUEUE_KEY = 'jlptQuickRef.syncQueue.v1';
   const MIGRATED_KEY = 'jlptQuickRef.cloudMigrated.v1';
   const CLAIMED_BY_KEY = 'jlptQuickRef.localProgressClaimedBy.v1';
+  // A local queue owner, not an authentication credential. This lets an
+  // offline cold start record edits before an expired session can refresh.
+  const LOCAL_USER_KEY = 'jlptQuickRef.lastSyncUser.v1';
 
   let client = null;
   let adapters = null;
@@ -68,7 +71,9 @@
     document.body.classList.add('modal-open');
     if (!usesPageScrollRoot()) document.body.style.top = `-${lockedScrollY}px`;
     setMessage();
-    requestAnimationFrame(() => (currentUser ? els.signout : els.email)?.focus({ preventScroll: true }));
+    // The account panel also contains theme/offline settings; opening it must
+    // not summon the keyboard before the visitor chooses to sign in.
+    requestAnimationFrame(() => els.close?.focus({ preventScroll: true }));
   }
 
   function closeModal() {
@@ -257,6 +262,7 @@
     const nextUser = session?.user || null;
     const nextUserId = nextUser?.id || null;
     currentUser = nextUser;
+    writeJson(LOCAL_USER_KEY, nextUser ? { id: nextUser.id, email: nextUser.email } : null);
     renderSession();
 
     if (!nextUserId) {
@@ -264,6 +270,11 @@
       return;
     }
     if (reconciledUserId === nextUserId) return;
+    if (!navigator.onLine) {
+      reconciledUserId = null;
+      setSyncState('syncing', '离线浏览，联网后同步');
+      return;
+    }
     reconciledUserId = nextUserId;
     setSyncState('syncing', '正在读取云端进度…');
 
@@ -305,6 +316,7 @@
 
   async function submitAuth() {
     if (!client || authBusy) return;
+    if (!navigator.onLine) { setMessage('登录需要网络；离线浏览和本机进度仍可使用。', 'error'); return; }
     if (!els.form.reportValidity()) return;
     const email = els.email.value.trim();
     const password = els.password.value;
@@ -354,6 +366,7 @@
       setAuthBusy(false);
       if (error) { setMessage(error.message, 'error'); return; }
       currentUser = null;
+      writeJson(LOCAL_USER_KEY, null);
       reconciledUserId = null;
       renderSession();
       setMessage('已退出登录；当前进度仍保留在本机。', 'success');
@@ -369,6 +382,13 @@
     adapters = nextAdapters;
     bindUi();
 
+    const localUser = readJson(LOCAL_USER_KEY, null);
+    if (typeof localUser?.id === 'string') {
+      currentUser = localUser;
+      renderSession();
+      setSyncState('syncing', navigator.onLine ? '正在连接…' : '离线浏览，联网后同步');
+    }
+
     if (!window.supabase?.createClient) {
       setSyncState('error', '登录组件加载失败');
       setMessage('登录组件加载失败，请检查网络后刷新页面。', 'error');
@@ -376,22 +396,32 @@
     }
 
     client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+      auth: { persistSession: true, autoRefreshToken: navigator.onLine, detectSessionInUrl: true },
     });
 
     client.auth.onAuthStateChange((event, session) => {
       if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') return;
+      // A failed offline refresh must not erase the local queue owner.
+      if (!navigator.onLine && !session && event !== 'SIGNED_OUT') return;
       setTimeout(() => reconcile(session), 0);
     });
 
-    const { data, error } = await client.auth.getSession();
-    if (error) {
-      setSyncState('error', '登录状态读取失败');
-      setMessage(error.message, 'error');
-      return;
+    async function reconnect() {
+      if (!navigator.onLine) return;
+      const { data, error } = await client.auth.getSession();
+      if (error) { setSyncState('error', '登录状态读取失败，修改已保存在本机'); return; }
+      await reconcile(data.session);
+      await flushQueue();
     }
-    await reconcile(data.session);
-    window.addEventListener('online', () => flushQueue());
+    window.addEventListener('online', () => {
+      client.auth.startAutoRefresh();
+      reconnect().catch(() => setSyncState('error', '暂时无法同步，修改已保存在本机'));
+    });
+    window.addEventListener('offline', () => {
+      client.auth.stopAutoRefresh();
+      if (currentUser) setSyncState('syncing', '离线浏览，联网后同步');
+    });
+    await reconnect();
   }
 
   function saveItem(itemId, progress) {
