@@ -373,10 +373,6 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
    actual viewport (100lvh leaves a toolbar-sized outer scroll range). JS parks
    the document at a compensated 1px origin to observe native status-bar taps. */
 @supports (-webkit-touch-callout: none) {
-  :root {
-    --ios-top-buffer: 24px;
-  }
-
   html {
     height: 100%;
     overflow: hidden;
@@ -399,8 +395,8 @@ body.dark .mastery-btn.is-active { color: #68d6a3; }
     position: relative;
     top: auto;
     flex: 0 0 auto;
-    height: calc(var(--topbar-height) + env(safe-area-inset-top) + var(--ios-top-buffer));
-    padding-top: calc(10px + env(safe-area-inset-top) + var(--ios-top-buffer));
+    height: calc(var(--topbar-height) + env(safe-area-inset-top));
+    padding-top: calc(10px + env(safe-area-inset-top));
     padding-bottom: 10px;
     -webkit-transform: none;
     transform: none;
